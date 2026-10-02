@@ -1,0 +1,33 @@
+# Local agent instructions (case-insensitive filenames)
+[Aa][Gg][Ee][Nn][Tt].[Mm][Dd]
+[Aa][Gg][Ee][Nn][Tt][Ss].[Mm][Dd]
+.agents/
+.codex/
+.aws/
+
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# Local secrets, datasets, and experiment artifacts
+.env
+.env.*
+!.env.example
+data/
+artifacts/
+runs/
+
+# Operating system files
+.DS_Store
+Thumbs.db
