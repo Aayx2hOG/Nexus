@@ -22,7 +22,7 @@ from sklearn.metrics import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATA_DIR = PROJECT_ROOT / "data" / "processed"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "artifacts" / "models"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "models"
 
 
 def load_tree_data(

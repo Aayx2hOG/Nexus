@@ -4,7 +4,6 @@
 .agents/
 .codex/
 .aws/
-AGENTS.md
 
 # Local architecture designs
 /Design/
@@ -28,8 +27,6 @@ htmlcov/
 .env
 .env.*
 !.env.example
-data/
-artifacts/
 runs/
 
 # Operating system files
@@ -37,8 +34,10 @@ runs/
 Thumbs.db
 
 #dataset
-data/preprocessed/*
+data/processed/*
 data/raw/*
+!data/processed/.gitkeep
+!data/raw/.gitkeep
 
 #models
 models/*

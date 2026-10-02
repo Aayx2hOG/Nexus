@@ -38,3 +38,24 @@ location explicitly, use:
 ```sh
 python3 training/evaluate_models.py --model-dir data/processed --output reports/custom_metrics.json
 ```
+
+## Multiclass attack classification
+
+The multiclass pipeline predicts `attack_cat` (Normal plus each attack family)
+while reusing the same leakage-free feature matrices. Prepare the targets, train
+both models, and evaluate them with:
+
+```sh
+python3 preprocessing/prepare_multiclass_targets.py
+python3 training/train_multiclass_random_forest.py
+python3 training/train_multiclass_lightgbm.py
+python3 training/evaluate_multiclass_models.py
+```
+
+Target preparation writes `y_{train,test}_multiclass.npy` and
+`multiclass_labels.json` to `data/processed/`. The fitted models are named
+`multiclass_random_forest.joblib` and `multiclass_lightgbm.joblib`, so they do
+not overwrite the binary models. The combined report defaults to
+`reports/multiclass_evaluation_metrics.json` and includes macro and weighted
+metrics, one-vs-rest multiclass ROC-AUC, per-class metrics, and confusion
+matrices.
