@@ -39,3 +39,6 @@ Thumbs.db
 #dataset
 data/preprocessed/*
 data/raw/*
+
+#models
+models/*
