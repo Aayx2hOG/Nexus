@@ -4,6 +4,7 @@
 .agents/
 .codex/
 .aws/
+AGENTS.md
 
 # Local architecture designs
 /Design/
@@ -34,3 +35,7 @@ runs/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+#dataset
+data/preprocessed/*
+data/raw/*
