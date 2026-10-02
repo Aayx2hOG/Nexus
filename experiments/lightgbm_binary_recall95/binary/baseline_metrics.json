@@ -1,0 +1,74 @@
+{
+  "accuracy": 0.9010955643006364,
+  "balanced_accuracy": 0.8933075913202535,
+  "precision": 0.8661848401898422,
+  "recall": 0.9702638312891556,
+  "f1": 0.9152750465607474,
+  "false_positive_rate": 0.18364864864864866,
+  "specificity": 0.8163513513513514,
+  "roc_auc": 0.9842172041228557,
+  "confusion_matrix": [
+    [
+      30205,
+      6795
+    ],
+    [
+      1348,
+      43984
+    ]
+  ],
+  "classification_report": {
+    "normal": {
+      "precision": 0.9572782302792128,
+      "recall": 0.8163513513513514,
+      "f1-score": 0.8812159934649103,
+      "support": 37000.0
+    },
+    "attack": {
+      "precision": 0.8661848401898422,
+      "recall": 0.9702638312891556,
+      "f1-score": 0.9152750465607474,
+      "support": 45332.0
+    },
+    "accuracy": 0.9010955643006364,
+    "macro avg": {
+      "precision": 0.9117315352345274,
+      "recall": 0.8933075913202535,
+      "f1-score": 0.8982455200128289,
+      "support": 82332.0
+    },
+    "weighted avg": {
+      "precision": 0.9071222088108729,
+      "recall": 0.9010955643006364,
+      "f1-score": 0.8999689084304219,
+      "support": 82332.0
+    }
+  },
+  "model": "lightgbm",
+  "train_rows": 175341,
+  "test_rows": 82332,
+  "feature_count": 194,
+  "best_iteration": 1000,
+  "parameters": {
+    "boosting_type": "gbdt",
+    "class_weight": "balanced",
+    "colsample_bytree": 0.8,
+    "importance_type": "split",
+    "learning_rate": 0.05,
+    "max_depth": -1,
+    "min_child_samples": 20,
+    "min_child_weight": 0.001,
+    "min_split_gain": 0.0,
+    "n_estimators": 1000,
+    "n_jobs": -1,
+    "num_leaves": 31,
+    "objective": "binary",
+    "random_state": 42,
+    "reg_alpha": 0.0,
+    "reg_lambda": 1.0,
+    "subsample": 0.8,
+    "subsample_for_bin": 200000,
+    "subsample_freq": 1,
+    "verbosity": -1
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "command": [
+    "training/tune_lightgbm.py",
+    "--task",
+    "multiclass",
+    "--trials",
+    "30",
+    "--max-rounds",
+    "3000",
+    "--patience",
+    "100",
+    "--n-jobs",
+    "-1",
+    "--experiment-dir",
+    "experiments/lightgbm_multiclass_macrof1"
+  ],
+  "arguments": {
+    "task": "multiclass",
+    "data_dir": "/home/aayush/projects/Nexus/data/processed",
+    "baseline_dir": "/home/aayush/projects/Nexus/models",
+    "experiment_dir": "experiments/lightgbm_multiclass_macrof1",
+    "trials": 30,
+    "max_rounds": 3000,
+    "patience": 100,
+    "minimum_recall": 0.95,
+    "selection_size": 0.15,
+    "early_stopping_size": 0.15,
+    "seed": 42,
+    "n_jobs": -1
+  },
+  "created_utc": "20261002T161121_770426Z",
+  "data_sha256": {
+    "X_test_ft_cat.npy": "9de22087d0b7708b8abd38df3db08e223d928c322e97a466c9fae011baf8b710",
+    "X_test_ft_num.npy": "0ee59c2e1124f3944c60324f0ebb1cddca0a03e59a7236f7ff5ae22347e8c6ec",
+    "X_test_tree.npz": "d1eb15d65290f9c17a089618a761527d2f1fc63cc158be255f83e2644e934d2c",
+    "X_train_ft_cat.npy": "5952c01c149c1759ce8ee107402bb8e3fdd6dbdbc9a14bb6aff35c5a58505593",
+    "X_train_ft_num.npy": "8e59d0d0d1234de4ef312e2af2b31b60a404ba8be7e59def5f1001731f2c31bd",
+    "X_train_tree.npz": "95a975c4ace347991fcc5281a20c897a53348a399a6d55a79ce84a670d7ce520",
+    "multiclass_labels.json": "3e894062e1cfbd2610de806eb5a13f119053462989e8cac81c1598cdbec73d93",
+    "preprocessing_metadata.json": "c93ef7860a545bd9259ad6f486d8bb09a615344ac1a18ad63767f80af31e454f",
+    "preprocessor.joblib": "35027c5ba14c3e6d05e64dc2a4a985b0205385e7de88adab6c5f76b7e3382730",
+    "y_test.npy": "6a9ddf07f86c62b52428b7c87c62d09afcfe935b426b877ba67407213c610885",
+    "y_test_multiclass.npy": "5aaf01705709544f28b1a6e2642ab515bfebec31347196ba7b6d6befea6f2bfd",
+    "y_train.npy": "37429e0b210665a10ad7a664ecafebfcd33ea67d9af3d07b9cf7b3699b8da1c3",
+    "y_train_multiclass.npy": "d5a4309d8345e56a3e865525da7f231296edca7e88e57c3931b5393b552f9802"
+  },
+  "versions": {
+    "python": "3.14.4",
+    "lightgbm": "4.7.0",
+    "sklearn": "1.9.1",
+    "numpy": "2.5.3"
+  },
+  "limitation": "Uses existing preprocessing fitted on the official training split, including internal validation rows. Internal splits are stratified, not group/dedup audited. Rare-class validation metrics may be unstable. No test-driven selection or refit."
+}

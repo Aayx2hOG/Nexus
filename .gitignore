@@ -28,10 +28,24 @@ htmlcov/
 .env.*
 !.env.example
 runs/
+/artifacts/*
+!/artifacts/.gitkeep
+/explainability/*
+!/explainability/.gitkeep
+experiments/**/trials/
+experiments/**/all_trial_metrics.json
+*.joblib
+*.npy
+*.npz
+*.sqlite
+*.sqlite3
+*.db
+*.log
 
 # Operating system files
 .DS_Store
 Thumbs.db
+*:Zone.Identifier
 
 #dataset
 data/processed/*

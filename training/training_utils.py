@@ -60,14 +60,20 @@ def evaluate_binary_classifier(
     model: Any, X_test: sparse.csr_matrix, y_test: np.ndarray
 ) -> dict[str, Any]:
     """Return JSON-serializable metrics for a fitted binary classifier."""
-    predictions = model.predict(X_test)
     probabilities = model.predict_proba(X_test)[:, 1]
+    threshold = float(getattr(model, "decision_threshold_", 0.5))
+    predictions = (
+        (probabilities >= threshold).astype(int)
+        if hasattr(model, "decision_threshold_")
+        else model.predict(X_test)
+    )
     tn, fp, fn, tp = confusion_matrix(y_test, predictions, labels=[0, 1]).ravel()
 
     false_positive_rate = fp / (fp + tn) if fp + tn else 0.0
     specificity = tn / (tn + fp) if tn + fp else 0.0
 
     return {
+        "decision_threshold": threshold,
         "accuracy": float(accuracy_score(y_test, predictions)),
         "balanced_accuracy": float(balanced_accuracy_score(y_test, predictions)),
         "precision": float(precision_score(y_test, predictions, zero_division=0)),
