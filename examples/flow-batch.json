@@ -1,0 +1,53 @@
+{
+  "schema_version": "unsw-nb15.v0",
+  "flows": [
+    {
+      "flow_id": "f28c4459-0f99-4b9f-b1a1-0c9a90887c5d",
+      "event_time": "2026-10-02T10:00:00Z",
+      "features": {
+        "dur": 0.12,
+        "proto": "tcp",
+        "service": "http",
+        "state": "FIN",
+        "spkts": 10,
+        "dpkts": 8,
+        "sbytes": 1200,
+        "dbytes": 800,
+        "rate": 150.0,
+        "sttl": 64,
+        "dttl": 64,
+        "sload": 80000.0,
+        "dload": 53333.0,
+        "sloss": 0,
+        "dloss": 0,
+        "sinpkt": 12.0,
+        "dinpkt": 15.0,
+        "sjit": 0.1,
+        "djit": 0.2,
+        "swin": 255,
+        "stcpb": 12345,
+        "dtcpb": 67890,
+        "dwin": 255,
+        "tcprtt": 0.01,
+        "synack": 0.005,
+        "ackdat": 0.005,
+        "smean": 120,
+        "dmean": 100,
+        "trans_depth": 1,
+        "response_body_len": 500,
+        "ct_srv_src": 1,
+        "ct_state_ttl": 1,
+        "ct_dst_ltm": 1,
+        "ct_src_dport_ltm": 1,
+        "ct_dst_sport_ltm": 1,
+        "ct_dst_src_ltm": 1,
+        "is_ftp_login": 0,
+        "ct_ftp_cmd": 0,
+        "ct_flw_http_mthd": 1,
+        "ct_src_ltm": 1,
+        "ct_srv_dst": 1,
+        "is_sm_ips_ports": 0
+      }
+    }
+  ]
+}

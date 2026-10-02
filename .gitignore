@@ -5,6 +5,9 @@
 .codex/
 .aws/
 
+# Local architecture designs
+/Design/
+
 # Python environments and generated files
 .venv/
 venv/
