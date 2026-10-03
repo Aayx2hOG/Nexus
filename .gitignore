@@ -30,8 +30,6 @@ htmlcov/
 runs/
 /artifacts/*
 !/artifacts/.gitkeep
-/explainability/*
-!/explainability/.gitkeep
 experiments/**/trials/
 experiments/**/all_trial_metrics.json
 *.joblib
@@ -55,3 +53,4 @@ data/raw/*
 
 #models
 models/*
+!models/.gitkeep

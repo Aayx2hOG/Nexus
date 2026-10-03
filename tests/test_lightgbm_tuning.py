@@ -77,6 +77,21 @@ def test_winning_markdown_contains_arguments_and_metrics(tmp_path):
     assert "0.960000" in content
 
 
+def test_failed_selection_constraint_cannot_create_winner_report(tmp_path):
+    result = {
+        "task": "binary",
+        "selection_constraint_met": False,
+        "test_metrics": {"false_positive_rate": 0.1, "recall": 0.96},
+    }
+    assert not report(
+        tmp_path,
+        result,
+        {"false_positive_rate": 0.18, "recall": 0.97},
+        SimpleNamespace(minimum_recall=0.95),
+    )
+    assert not (tmp_path / "outperforming_result.md").exists()
+
+
 def test_evaluator_uses_saved_threshold(tmp_path):
     from lightgbm import LGBMClassifier
 

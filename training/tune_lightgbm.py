@@ -103,7 +103,9 @@ def configurations(args):
 def report(directory, result, baseline, args):
     task = result["task"]
     metrics = result["test_metrics"]
-    improved = outperforms(metrics, baseline, task, args.minimum_recall)
+    improved = result.get("selection_constraint_met", True) and outperforms(
+        metrics, baseline, task, args.minimum_recall
+    )
     objective = (
         f"Lower false-positive rate with recall >= {args.minimum_recall:.1%}"
         if task == "binary"
@@ -118,7 +120,12 @@ def report(directory, result, baseline, args):
         "",
         "Selection used validation only. Test results below did not select the model.",
         "The recall constraint is empirical on validation; test/deployment recall may differ.",
-        "Models are saved without refitting, preserving the validated probability scale.",
+        (
+            "The model was refitted on fitting + early-stopping rows; "
+            "binary thresholds were recalibrated on separate calibration rows."
+            if result.get("refit", False)
+            else "The selected model was saved without a final refit."
+        ),
         "",
         "| Metric | Current baseline | Selected test result | Change |",
         "|---|---:|---:|---:|",

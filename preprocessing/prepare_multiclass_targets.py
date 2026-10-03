@@ -13,7 +13,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RAW_DIR = PROJECT_ROOT / "data" / "raw" / "CSV_Files"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "data" / "processed"
@@ -67,9 +66,7 @@ def prepare_targets(raw_dir: Path, output_dir: Path) -> dict[str, object]:
         "train_rows": int(y_train.size),
         "test_rows": int(y_test.size),
         "target_counts": {
-            "train": {
-                name: int((train_categories == name).sum()) for name in class_names
-            },
+            "train": {name: int((train_categories == name).sum()) for name in class_names},
             "test": {name: int((test_categories == name).sum()) for name in class_names},
         },
     }

@@ -1,0 +1,71 @@
+{
+  "rows": 175341,
+  "unique_feature_rows": 101040,
+  "duplicate_rows_beyond_first": 74301,
+  "conflicting_label_groups": 1772,
+  "rows_in_conflicting_groups": 30528,
+  "conflicting_rows_by_class": {
+    "4": 13299,
+    "3": 9746,
+    "5": 2078,
+    "7": 1889,
+    "1": 1441,
+    "2": 1340,
+    "0": 396,
+    "6": 319,
+    "9": 13,
+    "8": 7
+  },
+  "grouping": "Exact predictor-row hashes; no inferred session or temporal groups.",
+  "split_class_counts": {
+    "selection": {
+      "Normal": 7897,
+      "Analysis": 276,
+      "Backdoor": 262,
+      "DoS": 1759,
+      "Exploits": 4799,
+      "Fuzzers": 2624,
+      "Generic": 5835,
+      "Reconnaissance": 1451,
+      "Shellcode": 164,
+      "Worms": 17
+    },
+    "calibration": {
+      "Normal": 7912,
+      "Analysis": 304,
+      "Backdoor": 267,
+      "DoS": 1876,
+      "Exploits": 4906,
+      "Fuzzers": 2611,
+      "Generic": 5635,
+      "Reconnaissance": 1341,
+      "Shellcode": 158,
+      "Worms": 18
+    },
+    "early": {
+      "Normal": 8002,
+      "Analysis": 299,
+      "Backdoor": 255,
+      "DoS": 1820,
+      "Exploits": 4847,
+      "Fuzzers": 2597,
+      "Generic": 5514,
+      "Reconnaissance": 1498,
+      "Shellcode": 161,
+      "Worms": 20
+    },
+    "fit": {
+      "Normal": 32189,
+      "Analysis": 1121,
+      "Backdoor": 962,
+      "DoS": 6809,
+      "Exploits": 18841,
+      "Fuzzers": 10352,
+      "Generic": 23016,
+      "Reconnaissance": 6201,
+      "Shellcode": 650,
+      "Worms": 75
+    }
+  },
+  "test_rows_with_training_feature_match": 8541
+}

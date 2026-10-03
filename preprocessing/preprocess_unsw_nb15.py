@@ -20,7 +20,6 @@ from scipy import sparse
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RAW_DIR = REPOSITORY_ROOT / "data" / "raw" / "CSV_Files"
 DEFAULT_OUTPUT_DIR = REPOSITORY_ROOT / "data" / "processed"
@@ -76,9 +75,7 @@ def load_categorical_columns(feature_catalog_path: Path, columns: list[str]) -> 
         )
 
     nominal_names = set(
-        catalog.loc[
-            catalog["Type"].astype(str).str.strip().str.casefold() == "nominal", "Name"
-        ]
+        catalog.loc[catalog["Type"].astype(str).str.strip().str.casefold() == "nominal", "Name"]
         .astype(str)
         .str.strip()
         .str.casefold()
@@ -204,9 +201,7 @@ def preprocess(raw_dir: Path, output_dir: Path) -> dict[str, Any]:
     test_cat = clean_categorical(test, categorical_columns)
 
     numeric_imputer = SimpleImputer(strategy="median")
-    train_num_unscaled = numeric_imputer.fit_transform(train[numerical_columns]).astype(
-        np.float32
-    )
+    train_num_unscaled = numeric_imputer.fit_transform(train[numerical_columns]).astype(np.float32)
     test_num_unscaled = numeric_imputer.transform(test[numerical_columns]).astype(np.float32)
 
     if not np.isfinite(train_num_unscaled).all() or not np.isfinite(test_num_unscaled).all():
@@ -214,20 +209,16 @@ def preprocess(raw_dir: Path, output_dir: Path) -> dict[str, Any]:
 
     # RF and LightGBM share a sparse float32 matrix. One-hot encoding avoids
     # imposing a false ordinal relationship on protocol/service/state values.
-    tree_encoder = OneHotEncoder(
-        handle_unknown="ignore", sparse_output=True, dtype=np.float32
-    )
+    tree_encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=True, dtype=np.float32)
     train_tree_cat = tree_encoder.fit_transform(train_cat)
     test_tree_cat = tree_encoder.transform(test_cat)
     x_train_tree = sparse.hstack(
         [sparse.csr_matrix(train_num_unscaled), train_tree_cat], format="csr"
     )
-    x_test_tree = sparse.hstack(
-        [sparse.csr_matrix(test_num_unscaled), test_tree_cat], format="csr"
+    x_test_tree = sparse.hstack([sparse.csr_matrix(test_num_unscaled), test_tree_cat], format="csr")
+    tree_feature_names = (
+        numerical_columns + tree_encoder.get_feature_names_out(categorical_columns).tolist()
     )
-    tree_feature_names = numerical_columns + tree_encoder.get_feature_names_out(
-        categorical_columns
-    ).tolist()
 
     # FT-Transformer receives one integer token per categorical field and a
     # separately standardized numerical matrix. Unknown categories use code 0.

@@ -1,0 +1,81 @@
+{
+  "command": [
+    "training/compare_lightgbm.py",
+    "--task",
+    "multiclass",
+    "--fit-seconds",
+    "60",
+    "--n-jobs",
+    "4",
+    "--alphas",
+    "0.40",
+    "0.45",
+    "0.50",
+    "0.55",
+    "0.60",
+    "--experiment-dir",
+    "experiments/lightgbm_controlled_multiclass"
+  ],
+  "arguments": {
+    "task": "multiclass",
+    "fit_seconds": 60.0,
+    "alphas": [
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6
+    ],
+    "full_grid": false,
+    "max_rounds": 2500,
+    "patience": 75,
+    "minimum_recall": 0.95,
+    "seed": 42,
+    "n_jobs": 4,
+    "experiment_dir": "experiments/lightgbm_controlled_multiclass",
+    "raw_dir": "/home/aayush/projects/Nexus/data/raw/CSV_Files/Training and Testing Sets",
+    "binary_baseline": "/home/aayush/projects/Nexus/experiments/lightgbm_binary_recall95/binary/selected_result.json",
+    "multiclass_baseline": "/home/aayush/projects/Nexus/experiments/lightgbm_multiclass_macrof1/multiclass/selected_result.json"
+  },
+  "hashes": {
+    "/home/aayush/projects/Nexus/data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_training-set.csv": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "/home/aayush/projects/Nexus/data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_testing-set.csv": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+    "/home/aayush/projects/Nexus/training/evaluate_models.py": "deed0936ee21be0bce5b1231c2ea062dba0165cfdb5f51b0a8ab965ea7f75073",
+    "/home/aayush/projects/Nexus/training/train_random_forest.py": "bb7d7bb3ab49f0705ac6329f08214fc7d65583bff4cb2caa79068e96e059c3da",
+    "/home/aayush/projects/Nexus/training/evaluate_multiclass_models.py": "a6519afda0ec809aa0d6cd1f17336326ea4a6cdc168ba80f969bba9722aaa6be",
+    "/home/aayush/projects/Nexus/training/training_utils.py": "d786790c313ee0054756ff8cbcf262e2a9e5a92b81fd65ca32cf78cf57a1f5e8",
+    "/home/aayush/projects/Nexus/training/tune_lightgbm.py": "6f51412bfc1775e9aa33ca0830eb9200216ac307cb42b8212e909503adce4def",
+    "/home/aayush/projects/Nexus/training/train_multiclass_random_forest.py": "72bb04b7112917205d5d3c35566010c7ee0236e12303e31417a4dfae589f4922",
+    "/home/aayush/projects/Nexus/training/train_multiclass_lightgbm.py": "bf3a8e3143381e6cb00b19acd5b8bbf75893514c82fa75876138896d88e04772",
+    "/home/aayush/projects/Nexus/training/compare_lightgbm.py": "da9a39c97815bf7855787fe6b2eb155a1dc43a15aa9c9d603cc5b87a48f68cc3",
+    "/home/aayush/projects/Nexus/training/multiclass_training_utils.py": "9667c621e5ff5c432f226589b69de628dc591671fdaef7167af4d359f6e686b4",
+    "/home/aayush/projects/Nexus/training/tune_lightgbm_fast.py": "ec32c581329e1391975739b7a23116dae1f64880e2004706f652b26e86ca56dd",
+    "/home/aayush/projects/Nexus/training/fast_lightgbm_models.py": "81ff2ec5635c777ff089c60640e2996578ed172606865627ba9c018f591d165d",
+    "/home/aayush/projects/Nexus/training/train_lightgbm.py": "911d70436e713d24ad0bd542099bb9a129cb6b7c8db869b4be8ff146a6ffab4e"
+  },
+  "class_names": [
+    "Normal",
+    "Analysis",
+    "Backdoor",
+    "DoS",
+    "Exploits",
+    "Fuzzers",
+    "Generic",
+    "Reconnaissance",
+    "Shellcode",
+    "Worms"
+  ],
+  "created_utc": "20261002T184317_642464Z",
+  "versions": {
+    "lightgbm": "4.7.0",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6"
+  },
+  "limitations": [
+    "One grouped split; rare-class estimates remain uncertain.",
+    "Prior test outcomes informed development; use a fresh holdout for confirmation.",
+    "Confidence bounds are pointwise, not deployment or model-selection guarantees.",
+    "A time-limited refit can have fewer rounds; check validation_comparison.md.",
+    "Numeric NaNs are retained in both representations; not exact legacy imputation."
+  ]
+}
