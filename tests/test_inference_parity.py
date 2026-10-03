@@ -43,7 +43,7 @@ def test_serving_offline_parity(bundle):
     raw, y, _ = read_data(CSV_PATH)
     raw = canonical_features(raw)
 
-    splits_path = PROJECT_ROOT / "experiments" / "lightgbm_validated_v1" / "split_indices.npz"
+    splits_path = PROJECT_ROOT / "models" / "lightgbm_validated_v1" / "split_indices.npz"
     splits = np.load(splits_path)
     sel = splits["selection"][:100]  # Take 100 selection rows
 

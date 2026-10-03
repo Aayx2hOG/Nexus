@@ -60,10 +60,13 @@ web/node_modules/
 web/.next/
 web/out/
 
-#experiments
-experiments/**/trials/
-experiments/**/all_trial_metrics.json
+# Historical/generated reports (curated Markdown remains tracked)
+/working.md
+/reports/**/*.json
+/reports/**/*.csv
+/reports/selective_fusion/
 
+# Other local experiments
 experiments/autoencoder_optimization/
 experiments/leave_one_attack_family_out/
 experiments/selective_fusion_leakage_free/

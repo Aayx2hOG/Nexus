@@ -26,7 +26,7 @@ def metrics(y, p, s=None):
     if s is not None:
         r.update(roc_auc=float(roc_auc_score(y, s)), pr_auc=float(average_precision_score(y, s)))
     return r
-model_path = 'models/model.joblib'
+model_path = 'models/lightgbm_validated_v1/binary/model.joblib'
 raw_path = 'data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_testing-set.csv'
 ae_path = 'models/autoencoder/autoencoder_test_scores.csv'
 m = joblib.load(model_path)
@@ -49,7 +49,7 @@ threshold = float(at['selected_threshold'])
 assert np.array_equal(a, (ae.anomaly_score >= threshold).astype(int))
 c = p | a
 results = {'lightgbm': metrics(y, p, s), 'baseline_autoencoder': metrics(y, a, ae.anomaly_score), 'combined_or': metrics(y, c)}
-manifest = json.loads(Path('experiments/lightgbm_validated_v1/manifest.json').read_text())
+manifest = json.loads(Path('models/lightgbm_validated_v1/manifest.json').read_text())
 sha = digest(model_path)
 expected = manifest['artifact_hashes'].get('binary/model.joblib')
 overlap = {label: {f'lightgbm_{i}_ae_{j}': int(np.sum((y == value) & (p == i) & (a == j))) for i in (0, 1) for j in (0, 1)} for label, value in [('actual_normal', 0), ('actual_attacks', 1)]}

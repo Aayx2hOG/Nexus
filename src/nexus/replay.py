@@ -29,7 +29,7 @@ DISCLOSURE_BANNER = (
 )
 
 DEFAULT_CSV = Path("data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_testing-set.csv")
-DEFAULT_SPLIT_FILE = Path("experiments/lightgbm_validated_v1/split_indices.npz")
+DEFAULT_SPLIT_FILE = Path("models/lightgbm_validated_v1/split_indices.npz")
 
 
 def now_timestamp() -> str:

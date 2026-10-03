@@ -1,6 +1,6 @@
 # Binary LightGBM: current validation winner
 
-Reviewed 2026-10-03. Experiment: `experiments/lightgbm_validated_v1`.
+Reviewed 2026-10-03. Experiment: `models/lightgbm_validated_v1`.
 
 ## Verdict and scope
 
@@ -40,7 +40,7 @@ Total classification errors decrease from 1,211 to 1,125 (86 fewer).
 Approximately 40 false alerts per 1,000 benign flows remains a meaningful
 operational burden; this result alone does not establish deployment readiness.
 
-Source: [validation_summary.json](../experiments/lightgbm_validated_v1/validation_summary.json).
+Source: [validation_summary.json](../models/lightgbm_validated_v1/validation_summary.json).
 
 ## What changed and what the evidence supports
 
@@ -72,8 +72,8 @@ This supports the balanced training procedure on this split. It does not prove
 the threshold change alone caused the gain: the fitted model and boosting
 rounds also change.
 
-Sources: [trial 1](../experiments/lightgbm_validated_v1/binary/trials/trial_0001.json),
-[selected trial 4](../experiments/lightgbm_validated_v1/binary/selected_validation.json).
+Sources: [trial 1](../models/lightgbm_validated_v1/binary/trials/trial_0001.json),
+[selected trial 4](../models/lightgbm_validated_v1/binary/selected_validation.json).
 
 ## Why the threshold changed
 
@@ -145,7 +145,7 @@ the historical test file, without refitting or changing thresholds:
 
 ```sh
 .venv/bin/python training/evaluate_frozen_lightgbm.py \
-  --experiment-dir experiments/lightgbm_validated_v1 \
+  --experiment-dir models/lightgbm_validated_v1 \
   --evaluation-csv 'data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_testing-set.csv' \
   --data-role historical
 ```

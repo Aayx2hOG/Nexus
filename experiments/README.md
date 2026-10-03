@@ -1,5 +1,10 @@
 # LightGBM experiments
 
+These are historical workflows and provenance retained for reproduction.
+For current model research, start with the
+[fusion experiment guide](../training/FUSION_EXPERIMENTS.md) and
+[eight-seed assessment](../reports/current_model_assessment.md).
+
 Run from the repository root with the existing `data/processed/` inputs and baseline
 `models/lightgbm_metrics.json` and `models/multiclass_lightgbm_metrics.json`:
 

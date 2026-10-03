@@ -69,7 +69,7 @@ For a historical diagnostic on the existing official test file:
 
 ```sh
 .venv/bin/python training/evaluate_frozen_lightgbm.py \
-  --experiment-dir experiments/lightgbm_validated_v1 \
+  --experiment-dir models/lightgbm_validated_v1 \
   --evaluation-csv 'data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_testing-set.csv' \
   --data-role historical
 ```

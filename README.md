@@ -1,305 +1,211 @@
 # Nexus
 
-Network intrusion detection research with validated LightGBM training, real-model TreeSHAP inference, all-prediction logging, an analyst-review API, and a Next.js SOC console.
+**Recover attacks a strong supervised detector misses, while measuring the extra false-alert cost.**
 
-## Project overview
+Nexus is a network-intrusion detection research project for the challenge
+*Catch the Attack the Signatures Miss*. It uses UNSW-NB15 flow features to label
+traffic normal or attack and support SOC review. Its current research combines
+LightGBM with complementary anomaly scores through learned and selective fusion.
+Alerts go to analysts; the project does not automatically block traffic.
 
-Nexus investigates normal-versus-attack detection on UNSW-NB15 and provides an
-end-to-end operational pipeline for real-time model inference and intrusion alert review.
-The implemented research workflow compares LightGBM with Random Forest using duplicate-grouped
-partitions, separate threshold calibration, and a frozen evaluation procedure.
-The operational system connects the cryptographically sealed LightGBM release bundle to
-a FastAPI backend, an all-prediction audit log, an explainability engine (TreeSHAP),
-and a Next.js analyst triage console.
+The local application already serves LightGBM predictions with TreeSHAP
+explanations, prediction logging and an analyst dashboard. **Fusion results are
+currently offline research; the new policy is not yet integrated into serving.**
 
-| Documentation | Contents |
+| Start here | Contents |
 | --- | --- |
-| [Binary results and improvement](reports/binary_validated_result.md) | Measured gains, threshold rationale, comparison limits, and evidence links. |
-| [Reproducible training and evaluation](training/VALIDATED_TRAINING.md) | Dataset handling, commands, split methodology, and frozen evaluation. |
-| [API contract](docs/api.md) | Implemented endpoints, validation, alert persistence, and analyst feedback. |
+| [Current model assessment](reports/current_model_assessment.md) | Eight-seed results, failures, research contribution and next experiments |
+| [Experiment commands](training/FUSION_EXPERIMENTS.md) | Reuse, training, calibration, evaluation, extra seeds and plots |
+| [Training workflows](training/README.md) | Active entry points and historical-code boundaries |
+| [Local demo](docs/LOCAL_DEMO.md) | Backend, frontend and historical dataset replay |
+| [API contract](docs/api.md) | Prediction, alert and analyst-feedback endpoints |
 
-Raw metrics, split audits, and manifests remain under `experiments/` and
-`reports/` as supporting evidence. Older experiment summaries are retained as
-JSON rather than duplicate Markdown reports.
+## Where we stand
 
-## Project contribution and progress
+The latest evaluation contains **960 result rows**: four scenarios, ten methods,
+three calibration FPR budgets and eight seeds. The scenarios are closed-set
+(`none`) and withheld Reconnaissance, Exploits and DoS. Seeds are
+7, 21, 42, 100, 123, 314, 1337 and 2026.
 
-Nexus focuses on making intrusion-detection results reproducible and actionable
-through recall-constrained classification, traceable evaluation, and an
-analyst-review API. Its contribution is an end-to-end vertical slice: connecting
-a validated LightGBM detector to an operational API with TreeSHAP explanations,
-all-prediction logging, an analyst review queue, and a Next.js SOC console.
+At the **3% calibration FPR budget**, selective fusion produces the following
+means across eight seeds. Recovery counts cover all evaluation attacks in each
+scenario; they are not counts exclusively from the withheld family.
 
-The cited research provides datasets, algorithms, and evaluation guidance.
-Nexus builds on those foundations with an explicit false-alert objective and
-a persistent review workflow. This is an engineering contribution, not a claim
-of a new learning algorithm or superiority over the published systems. The
-measured improvement is against our paired Random Forest baseline, not against
-the papers' reported results.
+| Scenario | LightGBM recall | Selective recall | Selective observed FPR | Additional attacks recovered | Lost LightGBM detections | Additional false positives |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Closed set | 93.169% | 93.178% | 3.089% | 1.63 | 0 | 0.25 |
+| Reconnaissance withheld | 92.734% | 92.767% | 2.986% | 16.50 | 0 | 1.00 |
+| Exploits withheld | 93.882% | 94.141% | 3.067% | 154.88 | 0 | 3.25 |
+| DoS withheld | 95.504% | 95.519% | 3.046% | 6.88 | 0 | 1.13 |
 
-| Capability | Completed work | Remaining work |
-| --- | --- | --- |
-| Known-attack detection | LightGBM/RF training and binary candidate selection; 18.5% fewer false positives than paired RF on selection data. Real LightGBM inference (bundle v1.0.0) with TreeSHAP feature attributions. | Compare frozen old/new checkpoints on common evaluation rows and confirm on fresh data. |
-| Reproducibility | Duplicate-grouped partitions, fitting-only preprocessing, separate threshold calibration, saved audits, and frozen source/model hashes. | Assess split sensitivity and session/time dependence where metadata permits. |
-| Analyst review | Flow validation, persistent alerts, TreeSHAP signed explanations, all-prediction logging, Next.js SOC console, missed-attack sampling, and dataset replay streaming. | Multi-user authentication, role-based permissions, and WebSocket notifications. |
-| Unknown-attack detection | Research direction and evaluation requirements documented. | Implement and compare normal-only autoencoder and Isolation Forest candidates using held-out attack families and a common false-alert budget. |
+The strongest current case is **Exploits recovery**. At 3%, its withheld-family
+recall increases from 93.746% to 94.189%; the overall recovery/added-FP ratio is
+47.65 when pooling the repeated-seed counts. These repetitions are not unique
+attacks from independent deployments.
 
-The intended extension combines known-attack classification with complementary
-anomaly detection and analyst review. Its value must be demonstrated by comparing
-the classifier alone with each added detector on identical evaluation data,
-including the combined alert rule's false-positive rate. A hybrid design alone
-does not establish research novelty or prove zero-day detection.
+Selective fusion preserved every baseline detection in all **96**
+scenario/seed/budget configurations. This is enforced by its decision rule.
+It does not guarantee zero extra false positives: only four of eight Exploits
+runs met the nominal 3% evaluation cap, as did the paired LightGBM baseline.
 
-## Model research
+The experiments also exposed approaches that should not be promoted:
 
-Use the [validated training workflow](training/VALIDATED_TRAINING.md) for new runs.
-The [latest binary report](reports/binary_validated_result.md) documents the current
-validation winner: 95.25% attack recall and 3.98% false-positive rate, with 18.5%
-fewer false positives than the paired Random Forest. Independent confirmation
-and comparison with older checkpoints remain outstanding.
+- Unrestricted learned fusion has larger mean gains in some settings, but loses
+  detections in others. At 3%, its mean net gain is +269 Exploits detections,
+  versus -98.50 for Reconnaissance and -24.75 in the closed-set scenario.
+- Naive OR raises mean FPR to roughly 5.8% when each detector receives a 3% budget.
+- Standalone anomaly detectors have substantially weaker recall than LightGBM
+  at practical FPR budgets. Denoising and scaling did not establish a universal
+  improvement over the plain AE.
+- Selective recovery is small for DoS and almost negligible for closed-set traffic.
 
-Install research and development dependencies with:
+These findings improve the model-selection evidence and identify a useful
+recovery policy. They do not establish a universal accuracy improvement,
+production readiness, or better runtime performance.
 
-```sh
-python -m pip install -e '.[dev,training]'
+Source: [model assessment and evidence links](reports/current_model_assessment.md).
+The older [validated binary result](reports/binary_validated_result.md) belongs
+to a different experiment and must not be compared directly with these figures.
+
+## Our approach
+
+```mermaid
+flowchart TD
+    A[Flow features] --> B[LightGBM]
+    A --> C[Normal-only anomaly models]
+    B --> D{LightGBM alert?}
+    D -->|Yes| E[Preserve alert]
+    D -->|No| F{Uncertain score or suspicious anomaly?}
+    C --> F
+    F -->|No| G[Keep normal decision]
+    F -->|Yes| H[Learned fusion score]
+    B --> H
+    C --> H
+    H --> I{Pass calibrated recovery cutoff?}
+    I -->|Yes| E
+    I -->|No| G
 ```
 
-The validated runner reads the raw training CSV and performs its own preprocessing.
-Scripts in `preprocessing/` reproduce the older feature arrays and are not required
-for this workflow. Historical training modules remain because the current runner
-imports their helpers and the frozen experiment verifies their source hashes.
-Datasets and model binaries stay local.
+This diagram describes the offline selective-fusion candidate. Its operating
+policy preserves LightGBM positives and considers uncertain or anomalous
+negatives for recovery. Score gates are configurable; they are not calibrated
+probabilities or proof that a flow is malicious.
 
-Autoencoders, Isolation Forest, and novelty detection are future research directions.
-Real-model API inference (v1.0.0) with TreeSHAP attribution is fully operational.
+1. **Keep related rows together.** Identical predictor rows share a partition.
+   Groups containing a withheld family are excluded from all development stages.
+2. **Separate development stages.** Remaining groups are allocated to fitting
+   (55%), early stopping (10%), fusion fitting (10%), calibration (10%) and
+   evaluation (15%). Row fractions vary with group size.
+3. **Fit complementary detectors.** LightGBM sees fitting rows; anomaly models
+   learn from benign fitting rows. Compare plain, scaled and denoising AEs,
+   latent covariance distance, and Isolation Forest.
+4. **Learn fusion on unseen fitting data.** Logistic fusion uses the LightGBM
+   score, log reconstruction error and log latent distance on its disjoint partition.
+5. **Calibrate the combined decision.** Thresholds use benign calibration rows
+   at budgets of 1%, 3% and 5%. Selective recovery can spend only the allowance
+   remaining after the preserved LightGBM alerts.
+6. **Report both gains and costs.** Precision, recall, F1, FPR, ROC-AUC, PR-AUC,
+   held-family recall, recovered/lost detections and gross/net added FPs accompany
+   seed means, SDs and paired differences. Plots use the saved experiment CSVs.
+
+The original nine comparisons remain reproducible alongside `selective_fusion`.
+There is no automatic winner selection, model promotion or deployment.
+
+## Contribution and comparison with existing projects
+
+Our contribution is a **reproducible, budget-calibrated recovery layer** around a
+strong supervised detector. The central question is: *what does the second
+model catch, what does it break, and how many false alerts does it cost?*
+
+This is an engineering and experimental contribution. Combining classifiers and
+autoencoders, conditional routing, and anomaly detection are not new inventions.
+A score-only fusion control is still needed to isolate how much of the gain
+comes specifically from anomaly information.
+
+| Comparison | What we can support |
+| --- | --- |
+| LightGBM alone, on our paired splits | Selective fusion recovers additional attacks without removing baseline alerts; Exploits is the strongest result. |
+| Naive OR, on our paired splits | Selective recovery adds far fewer false positives, with a smaller recall increase. No dominance at identical external-test FPR is established. |
+| A basic classifier demo | Nexus exposes leakage controls, held-family tests, seed variation and the cost of complementary detection, alongside an existing analyst-review application. |
+| Snort, Suricata and Zeek | A potential complementary ML component. We have not run a paired benchmark demonstrating superiority over these tools. |
+
+[Snort supports rule-based IDS/IPS detection](https://docs.snort.org/rules/).
+[Suricata already produces alerts and anomaly events](https://docs.suricata.io/en/suricata-8.0.5/output/eve/eve-json-output.html),
+and [Zeek supports programmable notice policies](https://docs.zeek.org/en/master/frameworks/notice.html).
+Anomaly handling and analyst-facing alerts are not exclusive to Nexus.
+Demonstrating signature-bypass coverage requires a common traffic corpus and an
+actual signature-IDS baseline; withheld-family flow classification is not that test.
 
 ## Research foundations
 
-These references explain the dataset and methods used in Nexus, guide evaluation,
-and identify possible extensions. Nexus is not a reproduction of every cited
-system, and their published results are not results achieved by this project.
-
-| Paper | Relevance to Nexus |
+| Paper | Insight used and scope |
 | --- | --- |
-| Moustafa & Slay (MILCIS 2015), [UNSW-NB15: a comprehensive data set for network intrusion detection systems](https://doi.org/10.1109/MILCIS.2015.7348942) | Source of the benchmark used for binary and attack-family classification. See the [official dataset description](https://research.unsw.edu.au/projects/unsw-nb15-dataset) for its construction and features. |
-| Ke et al. (NIPS 2017), [LightGBM: A Highly Efficient Gradient Boosting Decision Tree](https://proceedings.neurips.cc/paper_files/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html) | Algorithmic foundation of the implemented LightGBM classifier; it does not establish intrusion-detection performance on our splits. |
-| Arp et al. (USENIX Security 2022), [Dos and Don'ts of Machine Learning in Computer Security](https://www.usenix.org/conference/usenixsecurity22/presentation/arp) | Evaluation guidance on leakage, sampling bias, experimental design, and misleading performance claims. |
-| Sommer & Paxson (IEEE S&P 2010), [Outside the Closed World: On Using Machine Learning for Network Intrusion Detection](https://gangw.cs.illinois.edu/class/cs562/papers/Closed_World-IDS-sp10.pdf) | Explains the gap between benchmark anomaly detection and operational intrusion detection, including traffic diversity, evaluation difficulties, and the cost of errors. |
-| Mirsky et al. (NDSS 2018), [Kitsune: An Ensemble of Autoencoders for Online Network Intrusion Detection](https://arxiv.org/abs/1802.09089) | Reference for a possible autoencoder extension. Kitsune uses online packet-derived features and an ensemble; a future flow-CSV autoencoder here would be an adaptation, not a reproduction. **Not implemented.** |
-| Liu, Ting & Zhou (ICDM 2008), [Isolation Forest](https://www.lamda.nju.edu.cn/publication/icdm08b.pdf) | Reference for a possible anomaly-detection baseline using random isolation trees. **Not implemented.** |
+| [UNSW-NB15 — Moustafa & Slay, 2015](https://doi.org/10.1109/MILCIS.2015.7348942) | Benchmark foundation for the current flow-feature experiments. |
+| [LightGBM — Ke et al., NIPS 2017](https://proceedings.neurips.cc/paper_files/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html) | Gradient-boosted tree foundation for our primary supervised detector. |
+| [Kitsune — Mirsky et al., NDSS 2018](https://arxiv.org/abs/1802.09089) | Motivation for normal-behavior learning with autoencoders. Our flow-level models do not reproduce Kitsune's online packet-feature ensemble. |
+| [Dos and Don'ts of ML in Computer Security — Arp et al., USENIX Security 2022](https://www.usenix.org/conference/usenixsecurity22/presentation/arp) | Evaluation guidance: leakage, sampling bias, misleading metrics and unsupported security claims. |
+| [Autoencoders for Anomaly Detection are Unreliable — Bouman & Heskes, 2025 preprint](https://arxiv.org/abs/2501.13864) | Reconstruction error can fail to distinguish anomalies; motivates comparing scores and measuring complementary value rather than assuming AE superiority. |
+| [DeepAID — Han et al., CCS 2021](https://arxiv.org/abs/2109.11495) | Inspiration for investigating anomaly explanations and false positives. DeepAID's interpreter is not implemented; current TreeSHAP explains LightGBM. |
 
-## Evaluation pitfalls and safeguards
+These references inform the design. Their published results are not results
+achieved by Nexus, and we do not claim to outperform their systems.
 
-The following project practices apply the evaluation concerns described by
-[Arp et al.](https://www.usenix.org/conference/usenixsecurity22/presentation/arp)
-and [Sommer & Paxson](https://gangw.cs.illinois.edu/class/cs562/papers/Closed_World-IDS-sp10.pdf).
-They are not claims that the cited authors made these mistakes or that Nexus has
-eliminated every source of bias.
+## Reproduce the model research
 
-| Pitfall | Current safeguard and remaining limitation |
-| --- | --- |
-| Target or preprocessing leakage | The validated runner excludes `id`, `label`, and `attack_cat` from predictors and fits preprocessing only on fitting/refit rows. Older experiments used weaker isolation and remain historical evidence. |
-| Duplicate leakage and correlated traffic | Identical predictor rows stay in one partition; final evaluation removes development overlap. Exact-row grouping does not establish session or temporal independence. Conflicting labels are retained and reported. |
-| Tuning on the test set or reporting the best search score as final performance | Threshold calibration and selection are separate; evaluation verifies frozen hashes. Current scores are selection estimates. The official test set has already informed development, so fresh data is still needed for independent confirmation. |
-| Unfair comparisons | Current LightGBM and RF use the same partitions. RF has a smaller search budget; old full-test scores cannot be compared directly with new selection or overlap-filtered scores. |
-| High accuracy hiding false alarms and missed attacks | Binary selection minimizes FPR subject to recall >=95%; reports include precision, recall, F1, AUC, confusion counts and false alerts per 1,000 normal flows. The current rate is about 40 per 1,000, and benchmark precision may change with deployment attack prevalence. |
-| Treating a model score as a trustworthy attack probability | Threshold calibration chooses a decision cutoff; it does not calibrate probabilities. Class weighting changes score scales, and the recall margin does not guarantee performance under drift. |
-| Claiming unknown-attack detection from a closed-set benchmark | No zero-day detection claim is made. A future anomaly experiment must exclude the held-out attack family from all fitting and selection, use a separate benign calibration set, and evaluate the combined detector's false-alert rate. An anomaly is not automatically an attack. |
-
-Repeated predeclared splits, independent holdout evaluation, session/time-aware
-testing where metadata permits, and deployment monitoring remain outstanding.
-The [results report](reports/binary_validated_result.md) records the scope of the
-current improvement claim.
-
-## Running the complete system (Backend, Frontend & Traffic Replay)
-
-Nexus consists of three operational components:
-1. **FastAPI Backend (`src/nexus`)**: Serves real-time LightGBM predictions, computes TreeSHAP explanations, dual-logs predictions, and manages analyst feedback in SQLite.
-2. **Next.js SOC Console (`web/`)**: Minimal, high-density dashboard for reviewing alerts, inspecting signed feature contributions, and auditing sampled non-alert flows.
-3. **Dataset Replay Adapter (`nexus.replay`)**: Streams held-out evaluation traffic into the running system in real time.
-
-### Prerequisites
-- **Python 3.11+**
-- **Node.js 18+** (Node 20+ recommended) and `npm`
-
----
-
-### Step 1: Environment & Python dependencies
-
-From the repository root:
+Python 3.11+ and the local UNSW-NB15 training CSV are required. Models, datasets,
+split indices, raw results and release bundles remain Git-ignored and local.
 
 ```sh
 python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e '.[dev,training]'
+.venv/bin/python -m pip install -e '.[dev,training]'
+.venv/bin/python -m pytest -q tests/test_anomaly_detection_models.py
 ```
 
-*(Note for macOS Apple Silicon users: LightGBM requires OpenMP. If not present, run `brew install libomp`).*
-
----
-
-### Step 2: Ensure the release bundle is present
-
-The backend requires the cryptographically sealed release bundle (`artifacts/bundles/v1.0.0/`). Because bundles and model binaries are ignored by Git:
-- **On a new machine / fresh clone**: Copy the `artifacts/bundles/v1.0.0/` directory into your project root, OR export it if local training outputs and datasets are present:
+Start a new experiment directory; existing directories are never overwritten:
 
 ```sh
-python -m training.export_release_bundle
+.venv/bin/python training/run_novelty_experiment.py \
+  --output-dir artifacts/fusion_next_run \
+  --families none Reconnaissance Exploits DoS \
+  --seeds 42 123 2026 --fpr-budgets 0.01 0.03 0.05
 ```
 
-This verifies source code and training partition SHA-256 hashes, then packages `model.joblib`, `preprocessor.joblib`, and `manifest.json`.
+This trains and evaluates the models. If the local v1 suite exists, use
+`--reuse-dir artifacts/anomaly_comparison_v1` to reuse its matching seeds and
+fitted models. Full commands for all eight seeds, calibration, reporting and
+plots are in the [execution guide](training/FUSION_EXPERIMENTS.md).
+Everything runs in the foreground. No experiment starts automatically.
 
----
+## Limitations and next steps
 
-### Step 3: Start the Backend API (FastAPI)
+- Internal development holdouts are not independent external confirmation.
+  Repeated seeds share data; no statistical-significance claim is made.
+- A calibration FPR cap can be exceeded on evaluation or drifting traffic.
+  In 88/96 configurations, LightGBM already consumed all calibration FP slots.
+- Exact-row grouping does not establish session or temporal independence.
+- High benchmark precision need not transfer to low-prevalence production traffic.
+- Reconnaissance subtype labels cannot reliably be joined to benchmark rows.
+  TCP/FIN and service slices are diagnostics, not invented attack subtypes.
+- Attack-type classification exists as an optional offline diagnostic; unknown
+  rejection and end-to-end family classification remain unfinished.
 
-Set your environment variables and start Uvicorn on port `8000`:
+Next model work: a LightGBM-score-only fusion control, plain-AE versus denoising-AE
+fusion ablations, explicit budget allocation, and independent confirmation.
+Measure latency and drift before claiming operational improvement. Fusion
+integration with the application remains a separate milestone.
 
-```sh
-export NEXUS_BUNDLE_VERSION=v1.0.0
-export NEXUS_DATABASE_PATH=data/nexus.sqlite3
-export NEXUS_API_TOKEN="test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-export NEXUS_REVIEWER_ID=local-analyst
+## Repository layout
 
-uvicorn nexus.api:app --host 127.0.0.1 --port 8000 --reload
-```
-
-> **Authentication Tip**: The Next.js frontend API proxy defaults to `test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb`. Using this token in the backend avoids `401 Unauthorized` errors. If you use a custom secret token, export the same `NEXUS_API_TOKEN` before launching the frontend or define it in `web/.env.local`.
-
-Verify backend health:
-- Readiness: `curl http://127.0.0.1:8000/health/ready`
-- Interactive API Docs: <http://127.0.0.1:8000/docs>
-
----
-
-### Step 4: Seed Demo Alerts (Recommended on Fresh Clone)
-
-On a freshly cloned repository, the database is empty (`0 alerts`). To immediately populate the queue with sample alerts for testing the UI:
-
-```sh
-NEXUS_DATABASE_PATH=data/nexus.sqlite3 python -m nexus.demo
-```
-
----
-
-### Step 5: Start the Frontend Console (Next.js)
-
-In a **second terminal**, start the Next.js development server:
-
-```sh
-cd web
-npm install
-npm run dev
-```
-
-For production builds:
-```sh
-npm run build
-npm run start -- -p 3000
-```
-
-Open your browser to <http://localhost:3000> (renders in dark mode).
-
----
-
-### Step 6: Ingest Traffic via Dataset Replay
-
-In a **third terminal**, stream real network traffic from the frozen held-out evaluation split into the live system *(requires `data/raw/CSV_Files/.../UNSW_NB15_testing-set.csv` and `split_indices.npz`)*:
-
-```sh
-source .venv/bin/activate
-
-# Stream 500 flows at 50 flows/second:
-python -m nexus.replay --limit 500 --rate 50
-
-# Or stream 1,000 flows from the attack partition:
-python -m nexus.replay --offset 6880 --limit 1000 --rate 100
-```
-
-**How it works:**
-1. Ground-truth labels (`label`, `attack_cat`) are strictly stripped before transmission so the model receives zero hints.
-2. Batches are POSTed to `http://127.0.0.1:8000/api/v1/predictions`.
-3. Flows scoring $\ge 0.577693$ trigger alerts with TreeSHAP explanations.
-4. Ground-truth labels are stored separately in the `replay_truth` table for empirical evaluation.
-5. Alerts appear live in the web dashboard!
-
----
-
-### Step 7: Using the SOC Analyst Console
-
-Navigate through the console at <http://localhost:3000>:
-- **/alerts**: Triage queue of active intrusion alerts. Filter by verdict, inspect raw scores, and view high-level triage statistics.
-- **/alerts/[id]**: Alert detail page with TreeSHAP signed feature contributions (red = pushed toward alert, green = pushed toward normal) and interactive analyst verdict submission (Confirmed Attack, False Positive, Needs Investigation).
-- **/review-sample**: Missed-attack audit queue sampling non-alert traffic (scores $< 0.5777$) to catch low-and-slow stealth attacks.
-- **/model**: Release bundle integrity, SHA-256 hashes, selection partition metrics, and empirical replay confusion matrix.
-- Press <kbd>?</kbd> anywhere in the console to view keyboard navigation shortcuts.
-
----
-
-## Endpoints
-
-| Method | Path | Purpose |
-| --- | --- | --- |
-| GET | `/health/live` | Process health. |
-| GET | `/health/ready` | Release bundle readiness and cryptographic SHA-256 verification. |
-| GET | `/api/v1/schema` | Provisional flow JSON Schema. |
-| POST | `/api/v1/flows/validate` | Validate a batch without storing or scoring it. |
-| POST | `/api/v1/predictions` | Real LightGBM inference, TreeSHAP explanation, prediction logging, and alert creation. |
-| GET | `/api/v1/alerts` | Paginate stored alerts; optional verdict and severity filters. |
-| GET | `/api/v1/alerts/{alert_id}` | Retrieve an alert, TreeSHAP contributions, and review status. |
-| GET | `/api/v1/alerts/{alert_id}/feedback` | Paginate append-only review history. |
-| POST | `/api/v1/alerts/{alert_id}/feedback` | Record a review with retry and concurrency protection. |
-| GET | `/api/v1/predictions/sample` | Stratified sample of non-alert flows for missed-attack auditing. |
-| POST | `/api/v1/predictions/{flow_id}/feedback` | Record analyst verdict on sampled non-alert flows. |
-| GET | `/api/v1/model` | Model architecture, decision threshold, SHA-256 hashes, and selection metrics. |
-| GET | `/api/v1/stats` | High-level triage statistics and verdict breakdown. |
-| GET | `/api/v1/replay/summary` | Empirical confusion matrix and false alert rate from replay truth. |
-
-Alert and review endpoints require the configured bearer token. The server assigns the reviewer ID; clients cannot supply reviewer identity, timestamps, or training eligibility. Without a token configured, alert endpoints return 503; missing or incorrect credentials return 401.
-
-See [the API contract](docs/api.md) for request limits, feedback examples, pagination, and error behaviour.
-
-## Code layout
-
-| Module | Responsibility |
+| Path | Role |
 | --- | --- |
-| `api.py` | App creation and database startup. |
-| `routes.py` | HTTP routing, authentication, prediction logging, and stats endpoints. |
-| `transport.py` | Header, body size, JSON, and timeout checks. |
-| `schemas.py` / `alerts.py` | Flow, alert, prediction, and review contracts. |
-| `bundle.py` | Release bundle manifest loading and SHA-256 integrity verification. |
-| `inference.py` | Preprocessing, LightGBM inference engine, and TreeSHAP attribution. |
-| `storage.py` | Parameterized SQLite queries, atomic dual-logging, and replay truth. |
-| `replay.py` | Dataset replay CLI streaming held-out evaluation traffic into the API. |
-| `config.py` / `errors.py` | Configuration and consistent error responses. |
-| `demo.py` | Explicit synthetic alert seeding. |
-| `web/` | Next.js SOC analyst console (App Router, Tailwind CSS, TanStack Query). |
+| `training/` | Current experiment runner, anomaly/fusion models, reporting and required historical training helpers |
+| `tests/` | Model invariants, API behavior and integration checks |
+| `reports/` | Curated research assessments; raw generated reports stay local |
+| `models/` | Local frozen checkpoints, including `lightgbm_validated_v1` |
+| `artifacts/` | Local experiment suites, aggregate CSVs, plots, logs, release bundles and archived reports |
+| `experiments/` | Retained historical LightGBM provenance needed by the binary report |
+| `src/nexus/`, `web/` | Existing LightGBM-serving API and SOC console |
+| `docs/` | API contract and local demo instructions |
 
-Database calls run in FastAPI's worker pool and use a separate connection per operation. SQLite writes serialize through transactions; review history and the alert's revision commit together.
-
-### Verification & Testing
-
-```sh
-# Backend test suite:
-pytest -q
-
-# Code formatting & linting:
-ruff check src tests
-ruff format --check src tests
-
-# Frontend build & typecheck:
-cd web && npm run build
-```
-
-## Next milestones
-
-- [x] Integrate evaluated release bundle for real predictions and all-prediction logging.
-- [x] Build the dashboard around stored alert and feedback endpoints.
-- [x] Stream held-out evaluation data with isolated ground truth.
-- [ ] Multi-class attack family classifier (e.g. Exploits, DoS, Reconnaissance).
-- [ ] Out-of-Distribution / novelty detection (Autoencoders or Isolation Forest).
-- [ ] Live PCAP / network interface ingestion adapter.
-- [ ] Multi-user identity, authentication, and role-based permissions.
-- [ ] WebSocket notifications for real-time alert push.
-
-Keep this development service on loopback. Multi-user identity/authorization, rate limiting, deployment hardening, backups, and full access auditing remain future work. Analyst reviews are recorded with provenance, but none automatically become training labels.
+For the application, use the [local demo guide](docs/LOCAL_DEMO.md). Dataset replay
+is historical traffic replay, not live packet capture or independent evaluation.

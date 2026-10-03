@@ -24,7 +24,7 @@ def digest(path):
 
 def main():
     raw_path = ROOT / 'data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_training-set.csv'
-    model_path = ROOT / 'experiments/lightgbm_validated_v/binary/model.joblib'
+    model_path = ROOT / 'models/lightgbm_validated_v1/binary/model.joblib'
     ae_path = ROOT / 'models/autoencoder/autoencoder.joblib'
     config_path = ae_path.with_name('autoencoder_config.json')
     preprocessor_path = ROOT / 'data/processed/preprocessor.joblib'

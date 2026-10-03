@@ -172,7 +172,7 @@ def main() -> None:
     parser.add_argument(
         "--experiment-dir",
         type=Path,
-        default=PROJECT_ROOT / "experiments/lightgbm_validated_v1",
+        default=PROJECT_ROOT / "models/lightgbm_validated_v1",
     )
     parser.add_argument(
         "--output-dir",
