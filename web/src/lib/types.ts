@@ -92,6 +92,55 @@ export interface NonAlertSamplePage {
   next_after: number | null;
 }
 
+export interface SimulationProfile {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  service: string;
+  expected_verdict: string;
+}
+
+export interface ProbeResult {
+  target_url: string;
+  profile_id: string;
+  profile_name: string;
+  category: string;
+  flow_id: string;
+  target_hit: boolean;
+  score: number;
+  threshold: number;
+  decision: "alert" | "normal";
+  threat_level: "CRITICAL" | "HIGH" | "MEDIUM" | "CLEAN";
+  alert_id?: string | null;
+  top_features: FeatureContribution[];
+  recommended_action: string;
+  event_time: string;
+}
+
+export interface PresetData {
+  preset_id: string;
+  flow_count: number;
+  csv_text: string;
+  flows: Record<string, unknown>[];
+}
+
+export interface BatchPredictionItem {
+  flow_id: string;
+  score: number;
+  threshold: number;
+  decision: "alert" | "normal";
+  alert_id?: string | null;
+}
+
+export interface BatchPredictionResponse {
+  bundle_version: string;
+  predictions: BatchPredictionItem[];
+  alert_count: number;
+  total_count: number;
+}
+
+
 export interface ReplaySummary {
   total_replayed: number;
   confusion_matrix: number[][];

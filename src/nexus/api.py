@@ -45,6 +45,8 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
     app.state.store = store
     app.add_middleware(StrictRequests, limits=limits or RequestLimits())
     register_error_handlers(app)
+    from nexus import traffic_presets
+
     for router in (
         routes.health,
         routes.flows,
@@ -52,6 +54,7 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
         routes.predictions,
         routes.stats,
         routes.replay,
+        traffic_presets.router,
     ):
         app.include_router(router)
     return app

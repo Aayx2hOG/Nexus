@@ -1,12 +1,16 @@
 import {
   AlertPage,
   AlertRecord,
+  BatchPredictionResponse,
   FeedbackPage,
   FeedbackRecord,
   Health,
   ModelSummary,
   NonAlertSamplePage,
+  PresetData,
+  ProbeResult,
   ReplaySummary,
+  SimulationProfile,
   Stats,
 } from "./types";
 
@@ -109,3 +113,40 @@ export async function submitSampleFeedback(
     body: JSON.stringify(data),
   });
 }
+
+export async function fetchSimulationProfiles(): Promise<SimulationProfile[]> {
+  return request<SimulationProfile[]>("traffic/profiles");
+}
+
+export async function simulateProbe(payload: {
+  target_url: string;
+  profile_id: string;
+}): Promise<ProbeResult> {
+  return request<ProbeResult>("traffic/simulate-probe", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function fetchPresetData(presetId: string): Promise<PresetData> {
+  return request<PresetData>(`traffic/presets/${presetId}`);
+}
+
+export async function submitBatchPredictions(
+  flows: Array<{
+    flow_id: string;
+    event_time: string;
+    features: Record<string, string | number>;
+  }>
+): Promise<BatchPredictionResponse> {
+  return request<BatchPredictionResponse>("predictions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      schema_version: "unsw-nb15.v0",
+      flows,
+    }),
+  });
+}
+

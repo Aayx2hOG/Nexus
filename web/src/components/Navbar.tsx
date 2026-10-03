@@ -8,6 +8,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/alerts", label: "Alerts" },
+    { href: "/traffic", label: "Traffic & Ingestion" },
     { href: "/review-sample", label: "Missed Attack Review" },
     { href: "/model", label: "Model & Manifest" },
   ];
