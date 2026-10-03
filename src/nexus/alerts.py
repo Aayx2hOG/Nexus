@@ -6,8 +6,8 @@ from pydantic import AfterValidator, BeforeValidator, Field, model_validator
 
 from nexus.schemas import Category, Identifier, StrictModel, Timestamp
 
-Severity = Literal["low", "medium", "high", "critical"]
-Verdict = Literal["confirmed_attack", "false_positive", "pending"]
+Severity = Literal["low", "medium", "high", "critical", "alert"]
+Verdict = Literal["confirmed_attack", "false_positive", "needs_investigation", "pending"]
 Probability = Annotated[float, Field(ge=0, le=1)]
 
 
@@ -40,9 +40,11 @@ class AlertData(StrictModel):
     source: Literal["mock", "model"]
     bundle_version: Annotated[str, Field(min_length=1, max_length=64, pattern=r"^[A-Za-z0-9_.-]+$")]
     predicted_class: Category
-    probability: Probability
-    novelty_score: Annotated[float, Field(ge=0, le=1e15)]
-    risk: Probability
+    score: float | None = None
+    threshold: float | None = None
+    probability: Probability | None = None
+    novelty_score: Annotated[float, Field(ge=0, le=1e15)] | None = None
+    risk: Probability | None = None
     severity: Severity
     top_features: Annotated[list[FeatureContribution], Field(max_length=20)]
 
