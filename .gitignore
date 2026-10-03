@@ -54,3 +54,8 @@ data/raw/*
 #models
 models/*
 !models/.gitkeep
+
+# web
+web/node_modules/
+web/.next/
+web/out/
