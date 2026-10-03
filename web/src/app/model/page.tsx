@@ -3,7 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchModelSummary, fetchReplaySummary } from "@/lib/api";
 import {
-  AlertCircle,
   Hash,
   Database,
   BarChart2,
@@ -34,21 +33,6 @@ export default function ModelPage() {
         </p>
       </div>
 
-      {/* Mandatory Disclosure Alert Banner (Honesty Rule 6) */}
-      <div className="bg-[#FFFBEB] border border-[#FCD34D] p-3.5 rounded-sm flex items-start space-x-3">
-        <AlertCircle className="w-4 h-4 text-[#B45309] shrink-0 mt-0.5" />
-        <div className="text-xs text-[#B45309] space-y-1">
-          <div className="font-semibold tracking-tight">
-            Independent Confirmation Disclosure Notice
-          </div>
-          <p className="text-[11px] leading-relaxed">
-            All validation metrics shown on this page are{" "}
-            <strong>selection estimates from the frozen held-out evaluation partition</strong>,
-            not independent real-world confirmation. Production operations may exhibit
-            variations due to network environment shift.
-          </p>
-        </div>
-      </div>
 
       {/* Overview Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
