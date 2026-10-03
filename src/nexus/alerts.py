@@ -22,9 +22,13 @@ def readable_text(value: str) -> str:
 Notes = Annotated[str, Field(min_length=1, max_length=2000), AfterValidator(readable_text)]
 
 
+FeatureName = Annotated[str, Field(min_length=1, max_length=64, pattern=r"^[A-Za-z0-9_./+-]+$")]
+
+
 class FeatureContribution(StrictModel):
-    feature: Category
+    feature: FeatureName
     contribution: Annotated[float, Field(ge=-1e15, le=1e15)]
+    value: float | str | None = None
 
 
 class AlertData(StrictModel):
