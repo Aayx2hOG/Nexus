@@ -1,0 +1,64 @@
+{
+  "evaluated_at": "2026-10-03T16:19:20.433468+05:30",
+  "model_path": "experiments/lightgbm_validated_v/binary/model.joblib",
+  "model_sha256": "e67ba339a6a67db546929e191dca9e8fd9caf8120372206d2ffcad6d2bbc6b02",
+  "model_matches_manifest": true,
+  "data_path": "data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_training-set.csv",
+  "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "data_matches_manifest_training_data": true,
+  "data_role": "official_training_development_data",
+  "scope": "All official training rows; includes model fitting, calibration, and selection data. These are development-set metrics, not independent holdout performance. No retraining or threshold tuning.",
+  "rows": 175341,
+  "normal_rows": 56000,
+  "attack_rows": 119341,
+  "metrics": {
+    "decision_threshold": 0.5776925765603604,
+    "accuracy": 0.973651342241689,
+    "balanced_accuracy": 0.9766298563569937,
+    "precision": 0.9927243052871194,
+    "recall": 0.9683847127139876,
+    "f1": 0.980403467992331,
+    "false_positive_rate": 0.015125,
+    "specificity": 0.984875,
+    "roc_auc": 0.998128546933936,
+    "confusion_matrix": [
+      [
+        55153,
+        847
+      ],
+      [
+        3773,
+        115568
+      ]
+    ],
+    "classification_report": {
+      "normal": {
+        "precision": 0.9359705393205037,
+        "recall": 0.984875,
+        "f1-score": 0.9598002192715313,
+        "support": 56000.0
+      },
+      "attack": {
+        "precision": 0.9927243052871194,
+        "recall": 0.9683847127139876,
+        "f1-score": 0.980403467992331,
+        "support": 119341.0
+      },
+      "accuracy": 0.973651342241689,
+      "macro avg": {
+        "precision": 0.9643474223038115,
+        "recall": 0.9766298563569937,
+        "f1-score": 0.9701018436319311,
+        "support": 175341.0
+      },
+      "weighted avg": {
+        "precision": 0.9745984197604571,
+        "recall": 0.973651342241689,
+        "f1-score": 0.9738232504256195,
+        "support": 175341.0
+      }
+    },
+    "average_precision": 0.9991067212827712,
+    "false_alerts_per_1000_normal": 15.125
+  }
+}

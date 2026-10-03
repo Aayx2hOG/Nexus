@@ -138,9 +138,10 @@ python -m pip install -e '.[dev,training]'
 
 ---
 
-### Step 2: Ensure the release bundle is exported
+### Step 2: Ensure the release bundle is present
 
-The backend requires the cryptographically sealed release bundle (`artifacts/bundles/v1.0.0/`):
+The backend requires the cryptographically sealed release bundle (`artifacts/bundles/v1.0.0/`). Because bundles and model binaries are ignored by Git:
+- **On a new machine / fresh clone**: Copy the `artifacts/bundles/v1.0.0/` directory into your project root, OR export it if local training outputs and datasets are present:
 
 ```sh
 python -m training.export_release_bundle
@@ -157,11 +158,13 @@ Set your environment variables and start Uvicorn on port `8000`:
 ```sh
 export NEXUS_BUNDLE_VERSION=v1.0.0
 export NEXUS_DATABASE_PATH=data/nexus.sqlite3
-export NEXUS_API_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+export NEXUS_API_TOKEN="test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 export NEXUS_REVIEWER_ID=local-analyst
 
 uvicorn nexus.api:app --host 127.0.0.1 --port 8000 --reload
 ```
+
+> **Authentication Tip**: The Next.js frontend API proxy defaults to `test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb`. Using this token in the backend avoids `401 Unauthorized` errors. If you use a custom secret token, export the same `NEXUS_API_TOKEN` before launching the frontend or define it in `web/.env.local`.
 
 Verify backend health:
 - Readiness: `curl http://127.0.0.1:8000/health/ready`
@@ -169,7 +172,17 @@ Verify backend health:
 
 ---
 
-### Step 4: Start the Frontend Console (Next.js)
+### Step 4: Seed Demo Alerts (Recommended on Fresh Clone)
+
+On a freshly cloned repository, the database is empty (`0 alerts`). To immediately populate the queue with sample alerts for testing the UI:
+
+```sh
+NEXUS_DATABASE_PATH=data/nexus.sqlite3 python -m nexus.demo
+```
+
+---
+
+### Step 5: Start the Frontend Console (Next.js)
 
 In a **second terminal**, start the Next.js development server:
 
@@ -185,13 +198,13 @@ npm run build
 npm run start -- -p 3000
 ```
 
-Open your browser to <http://localhost:3000>.
+Open your browser to <http://localhost:3000> (renders in dark mode).
 
 ---
 
-### Step 5: Ingest Traffic via Dataset Replay
+### Step 6: Ingest Traffic via Dataset Replay
 
-In a **third terminal**, stream real network traffic from the frozen held-out evaluation split into the live system:
+In a **third terminal**, stream real network traffic from the frozen held-out evaluation split into the live system *(requires `data/raw/CSV_Files/.../UNSW_NB15_testing-set.csv` and `split_indices.npz`)*:
 
 ```sh
 source .venv/bin/activate
@@ -212,7 +225,7 @@ python -m nexus.replay --offset 6880 --limit 1000 --rate 100
 
 ---
 
-### Step 6: Using the SOC Analyst Console
+### Step 7: Using the SOC Analyst Console
 
 Navigate through the console at <http://localhost:3000>:
 - **/alerts**: Triage queue of active intrusion alerts. Filter by verdict, inspect raw scores, and view high-level triage statistics.

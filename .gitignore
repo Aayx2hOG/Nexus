@@ -59,3 +59,13 @@ models/*
 web/node_modules/
 web/.next/
 web/out/
+
+#experiments
+experiments/**/trials/
+experiments/**/all_trial_metrics.json
+
+experiments/autoencoder_optimization/
+experiments/leave_one_attack_family_out/
+experiments/selective_fusion_leakage_free/
+reports/autoencoder_complementarity/
+reports/model_complementarity/

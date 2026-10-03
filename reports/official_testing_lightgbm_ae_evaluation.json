@@ -1,0 +1,139 @@
+{
+  "evaluated_at": "2026-10-03T16:36:53.768214+05:30",
+  "data_role": "full_official_test_historical",
+  "artifacts": {
+    "data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_testing-set.csv": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+    "experiments/lightgbm_validated_v/binary/model.joblib": "e67ba339a6a67db546929e191dca9e8fd9caf8120372206d2ffcad6d2bbc6b02",
+    "models/autoencoder/autoencoder.joblib": "871091426bce7dfa8b45215fa8f5cfa267e5a93b7f0724871df8d0ed2c313d56",
+    "models/autoencoder/autoencoder_config.json": "3e67955b9116791285a3836fd1962c6ccea52704d718829f7db43a2b6c08c45b",
+    "data/processed/preprocessor.joblib": "e0dc44f2869183ffa49e52a35354cf5274ea9694c03f86650a51ae12fed0b3dd"
+  },
+  "rows": 82332,
+  "normal_rows": 37000,
+  "attack_rows": 45332,
+  "thresholds": {
+    "lightgbm": 0.5776925765603604,
+    "baseline_ae": 0.0008786016260273755
+  },
+  "fusion_rule": "attack if LightGBM OR baseline AE predicts attack",
+  "checks": "LightGBM manifest hash and feature schema verified; raw labels and all AE input rows match cached testing data.",
+  "results": {
+    "LightGBM": {
+      "confusion_matrix": [
+        [
+          30665,
+          6335
+        ],
+        [
+          1570,
+          43762
+        ]
+      ],
+      "classification_report": {
+        "normal": {
+          "precision": 0.9512951760508763,
+          "recall": 0.8287837837837838,
+          "f1-score": 0.8858236441106376,
+          "support": 37000.0
+        },
+        "attack": {
+          "precision": 0.8735453220751742,
+          "recall": 0.9653666284302479,
+          "f1-score": 0.9171635456726991,
+          "support": 45332.0
+        },
+        "accuracy": 0.9039862993732692,
+        "macro avg": {
+          "precision": 0.9124202490630253,
+          "recall": 0.8970752061070159,
+          "f1-score": 0.9014935948916684,
+          "support": 82332.0
+        },
+        "weighted avg": {
+          "precision": 0.9084861056963783,
+          "recall": 0.9039862993732692,
+          "f1-score": 0.9030793942152309,
+          "support": 82332.0
+        }
+      }
+    },
+    "Baseline AE": {
+      "confusion_matrix": [
+        [
+          31336,
+          5664
+        ],
+        [
+          7898,
+          37434
+        ]
+      ],
+      "classification_report": {
+        "normal": {
+          "precision": 0.7986950094305959,
+          "recall": 0.8469189189189189,
+          "f1-score": 0.8221003751606895,
+          "support": 37000.0
+        },
+        "attack": {
+          "precision": 0.8685785883335654,
+          "recall": 0.8257742874790435,
+          "f1-score": 0.8466357570960081,
+          "support": 45332.0
+        },
+        "accuracy": 0.8352766846426662,
+        "macro avg": {
+          "precision": 0.8336367988820806,
+          "recall": 0.8363466031989812,
+          "f1-score": 0.8343680661283488,
+          "support": 82332.0
+        },
+        "weighted avg": {
+          "precision": 0.8371729086536125,
+          "recall": 0.8352766846426662,
+          "f1-score": 0.8356095566926802,
+          "support": 82332.0
+        }
+      }
+    },
+    "Combined OR": {
+      "confusion_matrix": [
+        [
+          26965,
+          10035
+        ],
+        [
+          935,
+          44397
+        ]
+      ],
+      "classification_report": {
+        "normal": {
+          "precision": 0.9664874551971326,
+          "recall": 0.7287837837837838,
+          "f1-score": 0.8309707241910632,
+          "support": 37000.0
+        },
+        "attack": {
+          "precision": 0.8156415343915344,
+          "recall": 0.9793743933645107,
+          "f1-score": 0.8900404955695441,
+          "support": 45332.0
+        },
+        "accuracy": 0.86675897585386,
+        "macro avg": {
+          "precision": 0.8910644947943336,
+          "recall": 0.8540790885741473,
+          "f1-score": 0.8605056098803037,
+          "support": 82332.0
+        },
+        "weighted avg": {
+          "precision": 0.8834316897358373,
+          "recall": 0.86675897585386,
+          "f1-score": 0.8634945408860214,
+          "support": 82332.0
+        }
+      }
+    }
+  }
+}
