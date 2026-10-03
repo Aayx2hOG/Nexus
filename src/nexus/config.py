@@ -8,6 +8,8 @@ from pathlib import Path
 @dataclass(frozen=True)
 class Settings:
     database_path: Path = Path("artifacts/nexus.sqlite3")
+    bundles_dir: Path = Path("artifacts/bundles")
+    bundle_version: str | None = None
     api_token: str | None = field(default=None, repr=False)
     reviewer_id: str = "local-analyst"
 
@@ -28,6 +30,8 @@ class Settings:
     def from_env(cls) -> "Settings":
         return cls(
             database_path=Path(os.environ.get("NEXUS_DATABASE_PATH", "artifacts/nexus.sqlite3")),
+            bundles_dir=Path(os.environ.get("NEXUS_BUNDLES_DIR", "artifacts/bundles")),
+            bundle_version=os.environ.get("NEXUS_BUNDLE_VERSION"),
             api_token=os.environ.get("NEXUS_API_TOKEN"),
             reviewer_id=os.environ.get("NEXUS_REVIEWER_ID", "local-analyst"),
         )

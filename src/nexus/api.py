@@ -19,6 +19,19 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         await run_in_threadpool(store.initialize)
+        if settings.bundle_version:
+            from nexus.bundle import BundleLoader
+
+            loader = BundleLoader(settings.bundles_dir, settings.bundle_version)
+            try:
+                loader.load()
+            except Exception as e:
+                import logging
+
+                logging.getLogger(__name__).warning("Bundle load failed at startup: %s", e)
+            app.state.bundle_loader = loader
+        else:
+            app.state.bundle_loader = None
         yield
 
     app = FastAPI(

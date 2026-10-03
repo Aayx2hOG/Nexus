@@ -3,7 +3,7 @@
 from secrets import compare_digest
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, Query, Request, Response
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from nexus.alerts import (
@@ -64,13 +64,20 @@ alerts = APIRouter(
 )
 
 
-@health.get("/live")
+@health.get("/live", response_model_exclude_none=True)
 async def live() -> Health:
     return Health(status="alive")
 
 
-@health.get("/ready", status_code=503)
-async def ready() -> Health:
+@health.get("/ready", response_model_exclude_none=True)
+async def ready(request: Request, response: Response) -> Health:
+    loader = getattr(request.app.state, "bundle_loader", None)
+    if loader is not None and loader.is_ready and loader.loaded_bundle is not None:
+        return Health(
+            status="ready",
+            bundle_version=loader.loaded_bundle.manifest.bundle_version,
+        )
+    response.status_code = 503
     return Health(status="not_ready")
 
 

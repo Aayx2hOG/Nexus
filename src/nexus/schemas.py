@@ -127,4 +127,5 @@ class ValidationResult(StrictModel):
 
 
 class Health(StrictModel):
-    status: Literal["alive", "not_ready"]
+    status: Literal["alive", "not_ready", "ready"]
+    bundle_version: str | None = None
