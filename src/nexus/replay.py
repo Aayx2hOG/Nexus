@@ -40,6 +40,7 @@ def load_evaluation_data(
     csv_path: Path,
     split_file: Path | None = None,
     split_name: str = "selection",
+    offset: int = 0,
     limit: int | None = None,
 ) -> pd.DataFrame:
     """Load evaluation flows strictly isolated to the specified frozen partition."""
@@ -60,6 +61,8 @@ def load_evaluation_data(
             # If CSV is already pre-filtered or different size, log warning
             pass
 
+    if offset > 0:
+        df = df.iloc[offset:].copy()
     if limit is not None and limit > 0:
         df = df.iloc[:limit].copy()
 
@@ -258,6 +261,7 @@ def main() -> None:
         help="Partition name (strictly 'selection' for frozen evaluation)",
     )
     parser.add_argument("--rate", type=float, default=0.0, help="Target replay rate (flows/sec)")
+    parser.add_argument("--offset", type=int, default=0, help="Starting row offset in partition")
     parser.add_argument("--limit", type=int, default=None, help="Maximum number of flows to replay")
     parser.add_argument("--batch-size", type=int, default=50, help="Flows per prediction batch")
     parser.add_argument("--url", type=str, default="http://localhost:8000", help="Nexus API URL")
@@ -275,6 +279,7 @@ def main() -> None:
         csv_path=args.csv,
         split_file=args.split_file,
         split_name=args.split,
+        offset=args.offset,
         limit=args.limit,
     )
 
