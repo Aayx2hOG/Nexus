@@ -1,18 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
-interface Props {
-  open: boolean;
-  onClose: () => void;
-}
+export function KeyboardHelpModal() {
+  const [open, setOpen] = useState(false);
 
-export function KeyboardHelpModal({ open, onClose }: Props) {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "?" && !e.metaKey && !e.ctrlKey) {
-        // don't toggle if typing in an input or textarea
         if (
           document.activeElement?.tagName === "INPUT" ||
           document.activeElement?.tagName === "TEXTAREA"
@@ -20,16 +16,15 @@ export function KeyboardHelpModal({ open, onClose }: Props) {
           return;
         }
         e.preventDefault();
-        if (open) onClose();
-        else onClose(); // parent handles toggle
+        setOpen((prev) => !prev);
       }
       if (e.key === "Escape" && open) {
-        onClose();
+        setOpen(false);
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
@@ -50,7 +45,7 @@ export function KeyboardHelpModal({ open, onClose }: Props) {
         <div className="flex items-center justify-between border-b border-[#E2E2DD] pb-3 mb-4">
           <h3 className="text-sm font-semibold text-[#1C1C1A]">Keyboard Navigation</h3>
           <button
-            onClick={onClose}
+            onClick={() => setOpen(false)}
             className="text-[#6B6966] hover:text-[#1C1C1A] p-1 rounded-sm hover:bg-[#FAFAF8]"
           >
             <X className="w-4 h-4" />
