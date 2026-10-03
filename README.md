@@ -1,13 +1,16 @@
 # Nexus
 
-Network intrusion detection research with validated LightGBM/Random Forest training and a local API for flow validation, persisted alerts, and analyst reviews. Real-model API inference is not integrated yet.
+Network intrusion detection research with validated LightGBM training, real-model TreeSHAP inference, all-prediction logging, an analyst-review API, and a Next.js SOC console.
 
 ## Project overview
 
 Nexus investigates normal-versus-attack detection on UNSW-NB15 and provides an
-API foundation for reviewing intrusion alerts. The implemented research workflow
-compares LightGBM with Random Forest using duplicate-grouped partitions, separate
-threshold calibration, and a frozen evaluation procedure.
+end-to-end operational pipeline for real-time model inference and intrusion alert review.
+The implemented research workflow compares LightGBM with Random Forest using duplicate-grouped
+partitions, separate threshold calibration, and a frozen evaluation procedure.
+The operational system connects the cryptographically sealed LightGBM release bundle to
+a FastAPI backend, an all-prediction audit log, an explainability engine (TreeSHAP),
+and a Next.js analyst triage console.
 
 | Documentation | Contents |
 | --- | --- |
@@ -23,9 +26,9 @@ JSON rather than duplicate Markdown reports.
 
 Nexus focuses on making intrusion-detection results reproducible and actionable
 through recall-constrained classification, traceable evaluation, and an
-analyst-review API. Its current contribution is the implementation of these
-capabilities within one project; connecting the trained detector to the API is
-still outstanding.
+analyst-review API. Its contribution is an end-to-end vertical slice: connecting
+a validated LightGBM detector to an operational API with TreeSHAP explanations,
+all-prediction logging, an analyst review queue, and a Next.js SOC console.
 
 The cited research provides datasets, algorithms, and evaluation guidance.
 Nexus builds on those foundations with an explicit false-alert objective and
@@ -36,9 +39,9 @@ the papers' reported results.
 
 | Capability | Completed work | Remaining work |
 | --- | --- | --- |
-| Known-attack detection | LightGBM/RF training and binary candidate selection; 18.5% fewer false positives than paired RF on selection data, with slightly higher recall. | Compare frozen old/new checkpoints on common evaluation rows and confirm on fresh data. |
+| Known-attack detection | LightGBM/RF training and binary candidate selection; 18.5% fewer false positives than paired RF on selection data. Real LightGBM inference (bundle v1.0.0) with TreeSHAP feature attributions. | Compare frozen old/new checkpoints on common evaluation rows and confirm on fresh data. |
 | Reproducibility | Duplicate-grouped partitions, fitting-only preprocessing, separate threshold calibration, saved audits, and frozen source/model hashes. | Assess split sensitivity and session/time dependence where metadata permits. |
-| Analyst review | Flow validation, persistent alerts, append-only feedback history, and retry/concurrency protection. | Connect real-model inference, prediction logging, explanations, and a dashboard; current demonstrations use mock alerts. |
+| Analyst review | Flow validation, persistent alerts, TreeSHAP signed explanations, all-prediction logging, Next.js SOC console, missed-attack sampling, and dataset replay streaming. | Multi-user authentication, role-based permissions, and WebSocket notifications. |
 | Unknown-attack detection | Research direction and evaluation requirements documented. | Implement and compare normal-only autoencoder and Isolation Forest candidates using held-out attack families and a common false-alert budget. |
 
 The intended extension combines known-attack classification with complementary
@@ -67,8 +70,8 @@ for this workflow. Historical training modules remain because the current runner
 imports their helpers and the frozen experiment verifies their source hashes.
 Datasets and model binaries stay local.
 
-Autoencoders, Isolation Forest, novelty detection, and real-model API integration
-are future work. Current API demonstrations use explicitly marked mock alerts.
+Autoencoders, Isolation Forest, and novelty detection are future research directions.
+Real-model API inference (v1.0.0) with TreeSHAP attribution is fully operational.
 
 ## Research foundations
 
@@ -108,53 +111,138 @@ testing where metadata permits, and deployment monitoring remain outstanding.
 The [results report](reports/binary_validated_result.md) records the scope of the
 current improvement claim.
 
-## Development
+## Running the complete system (Backend, Frontend & Traffic Replay)
 
-Requires Python 3.11 or newer.
+Nexus consists of three operational components:
+1. **FastAPI Backend (`src/nexus`)**: Serves real-time LightGBM predictions, computes TreeSHAP explanations, dual-logs predictions, and manages analyst feedback in SQLite.
+2. **Next.js SOC Console (`web/`)**: Minimal, high-density dashboard for reviewing alerts, inspecting signed feature contributions, and auditing sampled non-alert flows.
+3. **Dataset Replay Adapter (`nexus.replay`)**: Streams held-out evaluation traffic into the running system in real time.
+
+### Prerequisites
+- **Python 3.11+**
+- **Node.js 18+** (Node 20+ recommended) and `npm`
+
+---
+
+### Step 1: Environment & Python dependencies
+
+From the repository root:
 
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev]'
+python -m pip install -e '.[dev,training]'
 ```
 
-Configure a local analyst credential. Keep the generated token private and reuse it for requests in the same shell:
+*(Note for macOS Apple Silicon users: LightGBM requires OpenMP. If not present, run `brew install libomp`).*
+
+---
+
+### Step 2: Ensure the release bundle is exported
+
+The backend requires the cryptographically sealed release bundle (`artifacts/bundles/v1.0.0/`):
 
 ```sh
+python -m training.export_release_bundle
+```
+
+This verifies source code and training partition SHA-256 hashes, then packages `model.joblib`, `preprocessor.joblib`, and `manifest.json`.
+
+---
+
+### Step 3: Start the Backend API (FastAPI)
+
+Set your environment variables and start Uvicorn on port `8000`:
+
+```sh
+export NEXUS_BUNDLE_VERSION=v1.0.0
+export NEXUS_DATABASE_PATH=data/nexus.sqlite3
 export NEXUS_API_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
 export NEXUS_REVIEWER_ID=local-analyst
-python -m nexus.demo
+
 uvicorn nexus.api:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-The optional demo command loads two synthetic alerts marked `source: mock`; identical reruns are safe. No demo data is inserted automatically. SQLite defaults to `artifacts/nexus.sqlite3`; override it with `NEXUS_DATABASE_PATH`.
+Verify backend health:
+- Readiness: `curl http://127.0.0.1:8000/health/ready`
+- Interactive API Docs: <http://127.0.0.1:8000/docs>
 
-Open <http://127.0.0.1:8000/docs> for interactive API documentation. Use its **Authorize** button for alert endpoints.
+---
+
+### Step 4: Start the Frontend Console (Next.js)
+
+In a **second terminal**, start the Next.js development server:
 
 ```sh
-curl --fail-with-body http://127.0.0.1:8000/api/v1/alerts \
-  -H "Authorization: Bearer $NEXUS_API_TOKEN"
-
-curl --fail-with-body http://127.0.0.1:8000/api/v1/flows/validate \
-  -H 'Content-Type: application/json' \
-  --data-binary @examples/flow-batch.json
+cd web
+npm install
+npm run dev
 ```
+
+For production builds:
+```sh
+npm run build
+npm run start -- -p 3000
+```
+
+Open your browser to <http://localhost:3000>.
+
+---
+
+### Step 5: Ingest Traffic via Dataset Replay
+
+In a **third terminal**, stream real network traffic from the frozen held-out evaluation split into the live system:
+
+```sh
+source .venv/bin/activate
+
+# Stream 500 flows at 50 flows/second:
+python -m nexus.replay --limit 500 --rate 50
+
+# Or stream 1,000 flows from the attack partition:
+python -m nexus.replay --offset 6880 --limit 1000 --rate 100
+```
+
+**How it works:**
+1. Ground-truth labels (`label`, `attack_cat`) are strictly stripped before transmission so the model receives zero hints.
+2. Batches are POSTed to `http://127.0.0.1:8000/api/v1/predictions`.
+3. Flows scoring $\ge 0.577693$ trigger alerts with TreeSHAP explanations.
+4. Ground-truth labels are stored separately in the `replay_truth` table for empirical evaluation.
+5. Alerts appear live in the web dashboard!
+
+---
+
+### Step 6: Using the SOC Analyst Console
+
+Navigate through the console at <http://localhost:3000>:
+- **/alerts**: Triage queue of active intrusion alerts. Filter by verdict, inspect raw scores, and view high-level triage statistics.
+- **/alerts/[id]**: Alert detail page with TreeSHAP signed feature contributions (red = pushed toward alert, green = pushed toward normal) and interactive analyst verdict submission (Confirmed Attack, False Positive, Needs Investigation).
+- **/review-sample**: Missed-attack audit queue sampling non-alert traffic (scores $< 0.5777$) to catch low-and-slow stealth attacks.
+- **/model**: Release bundle integrity, SHA-256 hashes, selection partition metrics, and empirical replay confusion matrix.
+- Press <kbd>?</kbd> anywhere in the console to view keyboard navigation shortcuts.
+
+---
 
 ## Endpoints
 
 | Method | Path | Purpose |
 | --- | --- | --- |
 | GET | `/health/live` | Process health. |
-| GET | `/health/ready` | Returns 503 until real inference is configured. |
+| GET | `/health/ready` | Release bundle readiness and cryptographic SHA-256 verification. |
 | GET | `/api/v1/schema` | Provisional flow JSON Schema. |
 | POST | `/api/v1/flows/validate` | Validate a batch without storing or scoring it. |
-| POST | `/api/v1/predictions` | Validate input, then return `model_unavailable` (503). |
-| GET | `/api/v1/alerts` | Paginate stored alerts; optional severity filter. |
-| GET | `/api/v1/alerts/{alert_id}` | Retrieve an alert and its feedback version. |
+| POST | `/api/v1/predictions` | Real LightGBM inference, TreeSHAP explanation, prediction logging, and alert creation. |
+| GET | `/api/v1/alerts` | Paginate stored alerts; optional verdict and severity filters. |
+| GET | `/api/v1/alerts/{alert_id}` | Retrieve an alert, TreeSHAP contributions, and review status. |
 | GET | `/api/v1/alerts/{alert_id}/feedback` | Paginate append-only review history. |
 | POST | `/api/v1/alerts/{alert_id}/feedback` | Record a review with retry and concurrency protection. |
+| GET | `/api/v1/predictions/sample` | Stratified sample of non-alert flows for missed-attack auditing. |
+| POST | `/api/v1/predictions/{flow_id}/feedback` | Record analyst verdict on sampled non-alert flows. |
+| GET | `/api/v1/model` | Model architecture, decision threshold, SHA-256 hashes, and selection metrics. |
+| GET | `/api/v1/stats` | High-level triage statistics and verdict breakdown. |
+| GET | `/api/v1/replay/summary` | Empirical confusion matrix and false alert rate from replay truth. |
 
-Alert endpoints require the configured bearer token. The server assigns the reviewer ID; clients cannot supply reviewer identity, timestamps, or training eligibility. This is a single-analyst development credential, not a multi-user authentication system. Without a token configured, alert endpoints return 503; missing or incorrect credentials return 401.
+Alert and review endpoints require the configured bearer token. The server assigns the reviewer ID; clients cannot supply reviewer identity, timestamps, or training eligibility. Without a token configured, alert endpoints return 503; missing or incorrect credentials return 401.
 
 See [the API contract](docs/api.md) for request limits, feedback examples, pagination, and error behaviour.
 
@@ -163,30 +251,42 @@ See [the API contract](docs/api.md) for request limits, feedback examples, pagin
 | Module | Responsibility |
 | --- | --- |
 | `api.py` | App creation and database startup. |
-| `routes.py` | HTTP routing, authentication, and dependencies. |
+| `routes.py` | HTTP routing, authentication, prediction logging, and stats endpoints. |
 | `transport.py` | Header, body size, JSON, and timeout checks. |
-| `schemas.py` / `alerts.py` | Flow, alert, and review contracts. |
-| `storage.py` | Parameterized SQLite queries and transactions. |
+| `schemas.py` / `alerts.py` | Flow, alert, prediction, and review contracts. |
+| `bundle.py` | Release bundle manifest loading and SHA-256 integrity verification. |
+| `inference.py` | Preprocessing, LightGBM inference engine, and TreeSHAP attribution. |
+| `storage.py` | Parameterized SQLite queries, atomic dual-logging, and replay truth. |
+| `replay.py` | Dataset replay CLI streaming held-out evaluation traffic into the API. |
 | `config.py` / `errors.py` | Configuration and consistent error responses. |
 | `demo.py` | Explicit synthetic alert seeding. |
+| `web/` | Next.js SOC analyst console (App Router, Tailwind CSS, TanStack Query). |
 
-Database calls run in FastAPI's worker pool and use a separate connection per operation. SQLite writes serialize through transactions; review history and the alert's revision commit together. The initial database schema is versioned with SQLite `user_version`.
+Database calls run in FastAPI's worker pool and use a separate connection per operation. SQLite writes serialize through transactions; review history and the alert's revision commit together.
+
+### Verification & Testing
 
 ```sh
-python -m pytest -q
+# Backend test suite:
+pytest -q
+
+# Code formatting & linting:
 ruff check src tests
 ruff format --check src tests
-```
 
-Keep datasets in `data/` and generated files in `artifacts/`; both are ignored by Git. The test suite uses temporary databases.
+# Frontend build & typecheck:
+cd web && npm run build
+```
 
 ## Next milestones
 
-- Evaluate frozen candidates on a common holdout and confirm results on fresh data.
-- Decide the next research experiment: further LightGBM tuning or anomaly detection.
-- Implement and benchmark autoencoder and Isolation Forest candidates before selecting a combined detector.
-- Integrate an evaluated release bundle for real predictions and all-prediction logging.
-- Build the dashboard around the stored alert and feedback endpoints.
-- Add WebSocket notifications after durable event delivery exists. HTTP remains available for initial loading and reconnect recovery.
+- [x] Integrate evaluated release bundle for real predictions and all-prediction logging.
+- [x] Build the dashboard around stored alert and feedback endpoints.
+- [x] Stream held-out evaluation data with isolated ground truth.
+- [ ] Multi-class attack family classifier (e.g. Exploits, DoS, Reconnaissance).
+- [ ] Out-of-Distribution / novelty detection (Autoencoders or Isolation Forest).
+- [ ] Live PCAP / network interface ingestion adapter.
+- [ ] Multi-user identity, authentication, and role-based permissions.
+- [ ] WebSocket notifications for real-time alert push.
 
 Keep this development service on loopback. Multi-user identity/authorization, rate limiting, deployment hardening, backups, and full access auditing remain future work. Analyst reviews are recorded with provenance, but none automatically become training labels.
