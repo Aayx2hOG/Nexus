@@ -123,7 +123,7 @@ export default function AlertDetailPage() {
 
   if (alertLoading) {
     return (
-      <div className="py-24 text-center text-xs text-[#6B6966]">
+      <div className="py-24 text-center text-xs text-[#939AA6]">
         Loading alert details...
       </div>
     );
@@ -131,14 +131,14 @@ export default function AlertDetailPage() {
 
   if (alertError || !alert) {
     return (
-      <div className="bg-white border border-[#E2E2DD] p-6 rounded-sm text-center">
-        <h2 className="text-sm font-semibold text-[#B91C1C]">Alert Not Found</h2>
-        <p className="text-xs text-[#6B6966] mt-1">
+      <div className="bg-[#13151A] border border-[#282C35] p-6 rounded-sm text-center">
+        <h2 className="text-sm font-semibold text-[#F87171]">Alert Not Found</h2>
+        <p className="text-xs text-[#939AA6] mt-1">
           The requested alert ID does not exist in the database.
         </p>
         <Link
           href="/alerts"
-          className="inline-flex items-center space-x-1 text-xs text-[#1C1C1A] underline mt-4"
+          className="inline-flex items-center space-x-1 text-xs text-[#F1F3F6] underline mt-4"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Alerts Queue</span>
@@ -157,7 +157,7 @@ export default function AlertDetailPage() {
       <div className="flex items-center justify-between">
         <Link
           href="/alerts"
-          className="inline-flex items-center space-x-1 text-xs text-[#6B6966] hover:text-[#1C1C1A]"
+          className="inline-flex items-center space-x-1 text-xs text-[#939AA6] hover:text-[#F1F3F6]"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Queue</span>
@@ -165,34 +165,34 @@ export default function AlertDetailPage() {
 
         <div className="flex items-center space-x-2">
           {alert.source === "mock" && (
-            <span className="px-2 py-0.5 text-[11px] font-semibold uppercase bg-[#FFFBEB] text-[#B45309] border border-[#FCD34D] rounded-sm">
+            <span className="px-2 py-0.5 text-[11px] font-semibold uppercase bg-[#2B1F0B] text-[#FBBF24] border border-[#5E4012] rounded-sm">
               MOCK ALERT
             </span>
           )}
-          <span className="px-2 py-0.5 text-[11px] font-semibold uppercase bg-[#FEF2F2] text-[#B91C1C] border border-[#FCA5A5] rounded-sm">
+          <span className="px-2 py-0.5 text-[11px] font-semibold uppercase bg-[#2A1316] text-[#F87171] border border-[#5C1D24] rounded-sm">
             {alert.severity}
           </span>
         </div>
       </div>
 
       {/* Main Alert Info Card */}
-      <div className="bg-white border border-[#E2E2DD] rounded-sm p-5 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-[#E2E2DD] pb-4">
+      <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-[#282C35] pb-4">
           <div>
-            <div className="text-[11px] uppercase tracking-wider text-[#6B6966] font-mono">
+            <div className="text-[11px] uppercase tracking-wider text-[#939AA6] font-mono">
               Alert Identification
             </div>
             <div className="flex items-center space-x-2 mt-1">
-              <span className="text-sm font-mono font-semibold text-[#1C1C1A]">
+              <span className="text-sm font-mono font-semibold text-[#F1F3F6]">
                 {alert.alert_id}
               </span>
               <button
                 onClick={() => copyToClipboard(alert.alert_id, "alert_id")}
-                className="text-[#6B6966] hover:text-[#1C1C1A]"
+                className="text-[#939AA6] hover:text-[#F1F3F6]"
                 title="Copy Alert ID"
               >
                 {copiedField === "alert_id" ? (
-                  <Check className="w-3.5 h-3.5 text-[#047857]" />
+                  <Check className="w-3.5 h-3.5 text-[#34D399]" />
                 ) : (
                   <Copy className="w-3.5 h-3.5" />
                 )}
@@ -202,20 +202,20 @@ export default function AlertDetailPage() {
 
           <div className="flex items-center space-x-6 text-xs">
             <div>
-              <div className="text-[11px] text-[#6B6966]">Created Timestamp</div>
-              <div className="font-mono text-[#1C1C1A] tabular-nums mt-0.5">
+              <div className="text-[11px] text-[#939AA6]">Created Timestamp</div>
+              <div className="font-mono text-[#F1F3F6] tabular-nums mt-0.5">
                 {alert.created_at}
               </div>
             </div>
             <div>
-              <div className="text-[11px] text-[#6B6966]">Bundle Version</div>
-              <div className="font-mono text-[#1C1C1A] mt-0.5">
+              <div className="text-[11px] text-[#939AA6]">Bundle Version</div>
+              <div className="font-mono text-[#F1F3F6] mt-0.5">
                 {alert.bundle_version}
               </div>
             </div>
             <div>
-              <div className="text-[11px] text-[#6B6966]">Review Version</div>
-              <div className="font-mono text-[#1C1C1A] mt-0.5">
+              <div className="text-[11px] text-[#939AA6]">Review Version</div>
+              <div className="font-mono text-[#F1F3F6] mt-0.5">
                 v{alert.feedback_version}
               </div>
             </div>
@@ -223,45 +223,45 @@ export default function AlertDetailPage() {
         </div>
 
         {/* Score vs Threshold Visual Bar */}
-        <div className="bg-[#FAFAF8] border border-[#E2E2DD] p-4 rounded-sm space-y-2">
+        <div className="bg-[#181B21] border border-[#282C35] p-4 rounded-sm space-y-2">
           <div className="flex items-center justify-between text-xs">
             <div>
-              <span className="font-medium text-[#1C1C1A]">
+              <span className="font-medium text-[#F1F3F6]">
                 Model Score Output
               </span>
-              <span className="text-[11px] text-[#6B6966] ml-2">
+              <span className="text-[11px] text-[#939AA6] ml-2">
                 (Raw model score & fixed decision threshold; not calibrated probability)
               </span>
             </div>
             <div className="font-mono text-xs tabular-nums">
-              <span className="font-semibold text-[#B91C1C]">
+              <span className="font-semibold text-[#F87171]">
                 Score: {score.toFixed(6)}
               </span>
-              <span className="text-[#6B6966] mx-2">|</span>
-              <span className="text-[#6B6966]">
+              <span className="text-[#616875] mx-2">|</span>
+              <span className="text-[#939AA6]">
                 Threshold: {threshold.toFixed(6)}
               </span>
             </div>
           </div>
 
           {/* Bar track */}
-          <div className="relative h-4 bg-[#E2E2DD] rounded-xs overflow-hidden">
+          <div className="relative h-4 bg-[#282C35] rounded-xs overflow-hidden">
             {/* Fill for score */}
             <div
               className={`h-full ${
-                isAboveThreshold ? "bg-[#B91C1C]" : "bg-[#047857]"
+                isAboveThreshold ? "bg-[#F87171]" : "bg-[#34D399]"
               }`}
               style={{ width: `${Math.min(Math.max(score * 100, 0), 100)}%` }}
             />
             {/* Threshold marker line */}
             <div
-              className="absolute top-0 bottom-0 w-0.5 bg-[#1C1C1A] z-10"
+              className="absolute top-0 bottom-0 w-0.5 bg-[#F1F3F6] z-10"
               style={{ left: `${threshold * 100}%` }}
               title={`Threshold: ${threshold.toFixed(4)}`}
             />
           </div>
 
-          <div className="flex justify-between text-[10px] text-[#6B6966] font-mono">
+          <div className="flex justify-between text-[10px] text-[#939AA6] font-mono">
             <span>0.0 (Normal)</span>
             <span>Threshold ({threshold.toFixed(4)})</span>
             <span>1.0 (Alert)</span>
@@ -272,12 +272,12 @@ export default function AlertDetailPage() {
       {/* Grid: TreeSHAP Explanations + Analyst Verdict Form */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column: TreeSHAP Feature Contributions */}
-        <div className="bg-white border border-[#E2E2DD] rounded-sm p-5 space-y-4">
+        <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
           <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#1C1C1A]">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
               TreeSHAP Feature Contributions
             </h2>
-            <p className="text-[11px] text-[#6B6966] mt-0.5">
+            <p className="text-[11px] text-[#939AA6] mt-0.5">
               Top signed contributions driving score toward or away from alert
             </p>
           </div>
@@ -300,18 +300,18 @@ export default function AlertDetailPage() {
                   <div key={idx} className="space-y-1 text-xs">
                     <div className="flex items-center justify-between font-mono text-[11px]">
                       <div className="flex items-center space-x-2">
-                        <span className="font-medium text-[#1C1C1A]">
+                        <span className="font-medium text-[#F1F3F6]">
                           {feat.feature}
                         </span>
                         {feat.value !== null && feat.value !== undefined && (
-                          <span className="text-[#6B6966] text-[10px]">
+                          <span className="text-[#939AA6] text-[10px]">
                             = {String(feat.value)}
                           </span>
                         )}
                       </div>
                       <span
                         className={`tabular-nums font-semibold ${
-                          isPositive ? "text-[#B91C1C]" : "text-[#047857]"
+                          isPositive ? "text-[#F87171]" : "text-[#34D399]"
                         }`}
                       >
                         {isPositive ? "+" : ""}
@@ -319,10 +319,10 @@ export default function AlertDetailPage() {
                       </span>
                     </div>
 
-                    <div className="h-2 bg-[#FAFAF8] border border-[#E2E2DD] rounded-xs flex overflow-hidden">
+                    <div className="h-2 bg-[#181B21] border border-[#282C35] rounded-xs flex overflow-hidden">
                       <div
                         className={`h-full ${
-                          isPositive ? "bg-[#B91C1C]" : "bg-[#047857]"
+                          isPositive ? "bg-[#F87171]" : "bg-[#34D399]"
                         }`}
                         style={{ width: `${barWidth}%` }}
                       />
@@ -332,27 +332,27 @@ export default function AlertDetailPage() {
               })}
             </div>
           ) : (
-            <div className="py-8 text-center text-xs text-[#6B6966]">
+            <div className="py-8 text-center text-xs text-[#939AA6]">
               No TreeSHAP explanation attributes available for this alert.
             </div>
           )}
         </div>
 
         {/* Right Column: Analyst Review Form */}
-        <div className="bg-white border border-[#E2E2DD] rounded-sm p-5 space-y-4">
+        <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#1C1C1A]">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
                 Record Analyst Verdict
               </h2>
-              <p className="text-[11px] text-[#6B6966] mt-0.5">
+              <p className="text-[11px] text-[#939AA6] mt-0.5">
                 Current version: v{alert.feedback_version} | Use keys 1, 2, 3 to select
               </p>
             </div>
           </div>
 
           {conflictError && (
-            <div className="bg-[#FEF2F2] border border-[#FCA5A5] p-3 rounded-sm text-xs text-[#B91C1C] flex items-start space-x-2">
+            <div className="bg-[#2A1316] border border-[#5C1D24] p-3 rounded-sm text-xs text-[#F87171] flex items-start space-x-2">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
               <div>
                 <div>{conflictError}</div>
@@ -373,7 +373,7 @@ export default function AlertDetailPage() {
           <div className="space-y-3 pt-1">
             {/* Verdict Selection Buttons */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-medium text-[#6B6966]">
+              <label className="text-[11px] font-medium text-[#939AA6]">
                 Verdict Decision:
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -382,8 +382,8 @@ export default function AlertDetailPage() {
                   onClick={() => setVerdict("confirmed_attack")}
                   className={`px-3 py-2 text-xs font-medium rounded-sm border transition-colors flex flex-col items-center justify-center space-y-1 ${
                     verdict === "confirmed_attack"
-                      ? "bg-[#FEF2F2] border-[#B91C1C] text-[#B91C1C] font-semibold"
-                      : "bg-[#FAFAF8] border-[#E2E2DD] text-[#6B6966] hover:bg-white"
+                      ? "bg-[#2A1316] border-[#F87171] text-[#F87171] font-semibold"
+                      : "bg-[#181B21] border-[#282C35] text-[#939AA6] hover:bg-[#1D2027]"
                   }`}
                 >
                   <span>Confirmed Attack</span>
@@ -395,8 +395,8 @@ export default function AlertDetailPage() {
                   onClick={() => setVerdict("false_positive")}
                   className={`px-3 py-2 text-xs font-medium rounded-sm border transition-colors flex flex-col items-center justify-center space-y-1 ${
                     verdict === "false_positive"
-                      ? "bg-[#ECFDF5] border-[#047857] text-[#047857] font-semibold"
-                      : "bg-[#FAFAF8] border-[#E2E2DD] text-[#6B6966] hover:bg-white"
+                      ? "bg-[#0C241B] border-[#34D399] text-[#34D399] font-semibold"
+                      : "bg-[#181B21] border-[#282C35] text-[#939AA6] hover:bg-[#1D2027]"
                   }`}
                 >
                   <span>False Positive</span>
@@ -408,8 +408,8 @@ export default function AlertDetailPage() {
                   onClick={() => setVerdict("needs_investigation")}
                   className={`px-3 py-2 text-xs font-medium rounded-sm border transition-colors flex flex-col items-center justify-center space-y-1 ${
                     verdict === "needs_investigation"
-                      ? "bg-[#FFFBEB] border-[#B45309] text-[#B45309] font-semibold"
-                      : "bg-[#FAFAF8] border-[#E2E2DD] text-[#6B6966] hover:bg-white"
+                      ? "bg-[#2B1F0B] border-[#FBBF24] text-[#FBBF24] font-semibold"
+                      : "bg-[#181B21] border-[#282C35] text-[#939AA6] hover:bg-[#1D2027]"
                   }`}
                 >
                   <span>Investigating</span>
@@ -421,13 +421,13 @@ export default function AlertDetailPage() {
             {/* Attack Category dropdown (required when confirmed_attack) */}
             {verdict === "confirmed_attack" && (
               <div className="space-y-1">
-                <label className="text-[11px] font-medium text-[#6B6966]">
+                <label className="text-[11px] font-medium text-[#939AA6]">
                   Attack Category:
                 </label>
                 <select
                   value={attackCategory}
                   onChange={(e) => setAttackCategory(e.target.value)}
-                  className="w-full bg-[#FAFAF8] border border-[#E2E2DD] rounded-sm px-2.5 py-1.5 text-xs text-[#1C1C1A] focus:outline-hidden"
+                  className="w-full bg-[#1D2027] border border-[#282C35] rounded-sm px-2.5 py-1.5 text-xs text-[#F1F3F6] focus:outline-hidden"
                 >
                   {ATTACK_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -440,7 +440,7 @@ export default function AlertDetailPage() {
 
             {/* Notes textarea */}
             <div className="space-y-1">
-              <label className="text-[11px] font-medium text-[#6B6966]">
+              <label className="text-[11px] font-medium text-[#939AA6]">
                 Analyst Triage Notes:
               </label>
               <textarea
@@ -448,14 +448,14 @@ export default function AlertDetailPage() {
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Observed anomalous port scan patterns, high packet rate, verified benign scanner, etc."
                 rows={3}
-                className="w-full bg-[#FAFAF8] border border-[#E2E2DD] rounded-sm p-2 text-xs text-[#1C1C1A] focus:outline-hidden resize-none placeholder:text-[#9E9D98]"
+                className="w-full bg-[#1D2027] border border-[#282C35] rounded-sm p-2 text-xs text-[#F1F3F6] focus:outline-hidden resize-none placeholder:text-[#616875]"
               />
             </div>
 
             <button
               onClick={() => submitMutation.mutate()}
               disabled={submitMutation.isPending}
-              className="w-full py-2 bg-[#1C1C1A] text-white text-xs font-medium rounded-sm hover:bg-[#333] transition-colors disabled:opacity-50"
+              className="w-full py-2 bg-[#F1F3F6] text-[#0A0B0D] text-xs font-medium rounded-sm hover:bg-white transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? "Submitting Verdict..." : "Save Review Verdict"}
             </button>
@@ -463,9 +463,9 @@ export default function AlertDetailPage() {
 
           {/* Feedback History Timeline */}
           {feedbackList.length > 0 && (
-            <div className="pt-4 border-t border-[#E2E2DD] space-y-3">
-              <div className="flex items-center space-x-1.5 text-xs font-semibold text-[#1C1C1A]">
-                <History className="w-3.5 h-3.5 text-[#6B6966]" />
+            <div className="pt-4 border-t border-[#282C35] space-y-3">
+              <div className="flex items-center space-x-1.5 text-xs font-semibold text-[#F1F3F6]">
+                <History className="w-3.5 h-3.5 text-[#939AA6]" />
                 <span>Review History ({feedbackList.length})</span>
               </div>
 
@@ -473,23 +473,23 @@ export default function AlertDetailPage() {
                 {feedbackList.map((fb) => (
                   <div
                     key={fb.feedback_id}
-                    className="p-2.5 bg-[#FAFAF8] border border-[#E2E2DD] rounded-sm text-xs space-y-1"
+                    className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-sm text-xs space-y-1"
                   >
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="font-semibold text-[#1C1C1A]">
+                      <span className="font-semibold text-[#F1F3F6]">
                         v{fb.version}: {fb.verdict.replace("_", " ").toUpperCase()}
                         {fb.attack_category ? ` (${fb.attack_category})` : ""}
                       </span>
-                      <span className="text-[#6B6966] tabular-nums font-mono">
+                      <span className="text-[#939AA6] tabular-nums font-mono">
                         {fb.created_at}
                       </span>
                     </div>
                     {fb.notes && (
-                      <p className="text-[11px] text-[#6B6966] italic">
+                      <p className="text-[11px] text-[#939AA6] italic">
                         &ldquo;{fb.notes}&rdquo;
                       </p>
                     )}
-                    <div className="text-[10px] text-[#9E9D98]">
+                    <div className="text-[10px] text-[#616875]">
                       Reviewer: {fb.reviewer_id}
                     </div>
                   </div>
