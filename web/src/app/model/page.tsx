@@ -20,6 +20,18 @@ export default function ModelPage() {
   });
 
   const metrics = model?.selection_metrics || {};
+  const cm = Array.isArray(metrics.confusion_matrix) ? metrics.confusion_matrix : null;
+  const tn = cm && Array.isArray(cm[0]) ? cm[0][0] : null;
+  const fp = cm && Array.isArray(cm[0]) ? cm[0][1] : null;
+  const fn = cm && Array.isArray(cm[1]) ? cm[1][0] : null;
+  const tp = cm && Array.isArray(cm[1]) ? cm[1][1] : null;
+  const totalVal = tn !== null && fp !== null && fn !== null && tp !== null ? tn + fp + fn + tp : null;
+  const fprVal =
+    typeof metrics.false_positive_rate === "number"
+      ? metrics.false_positive_rate
+      : typeof metrics.fpr === "number"
+      ? metrics.fpr
+      : null;
 
   return (
     <div className="space-y-6">
@@ -46,7 +58,7 @@ export default function ModelPage() {
         <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
           <div className="text-[11px] font-medium text-[#939AA6]">Bundle Version</div>
           <div className="text-sm font-semibold font-mono text-[#F1F3F6]">
-            {modelLoading ? "—" : model?.bundle_version}
+            {modelLoading ? "—" : model?.bundle_version || "—"}
           </div>
           <div className="text-[10px] text-[#939AA6]">Cryptographically sealed</div>
         </div>
@@ -54,7 +66,11 @@ export default function ModelPage() {
         <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
           <div className="text-[11px] font-medium text-[#939AA6]">Decision Threshold</div>
           <div className="text-sm font-semibold font-mono text-[#F87171] tabular-nums">
-            {modelLoading ? "—" : model?.decision_threshold.toFixed(6)}
+            {modelLoading
+              ? "—"
+              : typeof model?.decision_threshold === "number"
+              ? model.decision_threshold.toFixed(6)
+              : "—"}
           </div>
           <div className="text-[10px] text-[#939AA6]">Single operational decision boundary</div>
         </div>
@@ -66,7 +82,7 @@ export default function ModelPage() {
               ? "—"
               : typeof metrics.accuracy === "number"
               ? `${(metrics.accuracy * 100).toFixed(2)}%`
-              : "95.51%"}
+              : "—"}
           </div>
           <div className="text-[10px] text-[#939AA6]">Held-out selection partition</div>
         </div>
@@ -89,23 +105,23 @@ export default function ModelPage() {
               <div className="text-base font-semibold font-mono tabular-nums text-[#F1F3F6] mt-1">
                 {typeof metrics.recall === "number"
                   ? `${(metrics.recall * 100).toFixed(2)}%`
-                  : "95.25%"}
+                  : "—"}
               </div>
             </div>
 
             <div className="p-3 bg-[#181B21] border border-[#282C35] rounded-sm">
               <div className="text-[10px] text-[#939AA6]">False Positive Rate (FPR)</div>
               <div className="text-base font-semibold font-mono tabular-nums text-[#F1F3F6] mt-1">
-                {typeof metrics.fpr === "number"
-                  ? `${(metrics.fpr * 100).toFixed(2)}%`
-                  : "3.98%"}
+                {typeof fprVal === "number"
+                  ? `${(fprVal * 100).toFixed(2)}%`
+                  : "—"}
               </div>
             </div>
           </div>
 
           <div className="space-y-2">
             <div className="text-[11px] font-medium text-[#939AA6]">
-              Validation Confusion Matrix (25,031 flows):
+              Validation Confusion Matrix{totalVal !== null ? ` (${totalVal.toLocaleString()} flows)` : ""}:
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-center border border-[#282C35] text-xs font-mono">
@@ -122,10 +138,10 @@ export default function ModelPage() {
                       Actual Normal (0)
                     </td>
                     <td className="p-2 border-r border-[#282C35] text-[#34D399] font-semibold">
-                      7,867 (TN)
+                      {tn !== null ? `${tn.toLocaleString()} (TN)` : "—"}
                     </td>
                     <td className="p-2 text-[#FBBF24] font-semibold">
-                      326 (FP)
+                      {fp !== null ? `${fp.toLocaleString()} (FP)` : "—"}
                     </td>
                   </tr>
                   <tr>
@@ -133,10 +149,10 @@ export default function ModelPage() {
                       Actual Attack (1)
                     </td>
                     <td className="p-2 border-r border-[#282C35] text-[#F87171] font-semibold">
-                      799 (FN)
+                      {fn !== null ? `${fn.toLocaleString()} (FN)` : "—"}
                     </td>
                     <td className="p-2 text-[#34D399] font-semibold">
-                      16,039 (TP)
+                      {tp !== null ? `${tp.toLocaleString()} (TP)` : "—"}
                     </td>
                   </tr>
                 </tbody>
@@ -234,7 +250,7 @@ export default function ModelPage() {
 
         <div className="divide-y divide-[#282C35] border border-[#282C35] rounded-sm text-xs font-mono">
           <div className="p-3 bg-[#181B21] font-semibold text-[#F1F3F6]">
-            Release Artifacts ({model?.bundle_version || "v1.0.0"}):
+            Release Artifacts ({model?.bundle_version || "—"}):
           </div>
 
           {model?.bundle_hashes &&
