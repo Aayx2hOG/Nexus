@@ -4,32 +4,21 @@ import { useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import {
-  fetchSimulationProfiles,
-  simulateProbe,
   fetchPresetData,
   submitBatchPredictions,
   fetchModelSummary,
+  liveProbe,
 } from "@/lib/api";
 import { parseCSVText, chunkFlows, ParsedFlow } from "@/lib/csv";
-import { ProbeResult, SimulationProfile } from "@/lib/types";
+import { LiveProbeResult } from "@/lib/types";
 import {
   UploadCloud,
   FileSpreadsheet,
-  Globe,
-  ShieldAlert,
-  ShieldCheck,
   AlertTriangle,
   Play,
-  RotateCcw,
-  CheckCircle2,
-  XCircle,
   ExternalLink,
   ChevronRight,
-  Database,
   BarChart2,
-  Activity,
-  Layers,
-  Sparkles,
 } from "lucide-react";
 
 interface FlowResultItem {
@@ -54,12 +43,6 @@ export default function TrafficPage() {
     queryFn: fetchModelSummary,
   });
 
-  // Query Simulation Profiles
-  const { data: profiles, isLoading: profilesLoading } = useQuery({
-    queryKey: ["simulationProfiles"],
-    queryFn: fetchSimulationProfiles,
-  });
-
   // --- CSV Ingestion State ---
   const [csvRawText, setCsvRawText] = useState("");
   const [parsedFlows, setParsedFlows] = useState<ParsedFlow[]>([]);
@@ -71,12 +54,15 @@ export default function TrafficPage() {
   const [flowResults, setFlowResults] = useState<FlowResultItem[]>([]);
   const [filterVerdict, setFilterVerdict] = useState<"all" | "alert" | "normal">("all");
 
-  // --- Website Attack Simulator State ---
-  const [targetUrl, setTargetUrl] = useState("http://localhost:3000");
-  const [selectedProfileId, setSelectedProfileId] = useState("http_exploit");
+  // --- Live Website Probe State ---
+  const [targetUrl, setTargetUrl] = useState("https://");
+  const [probeMethod, setProbeMethod] = useState<"GET" | "HEAD" | "POST" | "OPTIONS">("GET");
+  const [probeTimeout, setProbeTimeout] = useState(10);
+  const [followRedirects, setFollowRedirects] = useState(true);
   const [isProbing, setIsProbing] = useState(false);
-  const [probeResult, setProbeResult] = useState<ProbeResult | null>(null);
+  const [probeResult, setProbeResult] = useState<LiveProbeResult | null>(null);
   const [probeError, setProbeError] = useState<string | null>(null);
+  const [probeHistory, setProbeHistory] = useState<LiveProbeResult[]>([]);
 
   // --- CSV Ingestion Handlers ---
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,21 +144,24 @@ export default function TrafficPage() {
     }
   };
 
-  // --- Website Probe Handler ---
-  const handleRunProbe = async () => {
-    if (!targetUrl.trim()) return;
+  // --- Live Probe Handler ---
+  const handleRunLiveProbe = async () => {
+    if (!targetUrl.trim() || targetUrl.trim() === "https://" || targetUrl.trim() === "http://") return;
     setIsProbing(true);
     setProbeError(null);
     setProbeResult(null);
 
     try {
-      const res = await simulateProbe({
+      const res = await liveProbe({
         target_url: targetUrl.trim(),
-        profile_id: selectedProfileId,
+        method: probeMethod,
+        timeout_seconds: probeTimeout,
+        follow_redirects: followRedirects,
       });
       setProbeResult(res);
+      setProbeHistory(prev => [res, ...prev].slice(0, 20)); // Keep last 20
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Website probe simulation failed.";
+      const message = err instanceof Error ? err.message : "Live probe failed.";
       setProbeError(message);
     } finally {
       setIsProbing(false);
@@ -216,13 +205,13 @@ export default function TrafficPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-lg font-semibold tracking-tight text-[#F1F3F6] flex items-center space-x-2">
-            <span>Traffic Ingestion & Attack Simulator</span>
+            <span>Traffic Ingestion & Website Probe</span>
             <span className="text-[10px] uppercase font-mono px-2 py-0.5 bg-[#181B21] border border-[#282C35] text-[#34D399] rounded-sm">
               Live Engine
             </span>
           </h1>
           <p className="text-xs text-[#939AA6] mt-0.5">
-            Manually upload flow CSVs for automated model triage or simulate web attacks targeting a specific website.
+            Upload flow CSVs for model triage, or probe any real website to analyze its network behavior with ML.
           </p>
         </div>
 
@@ -247,8 +236,7 @@ export default function TrafficPage() {
                 : "text-[#939AA6] hover:text-[#F1F3F6]"
             }`}
           >
-            <Globe className="w-3.5 h-3.5" />
-            <span>Website Attack Simulator</span>
+            <span>Live Website Probe</span>
           </button>
         </div>
       </div>
@@ -463,7 +451,6 @@ export default function TrafficPage() {
               <div className="bg-[#13151A] border border-[#282C35] rounded-sm overflow-hidden">
                 <div className="p-4 border-b border-[#282C35] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center space-x-2">
-                    <Layers className="w-4 h-4 text-[#939AA6]" />
                     <span className="text-xs font-semibold text-[#F1F3F6] uppercase tracking-wider">
                       Processed Flow Records ({filteredResults.length})
                     </span>
@@ -589,140 +576,184 @@ export default function TrafficPage() {
       )}
 
       {/* ============================================================== */}
-      {/* TAB 2: Website Attack Simulator & Target Probe                */}
+      {/* TAB 2: Live Website Probe (REAL HTTP CONNECTION)               */}
       {/* ============================================================== */}
       {activeTab === "probe" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column: Target Configuration & Attack Profiles */}
-          <div className="lg:col-span-6 space-y-5">
+          {/* Left Column: Probe Configuration */}
+          <div className="lg:col-span-5 space-y-5">
             <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
-              <div className="flex items-center space-x-2">
-                <Globe className="w-4 h-4 text-[#F1F3F6]" />
+              <div className="flex items-center justify-between">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-                  Target Website Configuration
+                  Live Website Probe
                 </h2>
+                <span className="text-[10px] font-mono text-[#939AA6]">
+                  HTTP Diagnostics
+                </span>
               </div>
+              <p className="text-[11px] text-[#939AA6]">
+                Makes an actual HTTP connection to the target. Measures real DNS resolution, TCP handshake, 
+                TLS negotiation, response timing, and payload sizes — then feeds those real metrics into the ML model.
+              </p>
 
+              {/* URL Input */}
               <div>
                 <label className="block text-[11px] font-medium text-[#939AA6] mb-1">
-                  Target Website URL / Host Endpoint
+                  Target URL
                 </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={targetUrl}
-                    onChange={(e) => setTargetUrl(e.target.value)}
-                    placeholder="https://my-target-site.com or http://localhost:3000"
-                    className="w-full bg-[#181B21] border border-[#282C35] focus:border-[#38BDF8] text-[#F1F3F6] text-xs font-mono px-3 py-2 rounded-xs outline-hidden"
-                  />
-                </div>
-                <p className="text-[10px] text-[#939AA6] mt-1">
-                  Specify any web application or microservice endpoint to simulate real network flow infiltration against.
-                </p>
+                <input
+                  type="text"
+                  value={targetUrl}
+                  onChange={(e) => setTargetUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  onKeyDown={(e) => e.key === "Enter" && handleRunLiveProbe()}
+                  className="w-full bg-[#181B21] border border-[#282C35] focus:border-[#38BDF8] text-[#F1F3F6] text-xs font-mono px-3 py-2.5 rounded-xs outline-hidden transition-colors"
+                />
               </div>
 
-              {/* Attack / Traffic Profile Selection */}
-              <div>
-                <label className="block text-[11px] font-medium text-[#939AA6] mb-2">
-                  Select Traffic / Attack Profile
+              {/* Method & Timeout Row */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-medium text-[#939AA6] mb-1">
+                    HTTP Method
+                  </label>
+                  <select
+                    value={probeMethod}
+                    onChange={(e) => setProbeMethod(e.target.value as "GET" | "HEAD" | "POST" | "OPTIONS")}
+                    className="w-full bg-[#181B21] border border-[#282C35] text-[#F1F3F6] text-xs font-mono px-3 py-2 rounded-xs outline-hidden"
+                  >
+                    <option value="GET">GET</option>
+                    <option value="HEAD">HEAD</option>
+                    <option value="POST">POST</option>
+                    <option value="OPTIONS">OPTIONS</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-medium text-[#939AA6] mb-1">
+                    Timeout (seconds)
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={30}
+                    value={probeTimeout}
+                    onChange={(e) => setProbeTimeout(Number(e.target.value))}
+                    className="w-full bg-[#181B21] border border-[#282C35] text-[#F1F3F6] text-xs font-mono px-3 py-2 rounded-xs outline-hidden"
+                  />
+                </div>
+              </div>
+
+              {/* Follow Redirects Toggle */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="followRedirects"
+                  checked={followRedirects}
+                  onChange={(e) => setFollowRedirects(e.target.checked)}
+                  className="rounded-xs border-[#282C35] bg-[#181B21]"
+                />
+                <label htmlFor="followRedirects" className="text-[11px] text-[#939AA6]">
+                  Follow HTTP redirects (3xx)
                 </label>
-
-                {profilesLoading ? (
-                  <div className="py-4 text-center text-xs text-[#939AA6]">Loading profiles...</div>
-                ) : (
-                  <div className="space-y-2">
-                    {profiles?.map((p: SimulationProfile) => {
-                      const isSelected = selectedProfileId === p.id;
-                      const isAttack = p.expected_verdict === "alert";
-
-                      return (
-                        <div
-                          key={p.id}
-                          onClick={() => setSelectedProfileId(p.id)}
-                          className={`p-3 border rounded-sm cursor-pointer transition-colors ${
-                            isSelected
-                              ? isAttack
-                                ? "bg-[#7F1D1D]/15 border-[#F87171] ring-1 ring-[#F87171]/40"
-                                : "bg-[#064E3B]/15 border-[#34D399] ring-1 ring-[#34D399]/40"
-                              : "bg-[#181B21] border-[#282C35] hover:border-[#3B414E]"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-semibold text-[#F1F3F6]">{p.name}</span>
-                            <span
-                              className={`text-[9px] uppercase font-mono px-1.5 py-0.5 rounded-xs font-semibold ${
-                                isAttack
-                                  ? "bg-[#7F1D1D]/40 text-[#F87171] border border-[#F87171]/30"
-                                  : "bg-[#064E3B]/40 text-[#34D399] border border-[#34D399]/30"
-                              }`}
-                            >
-                              {p.category}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-[#939AA6] mt-1">{p.description}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
               </div>
 
               {/* Run Probe Button */}
               <button
                 type="button"
-                onClick={handleRunProbe}
-                disabled={isProbing || !targetUrl.trim()}
-                className="w-full py-2.5 px-4 bg-[#F1F3F6] hover:bg-white text-[#0A0B0D] text-xs font-bold uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center justify-center space-x-2 disabled:opacity-50"
+                onClick={handleRunLiveProbe}
+                disabled={isProbing || !targetUrl.trim() || targetUrl.trim() === "https://" || targetUrl.trim() === "http://"}
+                className="w-full py-2.5 px-4 bg-[#38BDF8] hover:bg-[#7DD3FC] text-[#0A0B0D] text-xs font-bold uppercase tracking-wider rounded-sm transition-colors cursor-pointer flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>{isProbing ? "Sending Traffic & Probing..." : "Send Traffic & Probe Target"}</span>
+                {isProbing ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-[#0A0B0D]/30 border-t-[#0A0B0D] rounded-full animate-spin" />
+                    <span>Connecting & Probing...</span>
+                  </>
+                ) : (
+                  <span>Probe Target Website</span>
+                )}
               </button>
 
               {probeError && (
                 <div className="p-3 bg-[#7F1D1D]/20 border border-[#F87171]/40 rounded-sm text-xs text-[#F87171]">
+                  <div className="flex items-center space-x-1.5 mb-1 font-semibold">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    <span>Probe Failed</span>
+                  </div>
                   {probeError}
                 </div>
               )}
             </div>
+
+            {/* Probe History */}
+            {probeHistory.length > 1 && (
+              <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#F1F3F6]">
+                    Probe History ({probeHistory.length})
+                  </span>
+                </div>
+                <div className="space-y-1.5 max-h-64 overflow-y-auto">
+                  {probeHistory.map((h, i) => (
+                    <button
+                      key={`${h.flow_id}-${i}`}
+                      onClick={() => setProbeResult(h)}
+                      className={`w-full text-left p-2.5 rounded-xs border transition-colors text-xs ${
+                        probeResult?.flow_id === h.flow_id
+                          ? "bg-[#1D2027] border-[#3B414E]"
+                          : "bg-[#181B21] border-[#282C35] hover:border-[#3B414E]"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[#F1F3F6] truncate max-w-[200px]">
+                          {h.target_url.replace(/^https?:\/\//, "")}
+                        </span>
+                        <span className={`text-[9px] uppercase font-mono font-semibold px-1.5 py-0.5 rounded-xs ${
+                          h.target_hit
+                            ? "bg-[#7F1D1D]/40 text-[#F87171] border border-[#F87171]/30"
+                            : "bg-[#064E3B]/40 text-[#34D399] border border-[#34D399]/30"
+                        }`}>
+                          {h.target_hit ? "HIT" : "CLEAN"}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-3 mt-1 text-[10px] text-[#939AA6]">
+                        <span>{h.method}</span>
+                        <span>{h.connection.total_ms.toFixed(0)}ms</span>
+                        <span>Score: {(h.score * 100).toFixed(1)}%</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Right Column: Live Target Monitor & Did it Get Hit? */}
-          <div className="lg:col-span-6 space-y-5">
+          {/* Right Column: Live Probe Results */}
+          <div className="lg:col-span-7 space-y-5">
             {probeResult ? (
               <div className="space-y-4">
-                {/* BIG TARGET HIT BANNER */}
+                {/* BIG VERDICT BANNER */}
                 <div
                   className={`p-5 border rounded-sm space-y-3 transition-all ${
                     probeResult.target_hit
-                      ? "bg-[#7F1D1D]/20 border-[#F87171] shadow-lg shadow-[#F87171]/5"
-                      : "bg-[#064E3B]/20 border-[#34D399] shadow-lg shadow-[#34D399]/5"
+                      ? "bg-[#7F1D1D]/20 border-[#F87171]"
+                      : "bg-[#064E3B]/20 border-[#34D399]"
                   }`}
                 >
-                  <div className="flex items-center space-x-3">
-                    {probeResult.target_hit ? (
-                      <div className="w-10 h-10 bg-[#7F1D1D]/40 border border-[#F87171] rounded-full flex items-center justify-center text-[#F87171] animate-pulse">
-                        <ShieldAlert className="w-5 h-5" />
-                      </div>
-                    ) : (
-                      <div className="w-10 h-10 bg-[#064E3B]/40 border border-[#34D399] rounded-full flex items-center justify-center text-[#34D399]">
-                        <ShieldCheck className="w-5 h-5" />
-                      </div>
-                    )}
-                    <div>
-                      <div
-                        className={`text-sm font-bold tracking-tight uppercase ${
-                          probeResult.target_hit ? "text-[#F87171]" : "text-[#34D399]"
-                        }`}
-                      >
-                        {probeResult.target_hit ? "🚨 TARGET HIT! Malicious Infiltration" : "🟢 TARGET SECURE / ALL CLEAR"}
-                      </div>
-                      <div className="text-xs text-[#939AA6] mt-0.5">
-                        Target Endpoint: <code className="font-mono text-[#F1F3F6]">{probeResult.target_url}</code>
-                      </div>
+                  <div>
+                    <div
+                      className={`text-sm font-bold tracking-tight uppercase font-mono ${
+                        probeResult.target_hit ? "text-[#F87171]" : "text-[#34D399]"
+                      }`}
+                    >
+                      {probeResult.target_hit ? "SUSPICIOUS ACTIVITY DETECTED" : "TARGET SECURE / ALL CLEAR"}
+                    </div>
+                    <div className="text-xs text-[#939AA6] mt-1">
+                      <code className="font-mono text-[#F1F3F6]">{probeResult.method} {probeResult.target_url}</code>
                     </div>
                   </div>
 
-                  {/* Probability Gauge & Threat Dial */}
+                  {/* Score + Threat Level */}
                   <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#282C35]/60 text-xs">
                     <div className="p-3 bg-[#13151A]/80 border border-[#282C35] rounded-xs">
                       <div className="text-[10px] text-[#939AA6]">Attack Probability</div>
@@ -742,7 +773,10 @@ export default function TrafficPage() {
                       <div className="text-[10px] text-[#939AA6]">Threat Rating</div>
                       <div
                         className={`text-lg font-bold font-mono mt-0.5 ${
-                          probeResult.target_hit ? "text-[#F87171]" : "text-[#34D399]"
+                          probeResult.threat_level === "CRITICAL" ? "text-[#F87171]" :
+                          probeResult.threat_level === "HIGH" ? "text-[#FB923C]" :
+                          probeResult.threat_level === "MEDIUM" ? "text-[#FBBF24]" :
+                          "text-[#34D399]"
                         }`}
                       >
                         {probeResult.threat_level}
@@ -752,17 +786,98 @@ export default function TrafficPage() {
                   </div>
                 </div>
 
-                {/* Explainability & TreeSHAP Attribution Card */}
+                {/* Real Connection Metrics */}
+                <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
+                      Real Connection Metrics
+                    </h3>
+                    <span className="text-[10px] font-mono text-[#939AA6]">
+                      Raw Telemetry
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+                    <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                      <div className="text-[10px] text-[#939AA6]">DNS Resolve</div>
+                      <div className="text-sm font-bold font-mono text-[#F1F3F6] mt-1 tabular-nums">
+                        {probeResult.connection.dns_resolve_ms.toFixed(1)}ms
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                      <div className="text-[10px] text-[#939AA6]">TCP Connect</div>
+                      <div className="text-sm font-bold font-mono text-[#F1F3F6] mt-1 tabular-nums">
+                        {probeResult.connection.tcp_connect_ms.toFixed(1)}ms
+                      </div>
+                    </div>
+                    {probeResult.connection.tls_handshake_ms !== null && (
+                      <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                        <div className="text-[10px] text-[#939AA6]">TLS Handshake</div>
+                        <div className="text-sm font-bold font-mono text-[#F1F3F6] mt-1 tabular-nums">
+                          {probeResult.connection.tls_handshake_ms.toFixed(1)}ms
+                        </div>
+                      </div>
+                    )}
+                    <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                      <div className="text-[10px] text-[#939AA6]">Time to First Byte</div>
+                      <div className="text-sm font-bold font-mono text-[#F1F3F6] mt-1 tabular-nums">
+                        {probeResult.connection.ttfb_ms.toFixed(1)}ms
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                      <div className="text-[10px] text-[#939AA6]">Total Time</div>
+                      <div className="text-sm font-bold font-mono text-[#38BDF8] mt-1 tabular-nums">
+                        {probeResult.connection.total_ms.toFixed(1)}ms
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                      <div className="text-[10px] text-[#939AA6]">Response Size</div>
+                      <div className="text-sm font-bold font-mono text-[#F1F3F6] mt-1 tabular-nums">
+                        {(probeResult.connection.response_body_bytes / 1024).toFixed(1)} KB
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                      <div className="text-[10px] text-[#939AA6]">HTTP Status</div>
+                      <div className={`text-sm font-bold font-mono mt-1 tabular-nums ${
+                        probeResult.connection.status_code >= 400 ? "text-[#F87171]" :
+                        probeResult.connection.status_code >= 300 ? "text-[#FBBF24]" :
+                        "text-[#34D399]"
+                      }`}>
+                        {probeResult.connection.status_code}
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-xs">
+                      <div className="text-[10px] text-[#939AA6]">Protocol</div>
+                      <div className="text-sm font-bold font-mono text-[#F1F3F6] mt-1">
+                        {probeResult.connection.http_version} {probeResult.connection.is_https ? "(HTTPS)" : ""}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Server Info */}
+                  <div className="flex items-center space-x-4 text-[11px] text-[#939AA6] pt-2 border-t border-[#282C35]">
+                    {probeResult.connection.server_header && (
+                      <span>Server: <code className="text-[#F1F3F6] font-mono">{probeResult.connection.server_header}</code></span>
+                    )}
+                    {probeResult.connection.content_type && (
+                      <span>Type: <code className="text-[#F1F3F6] font-mono">{probeResult.connection.content_type.split(";")[0]}</code></span>
+                    )}
+                    {probeResult.connection.num_redirects > 0 && (
+                      <span>Redirects: <code className="text-[#FBBF24] font-mono">{probeResult.connection.num_redirects}</code></span>
+                    )}
+                  </div>
+                </div>
+
+                {/* TreeSHAP Explainability (only for alerts) */}
                 {probeResult.top_features && probeResult.top_features.length > 0 && (
                   <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-3">
                     <div className="flex items-center space-x-2">
-                      <Sparkles className="w-4 h-4 text-[#FBBF24]" />
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-                        TreeSHAP Explainability (Root-Cause Telemetry)
+                        TreeSHAP Feature Attribution
                       </h3>
                     </div>
                     <p className="text-[11px] text-[#939AA6]">
-                      Signed feature attributions indicating exact network telemetry drivers that triggered the detection:
+                      Which real connection metrics most influenced the ML model&apos;s decision:
                     </p>
 
                     <div className="space-y-2">
@@ -783,14 +898,28 @@ export default function TrafficPage() {
                   </div>
                 )}
 
-                {/* Action Box & Alert Direct Link */}
-                <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Activity className="w-4 h-4 text-[#38BDF8]" />
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-                      SOC Analyst Action Guidance
-                    </h3>
+                {/* Extracted Features (expandable) */}
+                <details className="bg-[#13151A] border border-[#282C35] rounded-sm">
+                  <summary className="p-4 cursor-pointer text-xs font-semibold uppercase tracking-wider text-[#F1F3F6] flex items-center space-x-2 select-none">
+                    <span>Extracted UNSW-NB15 Features (42 features from real connection)</span>
+                  </summary>
+                  <div className="px-4 pb-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-[11px] font-mono">
+                      {Object.entries(probeResult.extracted_features).map(([key, val]) => (
+                        <div key={key} className="p-2 bg-[#181B21] border border-[#282C35] rounded-xs">
+                          <div className="text-[#939AA6] text-[9px] uppercase">{key}</div>
+                          <div className="text-[#F1F3F6] mt-0.5 truncate">{String(val)}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+                </details>
+
+                {/* Action Box & Alert Link */}
+                <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-3">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
+                    Analysis Summary
+                  </h3>
 
                   <p className="text-xs text-[#D1D5DB] leading-relaxed">
                     {probeResult.recommended_action}
@@ -811,11 +940,23 @@ export default function TrafficPage() {
               </div>
             ) : (
               <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-12 text-center space-y-3">
-                <Globe className="w-10 h-10 text-[#3B414E] mx-auto" />
-                <div className="text-sm font-semibold text-[#F1F3F6]">Website Target Monitor Inactive</div>
+                <div className="text-sm font-semibold text-[#F1F3F6]">Ready to Probe</div>
                 <p className="text-xs text-[#939AA6] max-w-sm mx-auto">
-                  Configure your target URL on the left, pick an attack profile, and click &quot;Send Traffic &amp; Probe Target&quot; to check in real time whether the website gets hit.
+                  Enter any website URL and click &quot;Probe Target Website&quot;. Nexus will make a real HTTP connection,
+                  measure actual network metrics (DNS, TCP, TLS, response times), extract flow features, and run
+                  them through the LightGBM model to detect anomalous behavior.
                 </p>
+                <div className="flex flex-wrap justify-center gap-2 pt-3">
+                  {["https://google.com", "https://github.com", "https://example.com"].map((url) => (
+                    <button
+                      key={url}
+                      onClick={() => { setTargetUrl(url); }}
+                      className="px-2.5 py-1 text-[11px] font-mono bg-[#181B21] border border-[#282C35] text-[#38BDF8] hover:bg-[#1D2027] hover:border-[#38BDF8]/40 rounded-xs transition-colors cursor-pointer"
+                    >
+                      {url.replace("https://", "")}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>

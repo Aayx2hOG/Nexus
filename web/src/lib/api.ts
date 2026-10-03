@@ -5,6 +5,7 @@ import {
   FeedbackPage,
   FeedbackRecord,
   Health,
+  LiveProbeResult,
   ModelSummary,
   NonAlertSamplePage,
   PresetData,
@@ -147,6 +148,19 @@ export async function submitBatchPredictions(
       schema_version: "unsw-nb15.v0",
       flows,
     }),
+  });
+}
+
+export async function liveProbe(payload: {
+  target_url: string;
+  method?: "GET" | "HEAD" | "POST" | "OPTIONS";
+  timeout_seconds?: number;
+  follow_redirects?: boolean;
+}): Promise<LiveProbeResult> {
+  return request<LiveProbeResult>("traffic/live-probe", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
   });
 }
 

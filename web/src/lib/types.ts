@@ -101,6 +101,42 @@ export interface SimulationProfile {
   expected_verdict: string;
 }
 
+export interface ConnectionMetrics {
+  dns_resolve_ms: number;
+  tcp_connect_ms: number;
+  tls_handshake_ms: number | null;
+  ttfb_ms: number;
+  total_ms: number;
+  request_size_bytes: number;
+  response_size_bytes: number;
+  response_header_bytes: number;
+  response_body_bytes: number;
+  status_code: number;
+  http_version: string;
+  num_redirects: number;
+  server_header: string | null;
+  content_type: string | null;
+  is_https: boolean;
+}
+
+export interface LiveProbeResult {
+  target_url: string;
+  method: string;
+  flow_id: string;
+  connection: ConnectionMetrics;
+  target_hit: boolean;
+  score: number;
+  threshold: number;
+  decision: "alert" | "normal";
+  threat_level: "CRITICAL" | "HIGH" | "MEDIUM" | "CLEAN";
+  alert_id?: string | null;
+  top_features: FeatureContribution[];
+  recommended_action: string;
+  event_time: string;
+  extracted_features: Record<string, unknown>;
+}
+
+// Keep old ProbeResult for backward compat
 export interface ProbeResult {
   target_url: string;
   profile_id: string;
