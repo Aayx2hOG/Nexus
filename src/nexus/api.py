@@ -45,7 +45,14 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
     app.state.store = store
     app.add_middleware(StrictRequests, limits=limits or RequestLimits())
     register_error_handlers(app)
-    for router in (routes.health, routes.flows, routes.alerts):
+    for router in (
+        routes.health,
+        routes.flows,
+        routes.alerts,
+        routes.predictions,
+        routes.stats,
+        routes.replay,
+    ):
         app.include_router(router)
     return app
 

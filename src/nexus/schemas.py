@@ -2,7 +2,7 @@
 
 import re
 from datetime import datetime
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, model_validator
@@ -129,3 +129,83 @@ class ValidationResult(StrictModel):
 class Health(StrictModel):
     status: Literal["alive", "not_ready", "ready"]
     bundle_version: str | None = None
+
+
+class PredictionSummaryItem(StrictModel):
+    flow_id: Identifier
+    score: float
+    threshold: float
+    decision: Literal["alert", "normal"]
+    alert_id: Identifier | None = None
+
+
+class BatchPredictionResponse(StrictModel):
+    bundle_version: str
+    predictions: list[PredictionSummaryItem]
+    alert_count: int
+    total_count: int
+
+
+class ModelSummaryResponse(StrictModel):
+    bundle_version: str
+    algorithm: str
+    decision_threshold: float
+    bundle_hashes: dict[str, str]
+    source_hashes: dict[str, str]
+    selection_metrics: dict[str, Any]
+    metrics_note: Literal["selection estimate, not independent confirmation"] = (
+        "selection estimate, not independent confirmation"
+    )
+
+
+class StatsResponse(StrictModel):
+    alerts_24h: int
+    awaiting_review: int
+    confirmed_attacks: int
+    false_positives: int
+    needs_investigation: int
+    total_predictions_24h: int
+
+
+class NonAlertSampleItem(StrictModel):
+    sequence: int
+    flow_id: Identifier
+    bundle_version: str
+    event_time: Timestamp | None = None
+    ingest_time: Timestamp
+    features: dict[str, Any]
+    score: float
+    threshold: float
+    decision: Literal["normal"]
+    review: dict[str, Any] | None = None
+
+
+class NonAlertSamplePage(StrictModel):
+    items: list[NonAlertSampleItem]
+    next_after: int | None = None
+
+
+class ReplayTruthItem(StrictModel):
+    flow_id: Identifier
+    label: Flag
+    attack_cat: str
+
+
+class ReplayTruthBatch(StrictModel):
+    items: Annotated[list[ReplayTruthItem], Field(min_length=1, max_length=1000)]
+
+
+class ReplaySummaryResponse(StrictModel):
+    total_replayed: int
+    confusion_matrix: list[list[int]]
+    true_positives: int
+    false_positives: int
+    true_negatives: int
+    false_negatives: int
+    accuracy: float
+    recall: float
+    false_positive_rate: float
+    false_alerts_per_1000_normal: float
+    summary_note: Literal[
+        "historical replay on evaluation partition, not independent confirmation"
+    ] = "historical replay on evaluation partition, not independent confirmation"
