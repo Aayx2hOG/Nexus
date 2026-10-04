@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from uuid import uuid4
 
+import joblib
 import numpy as np
 import pytest
 
@@ -26,7 +27,7 @@ CSV_PATH = (
     / "raw"
     / "CSV_Files"
     / "Training and Testing Sets"
-    / "UNSW_NB15_testing-set.csv"
+    / "UNSW_NB15_training-set.csv"
 )
 
 
@@ -51,7 +52,11 @@ def test_serving_offline_parity(bundle):
 
     # 1. Offline path
     offline_X = bundle.preprocessor.transform(sample_df)
-    offline_scores = bundle.model.predict_proba(offline_X)[:, 1]
+    frozen = joblib.load(PROJECT_ROOT / "models/lightgbm_validated_v1/binary/model.joblib")
+    offline_scores = frozen.predict_proba(sample_df)[:, 1]
+    np.testing.assert_array_equal(bundle.model.predict_proba(offline_X)[:, 1], offline_scores)
+    assert bundle.decision_threshold == frozen.decision_threshold_
+    assert len(np.unique(offline_scores)) > 1
     offline_decisions = [
         "alert" if s >= bundle.decision_threshold else "normal" for s in offline_scores
     ]

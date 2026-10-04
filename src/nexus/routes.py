@@ -155,7 +155,7 @@ async def predict(batch: FlowBatch, request: Request, store: Store) -> BatchPred
                     event_time=p.event_time,
                     source="model",
                     bundle_version=bundle.manifest.bundle_version,
-                    predicted_class="Generic",
+                    predicted_class="Attack",
                     score=p.score,
                     threshold=p.threshold,
                     severity="alert",

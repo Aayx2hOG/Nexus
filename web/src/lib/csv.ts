@@ -171,16 +171,16 @@ export function parseCSVText(csvText: string): ParseResult {
       }
 
       if (INT_FIELDS.has(feat)) {
-        const parsed = parseInt(rawVal, 10);
-        if (isNaN(parsed)) {
+        const parsed = Number(rawVal);
+        if (!Number.isSafeInteger(parsed)) {
           if (errors.length < 5) errors.push(`Row ${r}: Invalid integer for '${feat}': ${rawVal}`);
           rowValid = false;
           break;
         }
         featDict[feat] = parsed;
       } else if (FLOAT_FIELDS.has(feat)) {
-        const parsed = parseFloat(rawVal);
-        if (isNaN(parsed)) {
+        const parsed = Number(rawVal);
+        if (!Number.isFinite(parsed)) {
           if (errors.length < 5) errors.push(`Row ${r}: Invalid number for '${feat}': ${rawVal}`);
           rowValid = false;
           break;

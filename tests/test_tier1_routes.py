@@ -198,3 +198,44 @@ def test_replay_truth_and_summary_endpoint(auth_client):
         summary["summary_note"]
         == "historical replay on evaluation partition, not independent confirmation"
     )
+
+
+def test_api_scores_match_frozen_winner_for_submitted_values(auth_client):
+    """Real input batches must produce checkpoint scores, never canned verdicts."""
+    import joblib
+    import numpy as np
+    import pandas as pd
+
+    frozen = joblib.load(PROJECT_ROOT / "models/lightgbm_validated_v1/binary/model.joblib")
+    rows = json.loads((PROJECT_ROOT / "data/presets/mixed_100.json").read_text())
+    columns = frozen.features.native.columns
+    frame = pd.DataFrame(rows).loc[:, columns]
+    expected = frozen.predict_proba(frame)[:, 1]
+    flows = [
+        {
+            "flow_id": str(uuid4()),
+            "event_time": "2026-10-04T10:00:00Z",
+            "features": {key: row[key] for key in columns},
+        }
+        for row in rows
+    ]
+    response = auth_client.post(
+        "/api/v1/predictions", json={"schema_version": "unsw-nb15.v0", "flows": flows}
+    )
+    assert response.status_code == 200, response.text
+    result = response.json()
+    scores = [item["score"] for item in result["predictions"]]
+    np.testing.assert_allclose(scores, expected, rtol=0, atol=1e-12)
+    assert len(set(scores)) > 1
+    assert {p["decision"] for p in result["predictions"]} == {"normal", "alert"}
+    for flow, pred in zip(flows, result["predictions"], strict=True):
+        assert pred["flow_id"] == flow["flow_id"]
+        assert pred["threshold"] == frozen.decision_threshold_
+        assert pred["decision"] == (
+            "alert" if pred["score"] >= frozen.decision_threshold_ else "normal"
+        )
+        if pred["alert_id"]:
+            alert = auth_client.get(f"/api/v1/alerts/{pred['alert_id']}").json()
+            assert alert["source"] == "model"
+            assert alert["score"] == pred["score"]
+            assert alert["predicted_class"] == "Attack"

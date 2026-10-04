@@ -380,7 +380,7 @@ export default function TrafficPage() {
                   <div className="text-lg font-bold font-mono text-[#F1F3F6] tabular-nums">
                     {totalAnalyzed.toLocaleString()}
                   </div>
-                  <div className="text-[10px] text-[#939AA6]">Model: LightGBM ({model?.bundle_version || "v2.0.0"})</div>
+                  <div className="text-[10px] text-[#939AA6]">Model: LightGBM ({model?.bundle_version ?? "unavailable"})</div>
                 </div>
 
                 <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
@@ -388,7 +388,7 @@ export default function TrafficPage() {
                   <div className="text-lg font-bold font-mono text-[#F87171] tabular-nums">
                     {alertCount.toLocaleString()}
                   </div>
-                  <div className="text-[10px] text-[#F87171]/80">Decision score &ge; {model?.decision_threshold.toFixed(4) || "0.7675"}</div>
+                  <div className="text-[10px] text-[#F87171]/80">Decision score &ge; {model?.decision_threshold.toFixed(4) ?? "unavailable"}</div>
                 </div>
 
                 <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
@@ -593,7 +593,7 @@ export default function TrafficPage() {
               </div>
               <p className="text-[11px] text-[#939AA6]">
                 Makes an actual HTTP connection to the target. Measures real DNS resolution, TCP handshake, 
-                TLS negotiation, response timing, and payload sizes — then feeds those real metrics into the ML model.
+                TLS negotiation, response timing, and payload sizes — then combines measurements with estimated and fixed network features for experimental model scoring. This is not a validated website security assessment.
               </p>
 
               {/* URL Input */}
@@ -877,7 +877,7 @@ export default function TrafficPage() {
                       </h3>
                     </div>
                     <p className="text-[11px] text-[#939AA6]">
-                      Which real connection metrics most influenced the ML model&apos;s decision:
+                      Which measured or estimated features most influenced the model score:
                     </p>
 
                     <div className="space-y-2">
@@ -901,7 +901,7 @@ export default function TrafficPage() {
                 {/* Extracted Features (expandable) */}
                 <details className="bg-[#13151A] border border-[#282C35] rounded-sm">
                   <summary className="p-4 cursor-pointer text-xs font-semibold uppercase tracking-wider text-[#F1F3F6] flex items-center space-x-2 select-none">
-                    <span>Extracted UNSW-NB15 Features (42 features from real connection)</span>
+                    <span>Extracted UNSW-NB15 Features (42 measured, estimated, or fixed features)</span>
                   </summary>
                   <div className="px-4 pb-4">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-[11px] font-mono">

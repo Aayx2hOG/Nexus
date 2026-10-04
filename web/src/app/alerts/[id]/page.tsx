@@ -148,8 +148,8 @@ export default function AlertDetailPage() {
   }
 
   const score = alert.score ?? alert.probability ?? 0.0;
-  const threshold = alert.threshold ?? 0.5777;
-  const isAboveThreshold = score >= threshold;
+  const threshold = alert.threshold;
+  const isAboveThreshold = threshold != null && score >= threshold;
 
   return (
     <div className="space-y-6">
@@ -239,7 +239,7 @@ export default function AlertDetailPage() {
               </span>
               <span className="text-[#616875] mx-2">|</span>
               <span className="text-[#939AA6]">
-                Threshold: {threshold.toFixed(6)}
+                Threshold: {threshold?.toFixed(6) ?? "Unavailable"}
               </span>
             </div>
           </div>
@@ -254,16 +254,16 @@ export default function AlertDetailPage() {
               style={{ width: `${Math.min(Math.max(score * 100, 0), 100)}%` }}
             />
             {/* Threshold marker line */}
-            <div
+            {threshold != null && <div
               className="absolute top-0 bottom-0 w-0.5 bg-[#F1F3F6] z-10"
               style={{ left: `${threshold * 100}%` }}
               title={`Threshold: ${threshold.toFixed(4)}`}
-            />
+            />}
           </div>
 
           <div className="flex justify-between text-[10px] text-[#939AA6] font-mono">
             <span>0.0 (Normal)</span>
-            <span>Threshold ({threshold.toFixed(4)})</span>
+            <span>Threshold ({threshold?.toFixed(4) ?? "Unavailable"})</span>
             <span>1.0 (Alert)</span>
           </div>
         </div>

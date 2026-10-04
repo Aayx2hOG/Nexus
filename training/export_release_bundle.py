@@ -12,18 +12,13 @@ import argparse
 import hashlib
 import json
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 import joblib
-import lightgbm as lgb
-import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "training"))
-
-from fast_lightgbm_models import OneHotFeatures  # noqa: E402
-from train_validated_lightgbm import canonical_features  # noqa: E402
-from tune_lightgbm_fast import read_data  # noqa: E402
 
 
 def sha256_file(path: Path) -> str:
@@ -47,62 +42,22 @@ def export_bundle(
     if not splits_path.is_file():
         raise FileNotFoundError(f"Missing split indices: {splits_path}")
 
-    splits = np.load(splits_path)
-    fit = splits["fit"]
-    early = splits["early"]
-    refit = np.sort(np.r_[fit, early])
-
-    sel_val_path = experiment_dir / "binary" / "selected_validation.json"
-    if not sel_val_path.is_file():
-        raise FileNotFoundError(f"Missing selected validation JSON: {sel_val_path}")
-
-    with sel_val_path.open() as f:
+    # Package the frozen validation winner, never retrain during export.
+    for name in ("binary/model.joblib", "binary/selected_validation.json", "split_indices.npz"):
+        expected = exp_manifest["artifact_hashes"][name]
+        if sha256_file(experiment_dir / name) != expected:
+            raise ValueError(f"Experiment artifact hash mismatch: {name}")
+    with (experiment_dir / "binary/selected_validation.json").open() as f:
         sel_val = json.load(f)
-
-    # Resolve train CSV
-    train_csv_arg = Path(exp_manifest["arguments"]["train_csv"])
-    if not train_csv_arg.is_file():
-        train_csv_arg = (
-            PROJECT_ROOT / "data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_testing-set.csv"
-        )
-    if not train_csv_arg.is_file():
-        raise FileNotFoundError(f"Train CSV not found: {train_csv_arg}")
-
-    csv_hash = sha256_file(train_csv_arg)
-    if csv_hash != exp_manifest["train_sha256"]:
-        raise ValueError(f"Train CSV hash mismatch: {csv_hash} != {exp_manifest['train_sha256']}")
-
-    print(f"Reading training data from {train_csv_arg}...", flush=True)
-    raw, y, class_names = read_data(train_csv_arg)
-    raw = canonical_features(raw)
-    target = (y > 0).astype(int)
-
-    # 1. Fit preprocessor on refit rows
-    print(f"Fitting OneHotFeatures preprocessor on {len(refit):,} refit rows...", flush=True)
-    preprocessor = OneHotFeatures().fit(raw.iloc[refit])
-
-    # 2. Refit LightGBM model with exact parameters from selected validation
-    print("Fitting winning LightGBM candidate...", flush=True)
-    refit_params = sel_val["refit"]["parameters"].copy()
-    refit_params["class_weight"] = {int(k): v for k, v in refit_params["class_weight"].items()}
-    refit_params["n_jobs"] = 4
-
-    X_refit = preprocessor.transform(raw.iloc[refit])
-    model = lgb.LGBMClassifier(**refit_params)
-    model.fit(X_refit, target[refit])
-    decision_threshold = float(sel_val["decision_threshold"])
-    model.decision_threshold_ = decision_threshold
-
-    # Verify predictions on selection set
-    sel = splits["selection"]
-    X_sel = preprocessor.transform(raw.iloc[sel])
-    sel_scores = model.predict_proba(X_sel)[:, 1]
-    sel_preds = (sel_scores >= decision_threshold).astype(int)
-    from sklearn.metrics import recall_score
-
-    observed_recall = float(recall_score(target[sel], sel_preds))
-    expected_recall = sel_val["validation_metrics"]["recall"]
-    print(f"Verified selection recall: {observed_recall:.6f} (expected {expected_recall:.6f})")
+    frozen = joblib.load(experiment_dir / "binary/model.joblib")
+    preprocessor = frozen.features
+    model = frozen.estimator
+    decision_threshold = float(frozen.decision_threshold_)
+    if decision_threshold != float(sel_val["decision_threshold"]):
+        raise ValueError("Saved model threshold does not match selected validation")
+    if list(preprocessor.native.columns) != exp_manifest["feature_columns"]:
+        raise ValueError("Saved preprocessing schema does not match experiment")
+    csv_hash = exp_manifest["train_sha256"]
 
     # Create destination bundle directory
     bundle_path = output_dir / bundle_version
@@ -132,8 +87,10 @@ def export_bundle(
 
     manifest = {
         "bundle_version": bundle_version,
-        "created_utc": sel_val.get("refit", {}).get("training_seconds"),
+        "created_utc": datetime.now(UTC).isoformat(),
         "code_version": "0.2.0",
+        "export_method": "frozen_checkpoint_no_refit",
+        "checkpoint_sha256": exp_manifest["artifact_hashes"]["binary/model.joblib"],
         "feature_columns": exp_manifest["feature_columns"],
         "dtypes": {
             col: "string" if col in preprocessor.categorical else "float64"

@@ -37,7 +37,7 @@ The backend requires the hash-checked release bundle (`artifacts/bundles/v1.0.0/
 python -m training.export_release_bundle
 ```
 
-The current exporter verifies the training CSV hash and **refits** preprocessing and LightGBM before packaging them. It does not export the saved checkpoint byte-for-byte; release parity remains a separate follow-up.
+The exporter verifies the experiment checkpoint, selection record, and split hashes, then packages the saved winning estimator and its fitted preprocessing without retraining. Serving scores are tested against that frozen checkpoint.
 
 ---
 
@@ -62,13 +62,14 @@ Verify backend health:
 
 ---
 
-### Step 4: Seed Demo Alerts (Recommended on Fresh Clone)
+### Step 4: Use real model results
 
-On a freshly cloned repository, the database is empty (`0 alerts`). To immediately populate the queue with sample alerts for testing the UI:
-
-```sh
-NEXUS_DATABASE_PATH=data/nexus.sqlite3 python -m nexus.demo
-```
+Do not seed synthetic alerts for the presentation. After starting the frontend,
+open **/traffic**, load the mixed CSV preset (or paste/upload your own 42-feature
+CSV), and click **Run Detection**. Presets provide inputs; scores and decisions
+are computed by the loaded model. Labels are excluded from prediction requests.
+The website probe uses estimated and fixed network features and is experimental;
+use CSV flows to demonstrate model inference.
 
 ---
 
@@ -84,7 +85,7 @@ npm run dev
 
 For production builds:
 ```sh
-npm run build
+npm run build -- --webpack
 npm run start -- -p 3000
 ```
 
@@ -185,3 +186,30 @@ ruff format --check src tests
 cd web && npm run build
 ```
 
+
+
+## Integration verification — 2026-10-04
+
+The local `v1.0.0` release packages the frozen LightGBM trial-4 binary validation
+winner from `models/lightgbm_validated_v1/binary/model.joblib`, including its
+fitted preprocessing and threshold `0.5776925765603604`. This is the winner for
+minimum validation FPR subject to at least 95% recall, not a claim of universal
+or independently tested superiority.
+
+- Backend: **223 tests passed**, including API/checkpoint parity and persisted alerts.
+- Frontend: production build and TypeScript passed with `npm run build -- --webpack`.
+  The default Turbopack build was blocked by local-port restrictions in this environment.
+- Local HTTP integration: actual frontend CSV parser → Next.js proxy → FastAPI →
+  model → proxy response. Mixed preset: **100 flows, 59 alerts, 41 normal,
+  94 distinct scores; maximum difference from the frozen checkpoint: 0.0**.
+  These counts demonstrate integration, not accuracy on an independent test set.
+- `/traffic`, `/model`, and `/alerts` returned HTTP 200. Visual browser interaction
+  was not automated. Temporary verification servers and database were cleaned up.
+- Changed Python files pass lint and formatting; repository-wide checks still
+  report existing issues in unrelated files.
+
+Restart the backend after exporting so it loads the updated artifacts. Start it
+with `NEXUS_BUNDLE_VERSION=v1.0.0` and the same API token as the frontend, following
+Step 3. For the presentation, use `/traffic` → mixed preset → Run Detection, then
+open a resulting alert. The website probe includes estimated/fixed inputs and is
+not a validated website security assessment.

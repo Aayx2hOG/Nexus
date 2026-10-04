@@ -107,7 +107,7 @@ export default function AlertsPage() {
             Alert Queue & Triage
           </h1>
           <p className="text-xs text-[#939AA6]">
-            Binary intrusion classification queue (threshold: 0.5777)
+            Binary intrusion classification queue (threshold shown per model result)
           </p>
         </div>
 
@@ -259,7 +259,7 @@ export default function AlertsPage() {
                 displayedAlerts.map((alert, idx) => {
                   const isSelected = idx === selectedIndex;
                   const score = alert.score ?? alert.probability;
-                  const threshold = alert.threshold ?? 0.5777;
+                  const threshold = alert.threshold;
 
                   return (
                     <tr
@@ -307,7 +307,7 @@ export default function AlertsPage() {
                           <div className="flex items-center space-x-2">
                             <span>{score.toFixed(4)}</span>
                             <span className="text-[#616875]">/</span>
-                            <span className="text-[#939AA6]">{threshold.toFixed(4)}</span>
+                            <span className="text-[#939AA6]">{threshold?.toFixed(4) ?? "Unavailable"}</span>
                           </div>
                         ) : (
                           "—"

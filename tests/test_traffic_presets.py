@@ -1,8 +1,9 @@
 """Tests for traffic simulation profiles, website probe, and flow presets."""
 
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
-from pathlib import Path
 
 from nexus.api import create_app
 from nexus.config import Settings
@@ -18,7 +19,7 @@ def app_with_bundle(tmp_path):
     settings = Settings(
         database_path=db_path,
         bundles_dir=BUNDLES_DIR,
-        bundle_version="v2.0.0",
+        bundle_version="v1.0.0",
         api_token="test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         reviewer_id="tier1-analyst",
     )
