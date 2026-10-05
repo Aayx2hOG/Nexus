@@ -19,6 +19,8 @@ class SelectiveFusion:
     baseline_false_positives: int
     allowed_additional_false_positives: int
     calibration_false_positives: int
+    primary_budget_fraction: float = 1.0
+    full_budget_baseline_threshold: float | None = None
 
     def route(self, tree, anomaly_rank):
         return (tree < self.baseline_threshold) & (
@@ -56,9 +58,12 @@ def calibrate_selective(
     uncertain_lower_ratio=0.5,
     suspicious_quantile=0.99,
     min_fusion_score=0.0,
+    primary_budget_fraction=1.0,
 ):
-    """Spend only the headroom remaining after preserving all baseline alerts.
+    """Calibrate recovery using benign rows and a predeclared primary share.
 
+    Share 1 preserves full-budget alerts and spends remaining headroom. Smaller
+    shares recalibrate the primary branch and can lose original baseline alerts.
     Arrays contain benign calibration rows only. With zero FP headroom, recovery
     requires a score strictly above every routed benign calibration score.
     """
@@ -76,10 +81,21 @@ def calibrate_selective(
         )
     ):
         raise ValueError("Budget must be in (0,1); gate parameters must be in [0,1]")
+    if not 0 < primary_budget_fraction <= 1:
+        raise ValueError("Primary budget fraction must be in (0,1]")
+    full_budget_threshold = baseline_threshold
+    if primary_budget_fraction < 1:
+        from anomaly_detection_models import fpr_threshold
+
+        baseline_threshold = fpr_threshold(tree, budget * primary_budget_fraction)
     baseline_fp = int((tree >= baseline_threshold).sum())
     remaining = int(np.floor(budget * len(tree))) - baseline_fp
     if remaining < 0:
         raise ValueError("Baseline already exceeds calibration FPR budget")
+    if primary_budget_fraction < 1:
+        remaining = min(
+            remaining, int(np.floor(budget * (1 - primary_budget_fraction) * len(tree)))
+        )
     policy = SelectiveFusion(
         baseline_threshold,
         min_fusion_score,
@@ -90,6 +106,8 @@ def calibrate_selective(
         remaining,
         baseline_fp,
     )
+    policy.primary_budget_fraction = primary_budget_fraction
+    policy.full_budget_baseline_threshold = full_budget_threshold
     routed = fusion[policy.route(tree, anomaly_rank)]
     if len(routed) > remaining:
         boundary = np.sort(routed)[len(routed) - remaining - 1]

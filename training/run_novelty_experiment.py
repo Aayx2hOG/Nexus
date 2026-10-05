@@ -21,8 +21,10 @@ import numpy as np
 import pandas as pd
 import sklearn
 from anomaly_detection_models import AnomalyFeatures, Autoencoder, benign_rank, fpr_threshold
+from calibration_evidence import write_evidence
 from complementary_fusion import calibrate_selective
 from fast_lightgbm_models import OneHotFeatures
+from fusion_ablation import fit_ablations, slice_diagnostics, validate_partitions
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
@@ -78,7 +80,8 @@ def digest(path):
 
 
 def write_json(path, value):
-    Path(path).write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
+    with Path(path).open("x") as stream:
+        stream.write(json.dumps(value, indent=2, allow_nan=False) + "\n")
 
 
 def grouped_split(frame, labels, families, held_family, seed):
@@ -292,7 +295,9 @@ def run(args, frame, labels, families, family, seed, output):
         ("scaled", True, 0.0),
         ("denoising", True, 0.10),
     ):
-        needed = set(args.models)
+        needed = set(args.models) | (
+            set(args.fusion_representations) if args.fusion_ablations else set()
+        )
         if variant == "plain" and "ae_plain" not in needed:
             continue
         if variant == "scaled" and not needed.intersection({"ae_scaled", "isolation_forest"}):
@@ -357,7 +362,7 @@ def run(args, frame, labels, families, family, seed, output):
             *[benign_rank(references[key], scores[name][key]) for key in references]
         )
     saved.update(fusion=fusion, fusion_columns=fusion_columns, rank_references=references)
-    return finish_run(args, labels, families, family, seed, output, split, scores, saved)
+    return finish_run(args, labels, families, family, seed, output, split, scores, saved, frame)
 
 
 def reuse_run(args, frame, labels, families, family, seed, output):
@@ -381,6 +386,7 @@ def reuse_run(args, frame, labels, families, family, seed, output):
     if any(not np.array_equal(split[key], expected[key]) for key in PARTITIONS):
         raise ValueError("Reuse splits differ from the frozen grouped protocol")
     saved = joblib.load(source / "models.joblib")
+    saved.setdefault("detector_checkpoint_sha256", manifest["artifact_hashes"]["models.joblib"])
     if args.fusion_c != saved["fusion"].named_steps["logisticregression"].C:
         raise ValueError("--fusion-c cannot change when reusing a fitted fusion model")
     output.mkdir(parents=True, exist_ok=False)
@@ -390,11 +396,25 @@ def reuse_run(args, frame, labels, families, family, seed, output):
         {
             "directory": str(source.resolve()),
             "manifest_sha256": digest(source / "manifest.json"),
-            "training": "No retraining; saved models and exact original partitions reused",
+            "training": (
+                "Detector checkpoints and exact partitions reused; "
+                "opt-in logistic ablations fit on fusion rows only"
+            ),
         },
     )
     scores = {}
     needed = set(args.models) | {"lightgbm", "ae_denoising", "ae_latent"}
+    if args.fusion_ablations:
+        needed.update(args.fusion_representations)
+    missing = {
+        key.removeprefix("ae_")
+        for key in needed
+        if key in {"ae_plain", "ae_scaled", "ae_denoising"}
+    } - set(saved["anomaly_models"])
+    if missing:
+        raise ValueError(
+            f"Required saved AE checkpoints missing: {sorted(missing)}; no implicit retraining"
+        )
     for name in ("fusion", "calibration", "evaluation"):
         print(f"Scoring {name} with frozen local models; no fitting...", flush=True)
         rows = frame.iloc[split[name]]
@@ -425,23 +445,43 @@ def reuse_run(args, frame, labels, families, family, seed, output):
             ]
         )
         scores[name] = current
-    return finish_run(args, labels, families, family, seed, output, split, scores, saved)
+    return finish_run(args, labels, families, family, seed, output, split, scores, saved, frame)
 
 
-def finish_run(args, labels, families, family, seed, output, split, scores, saved):
+def finish_run(args, labels, families, family, seed, output, split, scores, saved, frame):
+    validate_partitions(split, labels, families, family)
+    ablations = {}
+    if args.fusion_ablations:
+        ablations = fit_ablations(
+            scores,
+            split,
+            labels,
+            families,
+            family,
+            seed,
+            args.fusion_c,
+            args.fusion_representations,
+        )
+        saved["fusion_ablations"] = ablations
     print("Calibrating on benign calibration rows, then evaluating frozen decisions...", flush=True)
     thresholds, results = {}, []
     decisions, policies = {}, {}
+    diagnostic_scores = dict(scores["evaluation"])
     y_cal, y_eval = labels[split["calibration"]], labels[split["evaluation"]]
     for budget in args.fpr_budgets:
         cutoffs = {
             key: fpr_threshold(values[y_cal == 0], budget)
             for key, values in scores["calibration"].items()
         }
+        previous = saved.get("thresholds", {}).get(str(budget), {}).get("lightgbm")
+        if previous is not None and previous != cutoffs["lightgbm"]:
+            raise ValueError("Recalibration changed the saved full-budget LightGBM baseline")
         thresholds[str(budget)] = cutoffs
         baseline = scores["evaluation"]["lightgbm"] >= cutoffs["lightgbm"]
-        for key in MODELS:
-            if key not in scores["evaluation"] or key not in set(args.models) | {"lightgbm"}:
+        for key in (*MODELS, *ablations):
+            if key not in scores["evaluation"] or key not in set(args.models) | {"lightgbm"} | set(
+                ablations
+            ):
                 continue
             values = scores["evaluation"][key]
             prediction = values >= cutoffs[key]
@@ -468,40 +508,55 @@ def finish_run(args, labels, families, family, seed, output, split, scores, save
                 )
                 for name in ("calibration", "evaluation")
             }
-            policy = calibrate_selective(
-                scores["calibration"]["lightgbm"][y_cal == 0],
-                scores["calibration"]["learned_fusion"][y_cal == 0],
-                ranks["calibration"][y_cal == 0],
-                cutoffs["lightgbm"],
-                budget,
-                args.uncertain_lower_ratio,
-                args.suspicious_quantile,
-                args.min_fusion_score,
-            )
-            policies[str(budget)] = policy.to_dict()
-            tree, fusion = (scores["evaluation"][key] for key in ("lightgbm", "learned_fusion"))
-            prediction = policy.predict(tree, fusion, ranks["evaluation"])
-            decisions[f"selective_fusion__{budget}"] = prediction
-            result = metrics(
-                y_eval,
-                policy.score(tree, fusion, ranks["evaluation"]),
-                prediction,
-                baseline,
-                families[split["evaluation"]],
-                family,
-            )
-            result.update(
-                model="selective_fusion",
-                held_family=family,
-                seed=seed,
-                budget=budget,
-                threshold=policy.recovery_threshold,
-                calibration_fpr=policy.calibration_false_positives / policy.calibration_rows,
-                evaluation_budget_met=result["fpr"] <= budget,
-                routed_fraction=float(policy.route(tree, ranks["evaluation"]).mean()),
-                auc_score="budget-dependent conditional ranking",
-            )
-            results.append(result)
+            for allocation in args.primary_budget_fractions:
+                method = (
+                    "selective_fusion"
+                    if allocation == 1.0
+                    else f"selective_fusion_primary_{allocation}"
+                )
+                policy = calibrate_selective(
+                    scores["calibration"]["lightgbm"][y_cal == 0],
+                    scores["calibration"]["learned_fusion"][y_cal == 0],
+                    ranks["calibration"][y_cal == 0],
+                    cutoffs["lightgbm"],
+                    budget,
+                    args.uncertain_lower_ratio,
+                    args.suspicious_quantile,
+                    args.min_fusion_score,
+                    primary_budget_fraction=allocation,
+                )
+                policies[str(budget) if allocation == 1.0 else f"{method}__{budget}"] = (
+                    policy.to_dict()
+                )
+                tree, fusion = (scores["evaluation"][key] for key in ("lightgbm", "learned_fusion"))
+                prediction = policy.predict(tree, fusion, ranks["evaluation"])
+                if args.reconnaissance_diagnostics:
+                    diagnostic_scores[f"{method}__{budget}"] = policy.score(
+                        tree, fusion, ranks["evaluation"]
+                    )
+                decisions[f"{method}__{budget}"] = prediction
+                result = metrics(
+                    y_eval,
+                    policy.score(tree, fusion, ranks["evaluation"]),
+                    prediction,
+                    baseline,
+                    families[split["evaluation"]],
+                    family,
+                )
+                result.update(
+                    model=method,
+                    primary_budget_fraction=allocation,
+                    preserves_full_budget_baseline=allocation == 1.0,
+                    held_family=family,
+                    seed=seed,
+                    budget=budget,
+                    threshold=policy.recovery_threshold,
+                    calibration_fpr=policy.calibration_false_positives / policy.calibration_rows,
+                    evaluation_budget_met=result["fpr"] <= budget,
+                    routed_fraction=float(policy.route(tree, ranks["evaluation"]).mean()),
+                    auc_score="budget-dependent conditional ranking",
+                )
+                results.append(result)
     # Conventional OR uses each detector's full budget: report total FPR honestly.
     for budget in args.fpr_budgets:
         if "naive_or" not in args.models:
@@ -522,6 +577,60 @@ def finish_run(args, labels, families, family, seed, output, split, scores, save
             auc_score="rank_or (naive OR has two cutoffs)",
         )
         results.append(result)
+    if args.reconnaissance_diagnostics:
+        write_json(
+            output / "reconnaissance_diagnostics.json",
+            slice_diagnostics(
+                frame.iloc[split["evaluation"]],
+                y_eval,
+                families[split["evaluation"]],
+                diagnostic_scores,
+                decisions,
+            ),
+        )
+    comparison_context = {
+        "partition_sha256": digest(output / "split_indices.npz"),
+        "data_sha256": digest(args.train_csv),
+        "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+        "evaluation_policy": "frozen decisions on grouped internal development holdout",
+        "scenario": "binary" if family == "none" else "withheld_family",
+        "fusion_c": args.fusion_c,
+        "gate_configuration": [
+            args.uncertain_lower_ratio,
+            args.suspicious_quantile,
+            args.min_fusion_score,
+        ],
+        "fusion_representations": args.fusion_representations if args.fusion_ablations else [],
+        "primary_budget_fractions": args.primary_budget_fractions,
+    }
+    conditions = {
+        key: value
+        for key, value in comparison_context.items()
+        if key not in {"partition_sha256", "scenario"}
+    }
+    comparison_context["conditions_sha256"] = hashlib.sha256(
+        json.dumps(conditions, sort_keys=True).encode()
+    ).hexdigest()
+    for result in results:
+        result["conditions_sha256"] = comparison_context["conditions_sha256"]
+        result.update(
+            {
+                k: comparison_context[k]
+                for k in (
+                    "partition_sha256",
+                    "data_sha256",
+                    "calibration_policy",
+                    "evaluation_policy",
+                    "scenario",
+                )
+            }
+        )
+        result.setdefault("primary_budget_fraction", 1.0)
+        result["method_configuration"] = (
+            list(ablations[result["model"]]["columns"])
+            if result["model"] in ablations
+            else result["model"]
+        )
     baseline_metrics = {r["budget"]: r for r in results if r["model"] == "lightgbm"}
     for result in results:
         base = baseline_metrics[result["budget"]]
@@ -558,11 +667,32 @@ def finish_run(args, labels, families, family, seed, output, split, scores, save
     np.savez_compressed(
         output / "evaluation_decisions.npz", row_indices=split["evaluation"], **decisions
     )
+    model_hash = digest(output / "models.joblib")
+    write_evidence(
+        output,
+        split=split,
+        labels=y_cal,
+        families=families[split["calibration"]],
+        scores=scores["calibration"],
+        anomaly_rank=benign_rank(
+            saved["rank_references"]["ae_denoising"], scores["calibration"]["ae_denoising"]
+        ),
+        policies=policies,
+        budgets=args.fpr_budgets,
+        seed=seed,
+        held_family=family,
+        data_sha256=comparison_context["data_sha256"],
+        model_sha256=model_hash,
+    )
+    for result in results:
+        result["detector_checkpoint_sha256"] = saved.get("detector_checkpoint_sha256", model_hash)
     write_json(output / "metrics.json", results)
     write_json(
         output / "manifest.json",
         {
             "status": "complete",
+            "comparison_context": comparison_context,
+            "assessment_sha256": "a4456766c442ba2e6f41f03c05daf681c67da23ffe666a0a8b3df80bb251f1ad",
             "held_family": family,
             "seed": seed,
             "data_sha256": digest(args.train_csv),
@@ -572,6 +702,8 @@ def finish_run(args, labels, families, family, seed, output, split, scores, save
                     "run_novelty_experiment.py",
                     "anomaly_detection_models.py",
                     "complementary_fusion.py",
+                    "calibration_evidence.py",
+                    "fusion_ablation.py",
                     "fast_lightgbm_models.py",
                 )
             },
@@ -583,6 +715,7 @@ def finish_run(args, labels, families, family, seed, output, split, scores, save
                     "evaluation_scores.npz",
                     "evaluation_decisions.npz",
                     "calibration.json",
+                    "calibration_evidence.npz",
                     "metrics.json",
                 )
             },
@@ -632,8 +765,28 @@ def parse_args(argv=None):
     parser.add_argument(
         "--reuse-dir",
         type=Path,
-        help="Reuse a trusted local suite's frozen models/splits; no training",
+        help="Reuse frozen detectors/splits; --fusion-ablations fits logistic controls only",
     )
+    parser.add_argument(
+        "--fusion-ablations",
+        action="store_true",
+        help="Fit matched logistic controls on the disjoint fusion partition",
+    )
+    parser.add_argument(
+        "--fusion-representations",
+        nargs="+",
+        choices=["ae_plain", "ae_denoising", "ae_scaled"],
+        default=["ae_denoising"],
+        help="Reconstruction representations for matched ablations",
+    )
+    parser.add_argument(
+        "--primary-budget-fractions",
+        type=float,
+        nargs="+",
+        default=[1.0],
+        help="Predeclared primary shares; remaining share funds recovery; no winner selection",
+    )
+    parser.add_argument("--reconnaissance-diagnostics", action="store_true")
     parser.add_argument("--fusion-c", type=float, default=1.0)
     parser.add_argument(
         "--uncertain-lower-ratio",
@@ -662,6 +815,12 @@ def parse_args(argv=None):
         help="Also evaluate known attack-family classification",
     )
     args = parser.parse_args(argv)
+    if any(not 0 < v <= 1 for v in args.primary_budget_fractions) or len(
+        set(args.primary_budget_fractions)
+    ) != len(args.primary_budget_fractions):
+        parser.error("Primary budget fractions must be unique and in (0,1]")
+    if len(set(args.fusion_representations)) != len(args.fusion_representations):
+        parser.error("Fusion representations must not repeat")
     if not np.isfinite(args.fusion_c) or args.fusion_c <= 0:
         parser.error("fusion-c must be finite and positive")
     if any(

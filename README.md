@@ -14,6 +14,7 @@ currently offline research; the new policy is not yet integrated into serving.**
 
 | Start here | Contents |
 | --- | --- |
+| [Serving model and cleanup status](docs/MODEL_IMPROVEMENT_STATUS.md) | Selected checkpoint, metrics, candidate outcomes and retained dependencies |
 | [Current model assessment](reports/current_model_assessment.md) | Eight-seed results, failures, research contribution and next experiments |
 | [Experiment commands](training/FUSION_EXPERIMENTS.md) | Reuse, training, calibration, evaluation, extra seeds and plots |
 | [Training workflows](training/README.md) | Active entry points and historical-code boundaries |
@@ -202,7 +203,7 @@ integration with the application remains a separate milestone.
 | `tests/` | Model invariants, API behavior and integration checks |
 | `reports/` | Curated research assessments; raw generated reports stay local |
 | `models/` | Local frozen checkpoints, including `lightgbm_validated_v1` |
-| `artifacts/` | Local experiment suites, aggregate CSVs, plots, logs, release bundles and archived reports |
+| `artifacts/` | Local experiment suites, aggregate CSVs, plots, logs and release bundles |
 | `experiments/` | Retained historical LightGBM provenance needed by the binary report |
 | `src/nexus/`, `web/` | Existing LightGBM-serving API and SOC console |
 | `docs/` | API contract and local demo instructions |

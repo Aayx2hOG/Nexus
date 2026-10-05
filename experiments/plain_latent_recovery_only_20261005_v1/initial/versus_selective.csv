@@ -1,0 +1,4 @@
+scenario,budget,seed,extra_attacks_vs_selective,extra_fps_vs_selective,candidate_only_attack_detections,selective_only_attack_detections
+Exploits,0.01,42,1410,21,1410,0
+Exploits,0.01,123,1593,14,1593,0
+Exploits,0.01,2026,1494,12,1660,166

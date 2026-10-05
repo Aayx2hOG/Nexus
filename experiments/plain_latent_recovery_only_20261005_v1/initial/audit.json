@@ -1,0 +1,42 @@
+{
+  "inputs": [
+    {
+      "scenario": "Exploits",
+      "seed": 42,
+      "hashes": {
+        "evaluation_scores.npz": "d64cfd18a658bc192faeacf1da12f1448646893266d710bbeda404d75c72d3bd",
+        "evaluation_decisions.npz": "3899dfbd6347695a7e628f43dfbd9214e6f9bf824b2ed800c2cd372704c01035",
+        "calibration.json": "e7b98d818621ba3a81abe551a6751211189e406c8f2d1fb345f1794ae0cc5e34",
+        "metrics.json": "7e8b59ea40d90c65aacd8a61dd6c4c9c027798a408dab645d03afeeb9dc5cd7d"
+      }
+    },
+    {
+      "scenario": "Exploits",
+      "seed": 123,
+      "hashes": {
+        "evaluation_scores.npz": "dc3ac431455667279abed6fd62fc63a19ee0d8aee12d3065d8f3ce5fd63d0d97",
+        "evaluation_decisions.npz": "c48629fe9a54baf9518e966f9aff248757dcb096bd9fe898b69681e7e2384a12",
+        "calibration.json": "0e754ac70a96b5c199fb411fb4fb9e1ca47bee9f2f94dcc54b0e0581019ce52c",
+        "metrics.json": "bc928cb626385ac830e47e29f1cf5ed888c2bbc064b43a7ac2837e68bfbc7f6e"
+      }
+    },
+    {
+      "scenario": "Exploits",
+      "seed": 2026,
+      "hashes": {
+        "evaluation_scores.npz": "5a6e0d47a8b2a7a6b48fe68ac1c1d3e9b0ed1b848040dd23a84b6095115756af",
+        "evaluation_decisions.npz": "11409ef021ef79e783c63ef2319817234f6ca69660132adb7cd4d4d3a1671840",
+        "calibration.json": "e2acba301bc55547b748d5817879e41f924f3ef5e2ea7b7cdfdc2ae8b136f59b",
+        "metrics.json": "e5fd4c907e8b263e8778802116fdcecb8a5b9cadac10b427e549e20b93272745"
+      }
+    }
+  ],
+  "script_sha256": "78f300605ff2b2a01593257e3f1bb1714a50f31582f1765bccea5e82781744e9",
+  "stage": "initial",
+  "rule": "lightgbm_alert | ((~lightgbm_alert) & (archived_plain_latent_score >= frozen_plain_latent_threshold))",
+  "threshold_source": "Existing full-detector plain-AE+latent calibration threshold, reused unchanged",
+  "union_calibration_budget_guarantee": false,
+  "training": false,
+  "recalibration": false,
+  "inference": false
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "epoch": 1,
+    "normal_early_mse": 4.088279724121094
+  },
+  {
+    "epoch": 2,
+    "normal_early_mse": 1.9730366468429565
+  },
+  {
+    "epoch": 3,
+    "normal_early_mse": 0.8375963568687439
+  },
+  {
+    "epoch": 4,
+    "normal_early_mse": 0.5095752477645874
+  },
+  {
+    "epoch": 5,
+    "normal_early_mse": 0.41238588094711304
+  },
+  {
+    "epoch": 6,
+    "normal_early_mse": 0.28821730613708496
+  },
+  {
+    "epoch": 7,
+    "normal_early_mse": 0.2552708089351654
+  },
+  {
+    "epoch": 8,
+    "normal_early_mse": 0.23282040655612946
+  },
+  {
+    "epoch": 9,
+    "normal_early_mse": 0.1829596906900406
+  },
+  {
+    "epoch": 10,
+    "normal_early_mse": 0.15427261590957642
+  },
+  {
+    "epoch": 11,
+    "normal_early_mse": 0.16769152879714966
+  },
+  {
+    "epoch": 12,
+    "normal_early_mse": 0.15529395639896393
+  },
+  {
+    "epoch": 13,
+    "normal_early_mse": 0.136233851313591
+  },
+  {
+    "epoch": 14,
+    "normal_early_mse": 0.11137410998344421
+  },
+  {
+    "epoch": 15,
+    "normal_early_mse": 0.12553770840168
+  },
+  {
+    "epoch": 16,
+    "normal_early_mse": 0.0956721156835556
+  },
+  {
+    "epoch": 17,
+    "normal_early_mse": 0.14308539032936096
+  },
+  {
+    "epoch": 18,
+    "normal_early_mse": 0.0890282690525055
+  },
+  {
+    "epoch": 19,
+    "normal_early_mse": 0.10329605638980865
+  },
+  {
+    "epoch": 20,
+    "normal_early_mse": 0.10781259834766388
+  },
+  {
+    "epoch": 21,
+    "normal_early_mse": 0.08900845795869827
+  },
+  {
+    "epoch": 22,
+    "normal_early_mse": 0.09950067847967148
+  },
+  {
+    "epoch": 23,
+    "normal_early_mse": 0.08929269760847092
+  },
+  {
+    "epoch": 24,
+    "normal_early_mse": 0.08547206968069077
+  },
+  {
+    "epoch": 25,
+    "normal_early_mse": 0.06919915229082108
+  },
+  {
+    "epoch": 26,
+    "normal_early_mse": 0.07943560183048248
+  },
+  {
+    "epoch": 27,
+    "normal_early_mse": 0.18716572225093842
+  },
+  {
+    "epoch": 28,
+    "normal_early_mse": 0.07912424206733704
+  },
+  {
+    "epoch": 29,
+    "normal_early_mse": 0.0783400610089302
+  },
+  {
+    "epoch": 30,
+    "normal_early_mse": 0.07517553865909576
+  }
+]

@@ -55,6 +55,21 @@ def enrich(table):
     table = table.copy()
     if table.duplicated(KEYS).any():
         raise ValueError("Duplicate scenario/model/budget/seed rows: do not mix old and new suites")
+    context = ["partition_sha256", "data_sha256", "calibration_policy", "evaluation_policy"]
+    if "conditions_sha256" in table:
+        context.append("conditions_sha256")
+    if any(column in table for column in context):
+        if any(column not in table or table[column].isna().any() for column in context):
+            raise ValueError("Cannot mix provenance-bearing results with unaudited historical rows")
+        paired = table.groupby(["held_family", "budget", "seed"])
+        if (paired[context].nunique() != 1).any().any():
+            raise ValueError("Paired methods have different partitions or calibration conditions")
+        for _, rows in table.groupby(["held_family", "budget"]):
+            if "conditions_sha256" in rows and rows.conditions_sha256.nunique() != 1:
+                raise ValueError("Cannot aggregate seeds with different method conditions")
+            seeds = rows.groupby("model").seed.apply(lambda values: frozenset(values))
+            if len(set(seeds)) != 1:
+                raise ValueError("Compared methods must have identical seed sets")
     added = table.additional_false_positives
     recovered = table.recovered_lightgbm_misses
     table["net_recovered_attacks"] = recovered - table.lost_lightgbm_detections

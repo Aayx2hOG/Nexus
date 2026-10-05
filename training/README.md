@@ -27,6 +27,8 @@ these helpers and records source hashes, so removing them would break existing
 experiments. They are not the recommended entry point for new fusion research.
 Use each script's `--help` and its existing frozen manifest when reproducing a run.
 
-Historical generated reports were archived locally beneath
-`artifacts/archive/cleanup_20261003/`. Earlier official-test results are historical
-diagnostics, not independent confirmation of the new fusion policy.
+Obsolete standalone official-test evaluators and threshold scripts were removed
+along with their retired model artifacts. Frozen-manifest dependencies remain.
+See [cleanup and current model status](../docs/MODEL_IMPROVEMENT_STATUS.md).
+Earlier official-test results are historical diagnostics, not independent
+confirmation of the new fusion policy.

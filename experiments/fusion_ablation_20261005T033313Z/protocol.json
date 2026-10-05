@@ -1,0 +1,65 @@
+{
+  "train_csv": "/home/aayush/projects/Nexus/data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_training-set.csv",
+  "output_dir": "experiments/fusion_ablation_20261005T033313Z",
+  "families": [
+    "none",
+    "Exploits",
+    "DoS",
+    "Reconnaissance"
+  ],
+  "seeds": [
+    42,
+    123,
+    2026
+  ],
+  "fpr_budgets": [
+    0.01,
+    0.03,
+    0.05
+  ],
+  "models": [
+    "lightgbm",
+    "ae_plain",
+    "ae_scaled",
+    "isolation_forest",
+    "ae_denoising",
+    "ae_latent",
+    "learned_fusion",
+    "rank_or",
+    "naive_or",
+    "selective_fusion"
+  ],
+  "reuse_dir": null,
+  "fusion_ablations": true,
+  "fusion_representations": [
+    "ae_plain",
+    "ae_denoising",
+    "ae_scaled"
+  ],
+  "primary_budget_fractions": [
+    1.0,
+    0.75,
+    0.5
+  ],
+  "reconnaissance_diagnostics": true,
+  "fusion_c": 1.0,
+  "uncertain_lower_ratio": 0.5,
+  "suspicious_quantile": 0.99,
+  "min_fusion_score": 0.0,
+  "check_data": false,
+  "epochs": 40,
+  "patience": 5,
+  "batch_size": 512,
+  "max_rounds": 1500,
+  "n_jobs": 4,
+  "attack_types": false,
+  "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "status": "planned",
+  "partition_group_fractions": {
+    "fit": 0.55,
+    "early": 0.1,
+    "fusion": 0.1,
+    "calibration": 0.1,
+    "evaluation": 0.15
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "inputs": [
+    {
+      "scenario": "Exploits",
+      "seed": 42,
+      "hashes": {
+        "evaluation_scores.npz": "d64cfd18a658bc192faeacf1da12f1448646893266d710bbeda404d75c72d3bd",
+        "evaluation_decisions.npz": "3899dfbd6347695a7e628f43dfbd9214e6f9bf824b2ed800c2cd372704c01035",
+        "calibration.json": "e7b98d818621ba3a81abe551a6751211189e406c8f2d1fb345f1794ae0cc5e34",
+        "metrics.json": "7e8b59ea40d90c65aacd8a61dd6c4c9c027798a408dab645d03afeeb9dc5cd7d"
+      }
+    },
+    {
+      "scenario": "Exploits",
+      "seed": 123,
+      "hashes": {
+        "evaluation_scores.npz": "dc3ac431455667279abed6fd62fc63a19ee0d8aee12d3065d8f3ce5fd63d0d97",
+        "evaluation_decisions.npz": "c48629fe9a54baf9518e966f9aff248757dcb096bd9fe898b69681e7e2384a12",
+        "calibration.json": "0e754ac70a96b5c199fb411fb4fb9e1ca47bee9f2f94dcc54b0e0581019ce52c",
+        "metrics.json": "bc928cb626385ac830e47e29f1cf5ed888c2bbc064b43a7ac2837e68bfbc7f6e"
+      }
+    },
+    {
+      "scenario": "Exploits",
+      "seed": 2026,
+      "hashes": {
+        "evaluation_scores.npz": "5a6e0d47a8b2a7a6b48fe68ac1c1d3e9b0ed1b848040dd23a84b6095115756af",
+        "evaluation_decisions.npz": "11409ef021ef79e783c63ef2319817234f6ca69660132adb7cd4d4d3a1671840",
+        "calibration.json": "e2acba301bc55547b748d5817879e41f924f3ef5e2ea7b7cdfdc2ae8b136f59b",
+        "metrics.json": "e5fd4c907e8b263e8778802116fdcecb8a5b9cadac10b427e549e20b93272745"
+      }
+    },
+    {
+      "scenario": "Reconnaissance",
+      "seed": 42,
+      "hashes": {
+        "evaluation_scores.npz": "5d1e4fa375811e50a7fe63818c645fc7b0addfd6f8b18291938e658296978031",
+        "evaluation_decisions.npz": "1e3f693b1f53bf6a7c76ca355ade4252ab3b1bd39b9a2e29bfdfa8674ff61bdf",
+        "calibration.json": "ba1a269ccd378b77b621a9eab4b77906b6895bbabd8f0cffb80682169df26651",
+        "metrics.json": "17801e3fec37133cfd4075972f5262df6c15dce9b557d059dffe3cefa97c0c3e"
+      }
+    },
+    {
+      "scenario": "Reconnaissance",
+      "seed": 123,
+      "hashes": {
+        "evaluation_scores.npz": "b40bbdecf8bc146ca24eb0834bf9a69a671bd1064f6c4769ecf63c65951a316c",
+        "evaluation_decisions.npz": "5a98d599bc4e515521f77fcfe582f81055e9f83df62d45b73e9aa119640b99da",
+        "calibration.json": "4f8ba753bd14c4c3d58ea711f43af849b288b6f7a54fc6f1a740803b9be79070",
+        "metrics.json": "4e42b7d9ec203ccde88cf904a4088bfc74da8774c67201a11b9139413cd6f7b5"
+      }
+    },
+    {
+      "scenario": "Reconnaissance",
+      "seed": 2026,
+      "hashes": {
+        "evaluation_scores.npz": "411c56c7c7e4763b52014c5f9838732a5f753e2778fcd51a5e777d7f22f126e0",
+        "evaluation_decisions.npz": "32e538acd3d22c8b8eba8f8f5a308933234695eafaa99a5979e040cfc4a5ae6b",
+        "calibration.json": "25ae0c8e20837aa1f4375967637513da570c96e15e0f2846a7f133c686491884",
+        "metrics.json": "03b673847a44cdcaa1a5bc72a134a0caa74ae53c3f4e19bac6efc5d86bb09dc1"
+      }
+    },
+    {
+      "scenario": "DoS",
+      "seed": 42,
+      "hashes": {
+        "evaluation_scores.npz": "a5474d315a75446e42bc9879d01db14c7e78ede1db8f0576bdc76daa24d7b40b",
+        "evaluation_decisions.npz": "269d4ebf676f9aae13b5bb6bee877951c28ea079582a9b96eb60feb791d864ee",
+        "calibration.json": "13a88192b24039f098073f68efd8f8179ee1eb5aef7a7c8bb4e4271f1e35e002",
+        "metrics.json": "af8527570dc1a7db7f7750583f6524c71102af57070e9b2f6902431170b088b1"
+      }
+    },
+    {
+      "scenario": "DoS",
+      "seed": 123,
+      "hashes": {
+        "evaluation_scores.npz": "8ad8d9e15ab3de11b8e2828e3e86224ba6d8247dffa63bc156986f9369bcca94",
+        "evaluation_decisions.npz": "fcdfb62af082fcd182a32a86a571c920249f4124cdf3a60383b07e18afdad5c5",
+        "calibration.json": "2596c2aaaa820d6b10aaa91f703c5f7fd4c59b32f7f5cce90d96169f2626aac3",
+        "metrics.json": "761ca6e01fc663620afca81927f8aa2cab5b8f4cca4eaaff0a9b2bdecef5f023"
+      }
+    },
+    {
+      "scenario": "DoS",
+      "seed": 2026,
+      "hashes": {
+        "evaluation_scores.npz": "06e93c5b53d116d54a46eaea13d7c8406754fb1f2b0dfd97ece4ea2fcedf1fd8",
+        "evaluation_decisions.npz": "93e92fb3123b7a746b405fcd66a0261dbb7ee9f531922e9f976d14b8d32dde87",
+        "calibration.json": "e9318e07a74bbffef6ce0fa18969fd322857586bfabc4ddec370edc4a8da381e",
+        "metrics.json": "5cf7dffb5ece05ff23f50f762db2280aea7e2d01f8c0f27de8294048c80649ea"
+      }
+    },
+    {
+      "scenario": "none",
+      "seed": 42,
+      "hashes": {
+        "evaluation_scores.npz": "19e9d628e5fd499a445c95146e443c35e7387258fe43900864d3fab944b45938",
+        "evaluation_decisions.npz": "5921f708f48dee4bdce6d48fd92159ae2465d12706c01fc16a08420b44b79d19",
+        "calibration.json": "b817a33608b5a85d723300f2bccf786a444e79c2443e3c9c6b1b0d40a594505e",
+        "metrics.json": "68546d1670c2a49d75013ec2882e867a1178aaa951abea8915de9ee7eddcf7cf"
+      }
+    },
+    {
+      "scenario": "none",
+      "seed": 123,
+      "hashes": {
+        "evaluation_scores.npz": "81ed7753fdad49c4b066e672157ac25fbf3ae27219ca9830d384c05a809ddb73",
+        "evaluation_decisions.npz": "02b846cb1c06a77093bc7ceef5cce9fc01d29878ecc40ac7334ed9e7351b18f5",
+        "calibration.json": "65b63785a0c87c3a3be3d7d0557dd4d1e63482ccdb760b2c1dd60c0718738932",
+        "metrics.json": "8d90b02b9fdd4de001443736f8f396c614f87672735e3e05b85633d44284ca7e"
+      }
+    },
+    {
+      "scenario": "none",
+      "seed": 2026,
+      "hashes": {
+        "evaluation_scores.npz": "536fd48bfcd9243a9ca8d1b340c1484c01f45709b656fb7d17b93de17d7ffaf8",
+        "evaluation_decisions.npz": "0ddc23ac031459de691c9d10628ea416ed5e0c5c065b2991151271abb2295d31",
+        "calibration.json": "89fa428864b10b7f995214d2b31f9b5f7f8ea9f2d868d6b59f10b1a592cd77c1",
+        "metrics.json": "d5cbca5bf64a49cd256661e8045bd2d53c9ef48c0e11452dfa9f53305d85b706"
+      }
+    }
+  ],
+  "script_sha256": "78f300605ff2b2a01593257e3f1bb1714a50f31582f1765bccea5e82781744e9",
+  "stage": "extension",
+  "rule": "lightgbm_alert | ((~lightgbm_alert) & (archived_plain_latent_score >= frozen_plain_latent_threshold))",
+  "threshold_source": "Existing full-detector plain-AE+latent calibration threshold, reused unchanged",
+  "union_calibration_budget_guarantee": false,
+  "training": false,
+  "recalibration": false,
+  "inference": false
+}

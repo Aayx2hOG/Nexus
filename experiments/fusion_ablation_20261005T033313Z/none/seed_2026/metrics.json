@@ -1,0 +1,5144 @@
+[
+  {
+    "precision": 0.9934849416103257,
+    "recall": 0.8946203232233784,
+    "f1": 0.9414642669928359,
+    "fpr": 0.012661251791686574,
+    "false_alerts_per_1000_benign": 12.661251791686574,
+    "roc_auc": 0.9933076916730458,
+    "pr_auc": 0.9968664327057195,
+    "confusion_matrix": [
+      [
+        8266,
+        106
+      ],
+      [
+        1904,
+        16164
+      ]
+    ],
+    "recovered_lightgbm_misses": 0,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 0,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 0,
+    "recovered_per_additional_fp": null,
+    "recovery_ratio_status": "no_recovery_no_added_fp",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.7962264150943397
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9836734693877551
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9823788546255506
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9687180535677775
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.40957252466203875
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.998860491616474
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8309859154929577
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "lightgbm",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.8599444888350419,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "lightgbm",
+    "recall_delta": 0.0,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9899412148922273,
+    "recall": 0.4194155412884658,
+    "f1": 0.5892003265560005,
+    "fpr": 0.00919732441471572,
+    "false_alerts_per_1000_benign": 9.19732441471572,
+    "roc_auc": 0.8734666972125582,
+    "pr_auc": 0.9448866911576858,
+    "confusion_matrix": [
+      [
+        8295,
+        77
+      ],
+      [
+        10490,
+        7578
+      ]
+    ],
+    "recovered_lightgbm_misses": 36,
+    "lost_lightgbm_detections": 8622,
+    "additional_false_positives": 69,
+    "removed_false_positives": 98,
+    "net_additional_false_positives": -29,
+    "net_recovered_attacks": -8586,
+    "recovered_per_additional_fp": 0.5217391304347826,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.07924528301886792
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.1346938775510204
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.13986784140969163
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.21161316704150482
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.07161125319693094
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.969884421292528
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.039735099337748346
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.035211267605633804
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.23529411764705882
+      }
+    },
+    "model": "ae_plain",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.09617537260055543,
+    "calibration_fpr": 0.01009009009009009,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_plain",
+    "recall_delta": -0.47520478193491256,
+    "fpr_delta": -0.003463927376970854,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9898957497995189,
+    "recall": 0.34159840602169583,
+    "f1": 0.5079208328189936,
+    "fpr": 0.007525083612040134,
+    "false_alerts_per_1000_benign": 7.525083612040134,
+    "roc_auc": 0.9122665717059121,
+    "pr_auc": 0.9509703373015254,
+    "confusion_matrix": [
+      [
+        8309,
+        63
+      ],
+      [
+        11896,
+        6172
+      ]
+    ],
+    "recovered_lightgbm_misses": 12,
+    "lost_lightgbm_detections": 10004,
+    "additional_false_positives": 63,
+    "removed_false_positives": 106,
+    "net_additional_false_positives": -43,
+    "net_recovered_attacks": -9992,
+    "recovered_per_additional_fp": 0.19047619047619047,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.011320754716981131
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.04081632653061224
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.06332599118942732
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.11633612758127172
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.034709535988308365
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.8663519453035976
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.02924944812362031
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.014084507042253521
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.17647058823529413
+      }
+    },
+    "model": "ae_scaled",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.06270053982734682,
+    "calibration_fpr": 0.01009009009009009,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_scaled",
+    "recall_delta": -0.5530219172016826,
+    "fpr_delta": -0.00513616817964644,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9850793152190985,
+    "recall": 0.34713305291122426,
+    "f1": 0.5133619807652957,
+    "fpr": 0.011347348303870044,
+    "false_alerts_per_1000_benign": 11.347348303870042,
+    "roc_auc": 0.8618400118689484,
+    "pr_auc": 0.926664643907842,
+    "confusion_matrix": [
+      [
+        8277,
+        95
+      ],
+      [
+        11796,
+        6272
+      ]
+    ],
+    "recovered_lightgbm_misses": 11,
+    "lost_lightgbm_detections": 9903,
+    "additional_false_positives": 89,
+    "removed_false_positives": 100,
+    "net_additional_false_positives": -11,
+    "net_recovered_attacks": -9892,
+    "recovered_per_additional_fp": 0.12359550561797752,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.045283018867924525
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.07346938775510205
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.06773127753303965
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.0582702923737477
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.04603580562659847
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9244668728634218
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.01434878587196468
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.0
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.17647058823529413
+      }
+    },
+    "model": "isolation_forest",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.5592971270537869,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "isolation_forest",
+    "recall_delta": -0.547487270312154,
+    "fpr_delta": -0.0013139034878165302,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9768822243049047,
+    "recall": 0.17306840823555458,
+    "f1": 0.2940429733414829,
+    "fpr": 0.008838987099856666,
+    "false_alerts_per_1000_benign": 8.838987099856665,
+    "roc_auc": 0.9137036924847589,
+    "pr_auc": 0.9446059892239922,
+    "confusion_matrix": [
+      [
+        8298,
+        74
+      ],
+      [
+        14941,
+        3127
+      ]
+    ],
+    "recovered_lightgbm_misses": 23,
+    "lost_lightgbm_detections": 13060,
+    "additional_false_positives": 71,
+    "removed_false_positives": 103,
+    "net_additional_false_positives": -32,
+    "net_recovered_attacks": -13037,
+    "recovered_per_additional_fp": 0.323943661971831,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.011320754716981131
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.061224489795918366
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.09251101321585903
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.20363933755878144
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.011691633175009134
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.2809702099951164
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.09547461368653422
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.07042253521126761
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.23529411764705882
+      }
+    },
+    "model": "ae_denoising",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.3755088150501252,
+    "calibration_fpr": 0.01009009009009009,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_denoising",
+    "recall_delta": -0.7215519149878238,
+    "fpr_delta": -0.003822264691829908,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.930567315834039,
+    "recall": 0.06082576931591764,
+    "f1": 0.11418775001298768,
+    "fpr": 0.009794553272814142,
+    "false_alerts_per_1000_benign": 9.794553272814142,
+    "roc_auc": 0.8981995017548506,
+    "pr_auc": 0.9196799184145541,
+    "confusion_matrix": [
+      [
+        8290,
+        82
+      ],
+      [
+        16969,
+        1099
+      ]
+    ],
+    "recovered_lightgbm_misses": 11,
+    "lost_lightgbm_detections": 15076,
+    "additional_false_positives": 79,
+    "removed_false_positives": 103,
+    "net_additional_false_positives": -24,
+    "net_recovered_attacks": -15065,
+    "recovered_per_additional_fp": 0.13924050632911392,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.007547169811320755
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.004081632653061225
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.007709251101321586
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.03353097526068289
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.0025575447570332483
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.14748494221064626
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.0005518763796909492
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.007042253521126761
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.17647058823529413
+      }
+    },
+    "model": "ae_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 58.04214250181452,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_latent",
+    "recall_delta": -0.8337945539074607,
+    "fpr_delta": -0.002866698518872432,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9933366238894373,
+    "recall": 0.8910781492140801,
+    "f1": 0.9394328393044696,
+    "fpr": 0.012900143334925944,
+    "false_alerts_per_1000_benign": 12.900143334925943,
+    "roc_auc": 0.9922084739119541,
+    "pr_auc": 0.9959457586277463,
+    "confusion_matrix": [
+      [
+        8264,
+        108
+      ],
+      [
+        1968,
+        16100
+      ]
+    ],
+    "recovered_lightgbm_misses": 65,
+    "lost_lightgbm_detections": 129,
+    "additional_false_positives": 18,
+    "removed_false_positives": 16,
+    "net_additional_false_positives": 2,
+    "net_recovered_attacks": -64,
+    "recovered_per_additional_fp": 3.611111111111111,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8377358490566038
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9807268722466961
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9699447965651196
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.38180489587139205
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9986977047045418
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8169014084507042
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "learned_fusion",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9332415004066223,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "learned_fusion",
+    "recall_delta": -0.003542174009298238,
+    "fpr_delta": 0.0002388915432393699,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.994983922829582,
+    "recall": 0.8563205667478415,
+    "f1": 0.9204592777678624,
+    "fpr": 0.009316770186335404,
+    "false_alerts_per_1000_benign": 9.316770186335404,
+    "roc_auc": 0.9894133747637661,
+    "pr_auc": 0.9948483067871473,
+    "confusion_matrix": [
+      [
+        8294,
+        78
+      ],
+      [
+        2596,
+        15472
+      ]
+    ],
+    "recovered_lightgbm_misses": 16,
+    "lost_lightgbm_detections": 708,
+    "additional_false_positives": 40,
+    "removed_false_positives": 68,
+    "net_additional_false_positives": -28,
+    "net_recovered_attacks": -692,
+    "recovered_per_additional_fp": 0.4,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.7773584905660378
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9673469387755103
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9587004405286343
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9386628501328972
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.25611983924004383
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9967442617613543
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9729580573951435
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.6690140845070423
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.8823529411764706
+      }
+    },
+    "model": "rank_or",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9955027882712719,
+    "calibration_fpr": 0.009369369369369369,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "rank_or",
+    "recall_delta": -0.03829975647553685,
+    "fpr_delta": -0.00334448160535117,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9934849416103257,
+    "recall": 0.8946203232233784,
+    "f1": 0.9414642669928359,
+    "fpr": 0.012661251791686574,
+    "false_alerts_per_1000_benign": 12.661251791686574,
+    "roc_auc": 0.9933076916730458,
+    "pr_auc": 0.9968664327057195,
+    "confusion_matrix": [
+      [
+        8266,
+        106
+      ],
+      [
+        1904,
+        16164
+      ]
+    ],
+    "recovered_lightgbm_misses": 0,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 0,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 0,
+    "recovered_per_additional_fp": null,
+    "recovery_ratio_status": "no_recovery_no_added_fp",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.7962264150943397
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9836734693877551
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9823788546255506
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9687180535677775
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.40957252466203875
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.998860491616474
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8309859154929577
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_control",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9390469835214629,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm"
+    ],
+    "recall_delta": 0.0,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9933378570106718,
+    "recall": 0.891244188620766,
+    "f1": 0.9395256571078503,
+    "fpr": 0.012900143334925944,
+    "false_alerts_per_1000_benign": 12.900143334925943,
+    "roc_auc": 0.9922071054553053,
+    "pr_auc": 0.9959870038426865,
+    "confusion_matrix": [
+      [
+        8264,
+        108
+      ],
+      [
+        1965,
+        16103
+      ]
+    ],
+    "recovered_lightgbm_misses": 68,
+    "lost_lightgbm_detections": 129,
+    "additional_false_positives": 18,
+    "removed_false_positives": 16,
+    "net_additional_false_positives": 2,
+    "net_recovered_attacks": -61,
+    "recovered_per_additional_fp": 3.7777777777777777,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8490566037735849
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9807268722466961
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9699447965651196
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.38180489587139205
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9986977047045418
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8169014084507042
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.933124730132371,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_latent"
+    ],
+    "recall_delta": -0.003376134602612324,
+    "fpr_delta": 0.0002388915432393699,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9936317546679857,
+    "recall": 0.8894731016161169,
+    "f1": 0.9386718065533556,
+    "fpr": 0.01230291447682752,
+    "false_alerts_per_1000_benign": 12.302914476827521,
+    "roc_auc": 0.9927150342534616,
+    "pr_auc": 0.9964226225271662,
+    "confusion_matrix": [
+      [
+        8269,
+        103
+      ],
+      [
+        1997,
+        16071
+      ]
+    ],
+    "recovered_lightgbm_misses": 25,
+    "lost_lightgbm_detections": 118,
+    "additional_false_positives": 11,
+    "removed_false_positives": 14,
+    "net_additional_false_positives": -3,
+    "net_recovered_attacks": -93,
+    "recovered_per_additional_fp": 2.272727272727273,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9796255506607929
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9648333674095277
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.3876507124588966
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9980465570568127
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.7887323943661971
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_plain",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9303801861724705,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_plain"
+    ],
+    "recall_delta": -0.005147221607261443,
+    "fpr_delta": -0.000358337314859054,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.993801524824893,
+    "recall": 0.8873699357980961,
+    "f1": 0.9375749247098039,
+    "fpr": 0.011944577161968466,
+    "false_alerts_per_1000_benign": 11.944577161968466,
+    "roc_auc": 0.9922696710288393,
+    "pr_auc": 0.9962097738828328,
+    "confusion_matrix": [
+      [
+        8272,
+        100
+      ],
+      [
+        2035,
+        16033
+      ]
+    ],
+    "recovered_lightgbm_misses": 48,
+    "lost_lightgbm_detections": 179,
+    "additional_false_positives": 21,
+    "removed_false_positives": 27,
+    "net_additional_false_positives": -6,
+    "net_recovered_attacks": -131,
+    "recovered_per_additional_fp": 2.2857142857142856,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8264150943396227
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9836734693877551
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9779735682819384
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9656511960744224
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.37084398976982097
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9985349177926095
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9911699779249448
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.7887323943661971
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_plain_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.927733010600351,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_plain",
+      "ae_latent"
+    ],
+    "recall_delta": -0.007250387425282279,
+    "fpr_delta": -0.000716674629718108,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.993485342019544,
+    "recall": 0.8946756696922736,
+    "f1": 0.9414950930428958,
+    "fpr": 0.012661251791686574,
+    "false_alerts_per_1000_benign": 12.661251791686574,
+    "roc_auc": 0.9927117387189721,
+    "pr_auc": 0.9959688724003072,
+    "confusion_matrix": [
+      [
+        8266,
+        106
+      ],
+      [
+        1903,
+        16165
+      ]
+    ],
+    "recovered_lightgbm_misses": 18,
+    "lost_lightgbm_detections": 17,
+    "additional_false_positives": 6,
+    "removed_false_positives": 6,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 1,
+    "recovered_per_additional_fp": 3.0,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.7962264150943397
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9834801762114538
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9697403393988959
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.4062842528315674
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9991860654403386
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8309859154929577
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_denoising",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9344944753373889,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_denoising"
+    ],
+    "recall_delta": 5.534646889526762e-05,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9933366238894373,
+    "recall": 0.8910781492140801,
+    "f1": 0.9394328393044696,
+    "fpr": 0.012900143334925944,
+    "false_alerts_per_1000_benign": 12.900143334925943,
+    "roc_auc": 0.9922084739119541,
+    "pr_auc": 0.9959457586277463,
+    "confusion_matrix": [
+      [
+        8264,
+        108
+      ],
+      [
+        1968,
+        16100
+      ]
+    ],
+    "recovered_lightgbm_misses": 65,
+    "lost_lightgbm_detections": 129,
+    "additional_false_positives": 18,
+    "removed_false_positives": 16,
+    "net_additional_false_positives": 2,
+    "net_recovered_attacks": -64,
+    "recovered_per_additional_fp": 3.611111111111111,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8377358490566038
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9807268722466961
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9699447965651196
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.38180489587139205
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9986977047045418
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8169014084507042
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_denoising_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9332415004066223,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_denoising",
+      "ae_latent"
+    ],
+    "recall_delta": -0.003542174009298238,
+    "fpr_delta": 0.0002388915432393699,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9936003938219187,
+    "recall": 0.8936794332521585,
+    "f1": 0.9409947842303097,
+    "fpr": 0.012422360248447204,
+    "false_alerts_per_1000_benign": 12.422360248447205,
+    "roc_auc": 0.9928969596568931,
+    "pr_auc": 0.9961620372333678,
+    "confusion_matrix": [
+      [
+        8268,
+        104
+      ],
+      [
+        1921,
+        16147
+      ]
+    ],
+    "recovered_lightgbm_misses": 11,
+    "lost_lightgbm_detections": 28,
+    "additional_false_positives": 5,
+    "removed_false_positives": 7,
+    "net_additional_false_positives": -2,
+    "net_recovered_attacks": -17,
+    "recovered_per_additional_fp": 2.2,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8075471698113208
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9812775330396476
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9689225107340013
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.40263061746437706
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.998860491616474
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.823943661971831
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_scaled",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9327690971111289,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_scaled"
+    ],
+    "recall_delta": -0.0009408899712198826,
+    "fpr_delta": -0.0002388915432393699,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9933308632826973,
+    "recall": 0.8903032986495462,
+    "f1": 0.9389994746366237,
+    "fpr": 0.012900143334925944,
+    "false_alerts_per_1000_benign": 12.900143334925943,
+    "roc_auc": 0.9923880524452879,
+    "pr_auc": 0.9962300650482375,
+    "confusion_matrix": [
+      [
+        8264,
+        108
+      ],
+      [
+        1982,
+        16086
+      ]
+    ],
+    "recovered_lightgbm_misses": 47,
+    "lost_lightgbm_detections": 125,
+    "additional_false_positives": 19,
+    "removed_false_positives": 17,
+    "net_additional_false_positives": 2,
+    "net_recovered_attacks": -78,
+    "recovered_per_additional_fp": 2.473684210526316,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8226415094339623
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9807268722466961
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9691269679002249
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.37997807818779683
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9986977047045418
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8098591549295775
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_scaled_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9327150215134646,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_scaled",
+      "ae_latent"
+    ],
+    "recall_delta": -0.004317024573832207,
+    "fpr_delta": 0.0002388915432393699,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9931216606276485,
+    "recall": 0.8950077485056454,
+    "f1": 0.9415155308433525,
+    "fpr": 0.013377926421404682,
+    "false_alerts_per_1000_benign": 13.377926421404682,
+    "roc_auc": 0.9930558196243504,
+    "pr_auc": 0.9967613270210051,
+    "confusion_matrix": [
+      [
+        8260,
+        112
+      ],
+      [
+        1897,
+        16171
+      ]
+    ],
+    "recovered_lightgbm_misses": 7,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 6,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 6,
+    "net_recovered_attacks": 7,
+    "recovered_per_additional_fp": 1.1666666666666667,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8113207547169812
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9836734693877551
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9834801762114538
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9689225107340013
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.40957252466203875
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.998860491616474
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8309859154929577
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "selective_fusion",
+    "primary_budget_fraction": 1.0,
+    "preserves_full_budget_baseline": true,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9524452552297232,
+    "calibration_fpr": 0.00990990990990991,
+    "evaluation_budget_met": false,
+    "routed_fraction": 0.07344931921331316,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion",
+    "recall_delta": 0.00038742528226698436,
+    "fpr_delta": 0.000716674629718108,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9933995435198322,
+    "recall": 0.8912995350896613,
+    "f1": 0.9395840018670323,
+    "fpr": 0.012780697563306258,
+    "false_alerts_per_1000_benign": 12.780697563306259,
+    "roc_auc": 0.9930053387790945,
+    "pr_auc": 0.9967376852265292,
+    "confusion_matrix": [
+      [
+        8265,
+        107
+      ],
+      [
+        1964,
+        16104
+      ]
+    ],
+    "recovered_lightgbm_misses": 49,
+    "lost_lightgbm_detections": 109,
+    "additional_false_positives": 17,
+    "removed_false_positives": 16,
+    "net_additional_false_positives": 1,
+    "net_recovered_attacks": -60,
+    "recovered_per_additional_fp": 2.8823529411764706,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8301886792452831
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9812775330396476
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9695358822326723
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.38509316770186336
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9986977047045418
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9922737306843267
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8098591549295775
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.9411764705882353
+      }
+    },
+    "model": "selective_fusion_primary_0.75",
+    "primary_budget_fraction": 0.75,
+    "preserves_full_budget_baseline": false,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9376400976721778,
+    "calibration_fpr": 0.00972972972972973,
+    "evaluation_budget_met": false,
+    "routed_fraction": 0.08033282904689863,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion_primary_0.75",
+    "recall_delta": -0.0033207881337170564,
+    "fpr_delta": 0.00011944577161968409,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9936313609101589,
+    "recall": 0.8894177551472217,
+    "f1": 0.9386408107239859,
+    "fpr": 0.01230291447682752,
+    "false_alerts_per_1000_benign": 12.302914476827521,
+    "roc_auc": 0.9929574064364374,
+    "pr_auc": 0.9967144150174458,
+    "confusion_matrix": [
+      [
+        8269,
+        103
+      ],
+      [
+        1998,
+        16070
+      ]
+    ],
+    "recovered_lightgbm_misses": 55,
+    "lost_lightgbm_detections": 149,
+    "additional_false_positives": 17,
+    "removed_false_positives": 20,
+    "net_additional_false_positives": -3,
+    "net_recovered_attacks": -94,
+    "recovered_per_additional_fp": 3.235294117647059,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8301886792452831
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9796255506607929
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9687180535677775
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.37559371574716843
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9986977047045418
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9917218543046358
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8098591549295775
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.9411764705882353
+      }
+    },
+    "model": "selective_fusion_primary_0.5",
+    "primary_budget_fraction": 0.5,
+    "preserves_full_budget_baseline": false,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "threshold": 0.9366088016991347,
+    "calibration_fpr": 0.00972972972972973,
+    "evaluation_budget_met": false,
+    "routed_fraction": 0.094553706505295,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion_primary_0.5",
+    "recall_delta": -0.005202568076156711,
+    "fpr_delta": -0.000358337314859054,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9832064617351386,
+    "recall": 0.9364622537082135,
+    "f1": 0.9592652436431669,
+    "fpr": 0.034519827998088864,
+    "false_alerts_per_1000_benign": 34.519827998088864,
+    "roc_auc": 0.9933076916730458,
+    "pr_auc": 0.9968664327057195,
+    "confusion_matrix": [
+      [
+        8083,
+        289
+      ],
+      [
+        1148,
+        16920
+      ]
+    ],
+    "recovered_lightgbm_misses": 0,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 0,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 0,
+    "recovered_per_additional_fp": null,
+    "recovery_ratio_status": "no_recovery_no_added_fp",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8830188679245283
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.986710284195461
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6236755571793935
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "lightgbm",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.6581818724119789,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "lightgbm",
+    "recall_delta": 0.0,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9798211600854633,
+    "recall": 0.6852999778614124,
+    "f1": 0.8065135971340173,
+    "fpr": 0.030458671763019588,
+    "false_alerts_per_1000_benign": 30.458671763019588,
+    "roc_auc": 0.8734666972125582,
+    "pr_auc": 0.9448866911576858,
+    "confusion_matrix": [
+      [
+        8117,
+        255
+      ],
+      [
+        5686,
+        12382
+      ]
+    ],
+    "recovered_lightgbm_misses": 39,
+    "lost_lightgbm_detections": 4577,
+    "additional_false_positives": 216,
+    "removed_false_positives": 250,
+    "net_additional_false_positives": -34,
+    "net_recovered_attacks": -4538,
+    "recovered_per_additional_fp": 0.18055555555555555,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.7924528301886793
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.8734693877551021
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.8447136563876652
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.706399509302801
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.1885275849470223
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9916978674914537
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.19205298013245034
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.06338028169014084
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.23529411764705882
+      }
+    },
+    "model": "ae_plain",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.037626821547746665,
+    "calibration_fpr": 0.03009009009009009,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_plain",
+    "recall_delta": -0.25116227584680106,
+    "fpr_delta": -0.004061156235069276,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9733975461529641,
+    "recall": 0.46983617445206993,
+    "f1": 0.6337675911754824,
+    "fpr": 0.02771141901576684,
+    "false_alerts_per_1000_benign": 27.711419015766843,
+    "roc_auc": 0.9122665717059121,
+    "pr_auc": 0.9509703373015254,
+    "confusion_matrix": [
+      [
+        8140,
+        232
+      ],
+      [
+        9579,
+        8489
+      ]
+    ],
+    "recovered_lightgbm_misses": 30,
+    "lost_lightgbm_detections": 8461,
+    "additional_false_positives": 203,
+    "removed_false_positives": 260,
+    "net_additional_false_positives": -57,
+    "net_recovered_attacks": -8431,
+    "recovered_per_additional_fp": 0.1477832512315271,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.12452830188679245
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.13877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.1921806167400881
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.3254958086280924
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.08878333942272561
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9765586846817516
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.12362030905077263
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.07746478873239436
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.23529411764705882
+      }
+    },
+    "model": "ae_scaled",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.02755241468548775,
+    "calibration_fpr": 0.03009009009009009,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_scaled",
+    "recall_delta": -0.4666260792561435,
+    "fpr_delta": -0.006808408982322024,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.965752490107791,
+    "recall": 0.39174230684082356,
+    "f1": 0.5573886679529079,
+    "fpr": 0.029980888676540852,
+    "false_alerts_per_1000_benign": 29.98088867654085,
+    "roc_auc": 0.8618400118689484,
+    "pr_auc": 0.926664643907842,
+    "confusion_matrix": [
+      [
+        8121,
+        251
+      ],
+      [
+        10990,
+        7078
+      ]
+    ],
+    "recovered_lightgbm_misses": 20,
+    "lost_lightgbm_detections": 9862,
+    "additional_false_positives": 222,
+    "removed_false_positives": 260,
+    "net_additional_false_positives": -38,
+    "net_recovered_attacks": -9842,
+    "recovered_per_additional_fp": 0.09009009009009009,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.06037735849056604
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.10204081632653061
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.09966960352422907
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.1335105295440605
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.06905370843989769
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9720006511476478
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.02152317880794702
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.007042253521126761
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.17647058823529413
+      }
+    },
+    "model": "isolation_forest",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.5279143193747248,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "isolation_forest",
+    "recall_delta": -0.5447199468673899,
+    "fpr_delta": -0.004538939321548013,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9722293319682621,
+    "recall": 0.4204671241974762,
+    "f1": 0.5870489143033769,
+    "fpr": 0.025919732441471572,
+    "false_alerts_per_1000_benign": 25.91973244147157,
+    "roc_auc": 0.9137036924847589,
+    "pr_auc": 0.9446059892239922,
+    "confusion_matrix": [
+      [
+        8155,
+        217
+      ],
+      [
+        10471,
+        7597
+      ]
+    ],
+    "recovered_lightgbm_misses": 31,
+    "lost_lightgbm_detections": 9354,
+    "additional_false_positives": 182,
+    "removed_false_positives": 254,
+    "net_additional_false_positives": -72,
+    "net_recovered_attacks": -9323,
+    "recovered_per_additional_fp": 0.17032967032967034,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.07169811320754717
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.12244897959183673
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.16244493392070486
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.38192598650582704
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.05224698575082207
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.8095393130392317
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.13796909492273732
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.09859154929577464
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.29411764705882354
+      }
+    },
+    "model": "ae_denoising",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.11282382905483247,
+    "calibration_fpr": 0.03009009009009009,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_denoising",
+    "recall_delta": -0.5159951295107372,
+    "fpr_delta": -0.008600095556617292,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9468721251149954,
+    "recall": 0.2278614124418862,
+    "f1": 0.36732690935046397,
+    "fpr": 0.027591973244147156,
+    "false_alerts_per_1000_benign": 27.59197324414716,
+    "roc_auc": 0.8981995017548506,
+    "pr_auc": 0.9196799184145541,
+    "confusion_matrix": [
+      [
+        8141,
+        231
+      ],
+      [
+        13951,
+        4117
+      ]
+    ],
+    "recovered_lightgbm_misses": 42,
+    "lost_lightgbm_detections": 12845,
+    "additional_false_positives": 210,
+    "removed_false_positives": 268,
+    "net_additional_false_positives": -58,
+    "net_recovered_attacks": -12803,
+    "recovered_per_additional_fp": 0.2,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.12075471698113208
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.053061224489795916
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.10627753303964757
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.32263340830096093
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.016441359152356595
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.3447826794725704
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.07119205298013245
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.035211267605633804
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.23529411764705882
+      }
+    },
+    "model": "ae_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 32.11369484888228,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_latent",
+    "recall_delta": -0.7086008412663273,
+    "fpr_delta": -0.006927854753941708,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9843066332185987,
+    "recall": 0.9338056232012397,
+    "f1": 0.9583913204010338,
+    "fpr": 0.032130912565695176,
+    "false_alerts_per_1000_benign": 32.130912565695176,
+    "roc_auc": 0.9922084739119541,
+    "pr_auc": 0.9959457586277463,
+    "confusion_matrix": [
+      [
+        8103,
+        269
+      ],
+      [
+        1196,
+        16872
+      ]
+    ],
+    "recovered_lightgbm_misses": 19,
+    "lost_lightgbm_detections": 67,
+    "additional_false_positives": 6,
+    "removed_false_positives": 26,
+    "net_additional_false_positives": -20,
+    "net_recovered_attacks": -48,
+    "recovered_per_additional_fp": 3.1666666666666665,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8905660377358491
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9856879983643426
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6075995615637559
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "learned_fusion",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7472035815915153,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "learned_fusion",
+    "recall_delta": -0.002656630506973734,
+    "fpr_delta": -0.0023889154323936887,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9837750135208221,
+    "recall": 0.9060770422847022,
+    "f1": 0.9433288196145092,
+    "fpr": 0.032250358337314856,
+    "false_alerts_per_1000_benign": 32.25035833731486,
+    "roc_auc": 0.9894133747637661,
+    "pr_auc": 0.9948483067871473,
+    "confusion_matrix": [
+      [
+        8102,
+        270
+      ],
+      [
+        1697,
+        16371
+      ]
+    ],
+    "recovered_lightgbm_misses": 13,
+    "lost_lightgbm_detections": 562,
+    "additional_false_positives": 114,
+    "removed_false_positives": 133,
+    "net_additional_false_positives": -19,
+    "net_recovered_attacks": -549,
+    "recovered_per_additional_fp": 0.11403508771929824,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8301886792452831
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9877551020408163
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9906387665198237
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9760785115518299
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.4585312385823895
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9993488523522709
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9950331125827815
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8591549295774648
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "rank_or",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.9850692570606225,
+    "calibration_fpr": 0.02972972972972973,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "rank_or",
+    "recall_delta": -0.03038521142351125,
+    "fpr_delta": -0.002269469660774008,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9832064617351386,
+    "recall": 0.9364622537082135,
+    "f1": 0.9592652436431669,
+    "fpr": 0.034519827998088864,
+    "false_alerts_per_1000_benign": 34.519827998088864,
+    "roc_auc": 0.9933076916730458,
+    "pr_auc": 0.9968664327057195,
+    "confusion_matrix": [
+      [
+        8083,
+        289
+      ],
+      [
+        1148,
+        16920
+      ]
+    ],
+    "recovered_lightgbm_misses": 0,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 0,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 0,
+    "recovered_per_additional_fp": null,
+    "recovery_ratio_status": "no_recovery_no_added_fp",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8830188679245283
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.986710284195461
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6236755571793935
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_control",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7392481682826514,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm"
+    ],
+    "recall_delta": 0.0,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.984303886101062,
+    "recall": 0.9336395837945539,
+    "f1": 0.9583025620632847,
+    "fpr": 0.032130912565695176,
+    "false_alerts_per_1000_benign": 32.130912565695176,
+    "roc_auc": 0.9922071054553053,
+    "pr_auc": 0.9959870038426865,
+    "confusion_matrix": [
+      [
+        8103,
+        269
+      ],
+      [
+        1199,
+        16869
+      ]
+    ],
+    "recovered_lightgbm_misses": 19,
+    "lost_lightgbm_detections": 70,
+    "additional_false_positives": 6,
+    "removed_false_positives": 26,
+    "net_additional_false_positives": -20,
+    "net_recovered_attacks": -51,
+    "recovered_per_additional_fp": 3.1666666666666665,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8905660377358491
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9856879983643426
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6065034709535988
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7485447114235201,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_latent"
+    ],
+    "recall_delta": -0.002822669913659537,
+    "fpr_delta": -0.0023889154323936887,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.984295638974838,
+    "recall": 0.9331414655744964,
+    "f1": 0.9580361962667273,
+    "fpr": 0.032130912565695176,
+    "false_alerts_per_1000_benign": 32.130912565695176,
+    "roc_auc": 0.9927150342534616,
+    "pr_auc": 0.9964226225271662,
+    "confusion_matrix": [
+      [
+        8103,
+        269
+      ],
+      [
+        1208,
+        16860
+      ]
+    ],
+    "recovered_lightgbm_misses": 9,
+    "lost_lightgbm_detections": 69,
+    "additional_false_positives": 5,
+    "removed_false_positives": 25,
+    "net_additional_false_positives": -20,
+    "net_recovered_attacks": -60,
+    "recovered_per_additional_fp": 1.8,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8754716981132076
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9856879983643426
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6054073803434418
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9436619718309859
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_plain",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.735886105903195,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_plain"
+    ],
+    "recall_delta": -0.0033207881337170564,
+    "fpr_delta": -0.0023889154323936887,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.984524643774819,
+    "recall": 0.933086119105601,
+    "f1": 0.9581154807910889,
+    "fpr": 0.03165312947921643,
+    "false_alerts_per_1000_benign": 31.653129479216435,
+    "roc_auc": 0.9922696710288393,
+    "pr_auc": 0.9962097738828328,
+    "confusion_matrix": [
+      [
+        8107,
+        265
+      ],
+      [
+        1209,
+        16859
+      ]
+    ],
+    "recovered_lightgbm_misses": 18,
+    "lost_lightgbm_detections": 79,
+    "additional_false_positives": 8,
+    "removed_false_positives": 32,
+    "net_additional_false_positives": -24,
+    "net_recovered_attacks": -61,
+    "recovered_per_additional_fp": 2.25,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8867924528301887
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9858924555305664
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6032151991231275
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9507042253521126
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_plain_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7317632175752747,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_plain",
+      "ae_latent"
+    ],
+    "recall_delta": -0.003376134602612435,
+    "fpr_delta": -0.002866698518872432,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9831463939094555,
+    "recall": 0.9362962143015275,
+    "f1": 0.9591495393338058,
+    "fpr": 0.03463927376970855,
+    "false_alerts_per_1000_benign": 34.63927376970855,
+    "roc_auc": 0.9927117387189721,
+    "pr_auc": 0.9959688724003072,
+    "confusion_matrix": [
+      [
+        8082,
+        290
+      ],
+      [
+        1151,
+        16917
+      ]
+    ],
+    "recovered_lightgbm_misses": 6,
+    "lost_lightgbm_detections": 9,
+    "additional_false_positives": 2,
+    "removed_false_positives": 1,
+    "net_additional_false_positives": 1,
+    "net_recovered_attacks": -3,
+    "recovered_per_additional_fp": 3.0,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8867924528301887
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9950440528634361
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9865058270292374
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6225794665692364
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9507042253521126
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_denoising",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7299975302587468,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_denoising"
+    ],
+    "recall_delta": -0.00016603940668591388,
+    "fpr_delta": 0.00011944577161968756,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9843066332185987,
+    "recall": 0.9338056232012397,
+    "f1": 0.9583913204010338,
+    "fpr": 0.032130912565695176,
+    "false_alerts_per_1000_benign": 32.130912565695176,
+    "roc_auc": 0.9922084739119541,
+    "pr_auc": 0.9959457586277463,
+    "confusion_matrix": [
+      [
+        8103,
+        269
+      ],
+      [
+        1196,
+        16872
+      ]
+    ],
+    "recovered_lightgbm_misses": 19,
+    "lost_lightgbm_detections": 67,
+    "additional_false_positives": 6,
+    "removed_false_positives": 26,
+    "net_additional_false_positives": -20,
+    "net_recovered_attacks": -48,
+    "recovered_per_additional_fp": 3.1666666666666665,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8905660377358491
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9856879983643426
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6075995615637559
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_denoising_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7472035815915153,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_denoising",
+      "ae_latent"
+    ],
+    "recall_delta": -0.002656630506973734,
+    "fpr_delta": -0.0023889154323936887,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9832499709200884,
+    "recall": 0.9356874031436795,
+    "f1": 0.9588792467812376,
+    "fpr": 0.034400382226469184,
+    "false_alerts_per_1000_benign": 34.40038222646918,
+    "roc_auc": 0.9928969596568931,
+    "pr_auc": 0.9961620372333678,
+    "confusion_matrix": [
+      [
+        8084,
+        288
+      ],
+      [
+        1162,
+        16906
+      ]
+    ],
+    "recovered_lightgbm_misses": 5,
+    "lost_lightgbm_detections": 19,
+    "additional_false_positives": 3,
+    "removed_false_positives": 4,
+    "net_additional_false_positives": -1,
+    "net_recovered_attacks": -14,
+    "recovered_per_additional_fp": 1.6666666666666667,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8867924528301887
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9863013698630136
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6196565582754842
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9507042253521126
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_scaled",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7284751202141666,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_scaled"
+    ],
+    "recall_delta": -0.0007748505645339687,
+    "fpr_delta": -0.00011944577161968062,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9840862722238415,
+    "recall": 0.9343590878901926,
+    "f1": 0.9585782017431792,
+    "fpr": 0.03260869565217391,
+    "false_alerts_per_1000_benign": 32.608695652173914,
+    "roc_auc": 0.9923880524452879,
+    "pr_auc": 0.9962300650482375,
+    "confusion_matrix": [
+      [
+        8099,
+        273
+      ],
+      [
+        1186,
+        16882
+      ]
+    ],
+    "recovered_lightgbm_misses": 15,
+    "lost_lightgbm_detections": 53,
+    "additional_false_positives": 8,
+    "removed_false_positives": 24,
+    "net_additional_false_positives": -16,
+    "net_recovered_attacks": -38,
+    "recovered_per_additional_fp": 1.875,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8905660377358491
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9950440528634361
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.98609691269679
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6101571063207892
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_scaled_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7376309075188162,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_scaled",
+      "ae_latent"
+    ],
+    "recall_delta": -0.0021031658180208357,
+    "fpr_delta": -0.0019111323459149523,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9832103642595712,
+    "recall": 0.9366836395837945,
+    "f1": 0.9593832374365806,
+    "fpr": 0.034519827998088864,
+    "false_alerts_per_1000_benign": 34.519827998088864,
+    "roc_auc": 0.9931160680768443,
+    "pr_auc": 0.9967868561040301,
+    "confusion_matrix": [
+      [
+        8083,
+        289
+      ],
+      [
+        1144,
+        16924
+      ]
+    ],
+    "recovered_lightgbm_misses": 4,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 0,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 4,
+    "recovered_per_additional_fp": null,
+    "recovery_ratio_status": "recovery_without_additional_fp",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8867924528301887
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9950440528634361
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9869147413616848
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6240409207161125
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "selective_fusion",
+    "primary_budget_fraction": 1.0,
+    "preserves_full_budget_baseline": true,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.8712166917700875,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "routed_fraction": 0.05068078668683813,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion",
+    "recall_delta": 0.00022138587558107048,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9843048019137639,
+    "recall": 0.9336949302634492,
+    "f1": 0.9583321498565626,
+    "fpr": 0.032130912565695176,
+    "false_alerts_per_1000_benign": 32.130912565695176,
+    "roc_auc": 0.993087383374439,
+    "pr_auc": 0.99677450469654,
+    "confusion_matrix": [
+      [
+        8103,
+        269
+      ],
+      [
+        1198,
+        16870
+      ]
+    ],
+    "recovered_lightgbm_misses": 18,
+    "lost_lightgbm_detections": 68,
+    "additional_false_positives": 6,
+    "removed_false_positives": 26,
+    "net_additional_false_positives": -20,
+    "net_recovered_attacks": -50,
+    "recovered_per_additional_fp": 3.0,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8905660377358491
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9856879983643426
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6068688344903179
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "selective_fusion_primary_0.75",
+    "primary_budget_fraction": 0.75,
+    "preserves_full_budget_baseline": false,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7474996159814528,
+    "calibration_fpr": 0.02972972972972973,
+    "evaluation_budget_met": false,
+    "routed_fraction": 0.0575642965204236,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion_primary_0.75",
+    "recall_delta": -0.002767323444764269,
+    "fpr_delta": -0.0023889154323936887,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9843066332185987,
+    "recall": 0.9338056232012397,
+    "f1": 0.9583913204010338,
+    "fpr": 0.032130912565695176,
+    "false_alerts_per_1000_benign": 32.130912565695176,
+    "roc_auc": 0.9930550395379518,
+    "pr_auc": 0.996760548154103,
+    "confusion_matrix": [
+      [
+        8103,
+        269
+      ],
+      [
+        1196,
+        16872
+      ]
+    ],
+    "recovered_lightgbm_misses": 19,
+    "lost_lightgbm_detections": 67,
+    "additional_false_positives": 6,
+    "removed_false_positives": 26,
+    "net_additional_false_positives": -20,
+    "net_recovered_attacks": -48,
+    "recovered_per_additional_fp": 3.1666666666666665,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8905660377358491
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9856879983643426
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6075995615637559
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9977924944812362
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "selective_fusion_primary_0.5",
+    "primary_budget_fraction": 0.5,
+    "preserves_full_budget_baseline": false,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "threshold": 0.7472035815915153,
+    "calibration_fpr": 0.02990990990990991,
+    "evaluation_budget_met": false,
+    "routed_fraction": 0.06762481089258698,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion_primary_0.5",
+    "recall_delta": -0.002656630506973734,
+    "fpr_delta": -0.0023889154323936887,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9760339943342776,
+    "recall": 0.9534536196590657,
+    "f1": 0.9646116803852399,
+    "fpr": 0.050525561395126616,
+    "false_alerts_per_1000_benign": 50.525561395126616,
+    "roc_auc": 0.9933076916730458,
+    "pr_auc": 0.9968664327057195,
+    "confusion_matrix": [
+      [
+        7949,
+        423
+      ],
+      [
+        841,
+        17227
+      ]
+    ],
+    "recovered_lightgbm_misses": 0,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 0,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 0,
+    "recovered_per_additional_fp": null,
+    "recovery_ratio_status": "no_recovery_no_added_fp",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8981132075471698
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9961453744493393
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7248812568505664
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "lightgbm",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5441572187396378,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "lightgbm",
+    "recall_delta": 0.0,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9657283655641007,
+    "recall": 0.7158512286916094,
+    "f1": 0.8222243412478942,
+    "fpr": 0.054825609173435264,
+    "false_alerts_per_1000_benign": 54.82560917343526,
+    "roc_auc": 0.8734666972125582,
+    "pr_auc": 0.9448866911576858,
+    "confusion_matrix": [
+      [
+        7913,
+        459
+      ],
+      [
+        5134,
+        12934
+      ]
+    ],
+    "recovered_lightgbm_misses": 42,
+    "lost_lightgbm_detections": 4335,
+    "additional_false_positives": 380,
+    "removed_false_positives": 344,
+    "net_additional_false_positives": 36,
+    "net_recovered_attacks": -4293,
+    "recovered_per_additional_fp": 0.11052631578947368,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8075471698113208
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.8816326530612245
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.8777533039647577
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.7675322020036802
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.2309097552064304
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9933257366107765
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.22019867549668873
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.09859154929577464
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.5294117647058824
+      }
+    },
+    "model": "ae_plain",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.024419626221060756,
+    "calibration_fpr": 0.05009009009009009,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_plain",
+    "recall_delta": -0.23760239096745628,
+    "fpr_delta": 0.004300047778308648,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9621816060664982,
+    "recall": 0.5477640026566305,
+    "f1": 0.6981025604852931,
+    "fpr": 0.046464405160057336,
+    "false_alerts_per_1000_benign": 46.46440516005733,
+    "roc_auc": 0.9122665717059121,
+    "pr_auc": 0.9509703373015254,
+    "confusion_matrix": [
+      [
+        7983,
+        389
+      ],
+      [
+        8171,
+        9897
+      ]
+    ],
+    "recovered_lightgbm_misses": 38,
+    "lost_lightgbm_detections": 7368,
+    "additional_false_positives": 324,
+    "removed_false_positives": 358,
+    "net_additional_false_positives": -34,
+    "net_recovered_attacks": -7330,
+    "recovered_per_additional_fp": 0.11728395061728394,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.17735849056603772
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.19183673469387755
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.25715859030837
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.5146186873849928
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.1465107782243332
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.989581637636334
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.17328918322295805
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.13380281690140844
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.35294117647058826
+      }
+    },
+    "model": "ae_scaled",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.019815029576420787,
+    "calibration_fpr": 0.05009009009009009,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_scaled",
+    "recall_delta": -0.4056896170024352,
+    "fpr_delta": -0.00406115623506928,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9514635050018525,
+    "recall": 0.42638919636927164,
+    "f1": 0.5888782725014332,
+    "fpr": 0.04694218824653607,
+    "false_alerts_per_1000_benign": 46.94218824653607,
+    "roc_auc": 0.8618400118689484,
+    "pr_auc": 0.926664643907842,
+    "confusion_matrix": [
+      [
+        7979,
+        393
+      ],
+      [
+        10364,
+        7704
+      ]
+    ],
+    "recovered_lightgbm_misses": 23,
+    "lost_lightgbm_detections": 9546,
+    "additional_false_positives": 344,
+    "removed_false_positives": 374,
+    "net_additional_false_positives": -30,
+    "net_recovered_attacks": -9523,
+    "recovered_per_additional_fp": 0.06686046511627906,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.09811320754716982
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.11836734693877551
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.12940528634361234
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.21324882437129422
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.10522469857508221
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9822562265993814
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.024282560706401765
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.007042253521126761
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.23529411764705882
+      }
+    },
+    "model": "isolation_forest",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5016314318764141,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "isolation_forest",
+    "recall_delta": -0.5270644232897941,
+    "fpr_delta": -0.0035833731485905435,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9597450876261285,
+    "recall": 0.5001106929377905,
+    "f1": 0.6575701342648183,
+    "fpr": 0.04526994744386049,
+    "false_alerts_per_1000_benign": 45.26994744386049,
+    "roc_auc": 0.9137036924847589,
+    "pr_auc": 0.9446059892239922,
+    "confusion_matrix": [
+      [
+        7993,
+        379
+      ],
+      [
+        9032,
+        9036
+      ]
+    ],
+    "recovered_lightgbm_misses": 65,
+    "lost_lightgbm_detections": 8256,
+    "additional_false_positives": 297,
+    "removed_false_positives": 341,
+    "net_additional_false_positives": -44,
+    "net_recovered_attacks": -8191,
+    "recovered_per_additional_fp": 0.21885521885521886,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.13584905660377358
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.16326530612244897
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.22136563876651982
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.5046002862400327
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.12605042016806722
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.8757935861956698
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.18763796909492272
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.13380281690140844
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.35294117647058826
+      }
+    },
+    "model": "ae_denoising",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.06863631308078767,
+    "calibration_fpr": 0.05009009009009009,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_denoising",
+    "recall_delta": -0.4533429267212752,
+    "fpr_delta": -0.005255613951266128,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9473326998778335,
+    "recall": 0.3862630064201904,
+    "f1": 0.54877137802241,
+    "fpr": 0.04634495938843765,
+    "false_alerts_per_1000_benign": 46.34495938843765,
+    "roc_auc": 0.8981995017548506,
+    "pr_auc": 0.9196799184145541,
+    "confusion_matrix": [
+      [
+        7984,
+        388
+      ],
+      [
+        11089,
+        6979
+      ]
+    ],
+    "recovered_lightgbm_misses": 69,
+    "lost_lightgbm_detections": 10317,
+    "additional_false_positives": 333,
+    "removed_false_positives": 368,
+    "net_additional_false_positives": -35,
+    "net_recovered_attacks": -10248,
+    "recovered_per_additional_fp": 0.2072072072072072,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.2188679245283019
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.10204081632653061
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.17731277533039647
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.4567573093436925
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.03653635367190355
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.6597753540615334
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.09602649006622517
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.06338028169014084
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 0.23529411764705882
+      }
+    },
+    "model": "ae_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 25.816980810308294,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "ae_latent",
+    "recall_delta": -0.5671906132388753,
+    "fpr_delta": -0.004180602006688967,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9765026391963222,
+    "recall": 0.9522359973433695,
+    "f1": 0.9642166615294084,
+    "fpr": 0.04945054945054945,
+    "false_alerts_per_1000_benign": 49.45054945054945,
+    "roc_auc": 0.9922084739119541,
+    "pr_auc": 0.9959457586277463,
+    "confusion_matrix": [
+      [
+        7958,
+        414
+      ],
+      [
+        863,
+        17205
+      ]
+    ],
+    "recovered_lightgbm_misses": 18,
+    "lost_lightgbm_detections": 40,
+    "additional_false_positives": 18,
+    "removed_false_positives": 27,
+    "net_additional_false_positives": -9,
+    "net_recovered_attacks": -22,
+    "recovered_per_additional_fp": 1.0,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9966960352422908
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7161125319693095
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "learned_fusion",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5336911092122864,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "learned_fusion",
+    "recall_delta": -0.0012176223156962207,
+    "fpr_delta": -0.0010750119445771672,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9761877037727061,
+    "recall": 0.9279942439672348,
+    "f1": 0.9514811031664965,
+    "fpr": 0.048853320592451024,
+    "false_alerts_per_1000_benign": 48.85332059245103,
+    "roc_auc": 0.9894133747637661,
+    "pr_auc": 0.9948483067871473,
+    "confusion_matrix": [
+      [
+        7963,
+        409
+      ],
+      [
+        1301,
+        16767
+      ]
+    ],
+    "recovered_lightgbm_misses": 21,
+    "lost_lightgbm_detections": 481,
+    "additional_false_positives": 174,
+    "removed_false_positives": 188,
+    "net_additional_false_positives": -14,
+    "net_recovered_attacks": -460,
+    "recovered_per_additional_fp": 0.1206896551724138,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8830188679245283
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9944933920704846
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9852790840318953
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.5717939349652905
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9996744261761354
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9983443708609272
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9295774647887324
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "rank_or",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.973016729627631,
+    "calibration_fpr": 0.04936936936936937,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "rank_or",
+    "recall_delta": -0.025459375691830877,
+    "fpr_delta": -0.0016722408026755911,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9760339943342776,
+    "recall": 0.9534536196590657,
+    "f1": 0.9646116803852399,
+    "fpr": 0.050525561395126616,
+    "false_alerts_per_1000_benign": 50.525561395126616,
+    "roc_auc": 0.9933076916730458,
+    "pr_auc": 0.9968664327057195,
+    "confusion_matrix": [
+      [
+        7949,
+        423
+      ],
+      [
+        841,
+        17227
+      ]
+    ],
+    "recovered_lightgbm_misses": 0,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 0,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 0,
+    "net_recovered_attacks": 0,
+    "recovered_per_additional_fp": null,
+    "recovery_ratio_status": "no_recovery_no_added_fp",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8981132075471698
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9961453744493393
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7248812568505664
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_control",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5213492620030982,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm"
+    ],
+    "recall_delta": 0.0,
+    "fpr_delta": 0.0,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.976559396106476,
+    "recall": 0.9522913438122648,
+    "f1": 0.9642727043461204,
+    "fpr": 0.04933110367892977,
+    "false_alerts_per_1000_benign": 49.331103678929765,
+    "roc_auc": 0.9922071054553053,
+    "pr_auc": 0.9959870038426865,
+    "confusion_matrix": [
+      [
+        7959,
+        413
+      ],
+      [
+        862,
+        17206
+      ]
+    ],
+    "recovered_lightgbm_misses": 19,
+    "lost_lightgbm_detections": 40,
+    "additional_false_positives": 18,
+    "removed_false_positives": 28,
+    "net_additional_false_positives": -10,
+    "net_recovered_attacks": -21,
+    "recovered_per_additional_fp": 1.0555555555555556,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9966960352422908
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7164778955060285
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5343272905783437,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_latent"
+    ],
+    "recall_delta": -0.001162275846800953,
+    "fpr_delta": -0.0011944577161968478,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9758128469468675,
+    "recall": 0.9534536196590657,
+    "f1": 0.964503667207883,
+    "fpr": 0.05100334448160535,
+    "false_alerts_per_1000_benign": 51.00334448160535,
+    "roc_auc": 0.9927150342534616,
+    "pr_auc": 0.9964226225271662,
+    "confusion_matrix": [
+      [
+        7945,
+        427
+      ],
+      [
+        841,
+        17227
+      ]
+    ],
+    "recovered_lightgbm_misses": 6,
+    "lost_lightgbm_detections": 6,
+    "additional_false_positives": 4,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 4,
+    "net_recovered_attacks": 0,
+    "recovered_per_additional_fp": 1.5,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8981132075471698
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9961453744493393
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9903905131874873
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7245158933138472
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_plain",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.48071882846492936,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_plain"
+    ],
+    "recall_delta": 0.0,
+    "fpr_delta": 0.00047778308647873635,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9766676128299745,
+    "recall": 0.9521806508744742,
+    "f1": 0.9642686993806574,
+    "fpr": 0.0490922121356904,
+    "false_alerts_per_1000_benign": 49.092212135690396,
+    "roc_auc": 0.9922696710288393,
+    "pr_auc": 0.9962097738828328,
+    "confusion_matrix": [
+      [
+        7961,
+        411
+      ],
+      [
+        864,
+        17204
+      ]
+    ],
+    "recovered_lightgbm_misses": 20,
+    "lost_lightgbm_detections": 43,
+    "additional_false_positives": 13,
+    "removed_false_positives": 25,
+    "net_additional_false_positives": -12,
+    "net_recovered_attacks": -23,
+    "recovered_per_additional_fp": 1.5384615384615385,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9056603773584906
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9966960352422908
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7153818048958714
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_plain_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5079601015210333,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_plain",
+      "ae_latent"
+    ],
+    "recall_delta": -0.0012729687845914883,
+    "fpr_delta": -0.001433349259436216,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.97582517126196,
+    "recall": 0.9539517378791234,
+    "f1": 0.9647644902185777,
+    "fpr": 0.05100334448160535,
+    "false_alerts_per_1000_benign": 51.00334448160535,
+    "roc_auc": 0.9927117387189721,
+    "pr_auc": 0.9959688724003072,
+    "confusion_matrix": [
+      [
+        7945,
+        427
+      ],
+      [
+        832,
+        17236
+      ]
+    ],
+    "recovered_lightgbm_misses": 9,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 4,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 4,
+    "net_recovered_attacks": 9,
+    "recovered_per_additional_fp": 2.25,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9966960352422908
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9903905131874873
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7270734380708805
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_denoising",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5033551272014254,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_denoising"
+    ],
+    "recall_delta": 0.0004981182200576306,
+    "fpr_delta": 0.00047778308647873635,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9765026391963222,
+    "recall": 0.9522359973433695,
+    "f1": 0.9642166615294084,
+    "fpr": 0.04945054945054945,
+    "false_alerts_per_1000_benign": 49.45054945054945,
+    "roc_auc": 0.9922084739119541,
+    "pr_auc": 0.9959457586277463,
+    "confusion_matrix": [
+      [
+        7958,
+        414
+      ],
+      [
+        863,
+        17205
+      ]
+    ],
+    "recovered_lightgbm_misses": 18,
+    "lost_lightgbm_detections": 40,
+    "additional_false_positives": 18,
+    "removed_false_positives": 27,
+    "net_additional_false_positives": -9,
+    "net_recovered_attacks": -22,
+    "recovered_per_additional_fp": 1.0,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9966960352422908
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7161125319693095
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_denoising_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5336911092122864,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_denoising",
+      "ae_latent"
+    ],
+    "recall_delta": -0.0012176223156962207,
+    "fpr_delta": -0.0010750119445771672,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9756069953025072,
+    "recall": 0.9540624308169139,
+    "f1": 0.9647144416151328,
+    "fpr": 0.05148112756808409,
+    "false_alerts_per_1000_benign": 51.48112756808409,
+    "roc_auc": 0.9928969596568931,
+    "pr_auc": 0.9961620372333678,
+    "confusion_matrix": [
+      [
+        7941,
+        431
+      ],
+      [
+        830,
+        17238
+      ]
+    ],
+    "recovered_lightgbm_misses": 11,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 8,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 8,
+    "net_recovered_attacks": 11,
+    "recovered_per_additional_fp": 1.375,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9961453744493393
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9905949703537109
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7278041651443186
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_scaled",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.49236809423040956,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": false,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_scaled"
+    ],
+    "recall_delta": 0.0006088111578481659,
+    "fpr_delta": 0.0009555661729574727,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9764986376021798,
+    "recall": 0.9520699579366836,
+    "f1": 0.9641295818854388,
+    "fpr": 0.04945054945054945,
+    "false_alerts_per_1000_benign": 49.45054945054945,
+    "roc_auc": 0.9923880524452879,
+    "pr_auc": 0.9962300650482375,
+    "confusion_matrix": [
+      [
+        7958,
+        414
+      ],
+      [
+        866,
+        17202
+      ]
+    ],
+    "recovered_lightgbm_misses": 14,
+    "lost_lightgbm_detections": 39,
+    "additional_false_positives": 16,
+    "removed_false_positives": 25,
+    "net_additional_false_positives": -9,
+    "net_recovered_attacks": -25,
+    "recovered_per_additional_fp": 0.875,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9961453744493393
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9905949703537109
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7146510778224333
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "fusion_ae_scaled_latent",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5314672511280737,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": [
+      "lightgbm",
+      "ae_scaled",
+      "ae_latent"
+    ],
+    "recall_delta": -0.0013836617223821346,
+    "fpr_delta": -0.0010750119445771672,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9758694913334088,
+    "recall": 0.953508966127961,
+    "f1": 0.9645596551144953,
+    "fpr": 0.050883898709985664,
+    "false_alerts_per_1000_benign": 50.883898709985665,
+    "roc_auc": 0.9931415233537771,
+    "pr_auc": 0.9967976034109526,
+    "confusion_matrix": [
+      [
+        7946,
+        426
+      ],
+      [
+        840,
+        17228
+      ]
+    ],
+    "recovered_lightgbm_misses": 1,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 3,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 3,
+    "net_recovered_attacks": 1,
+    "recovered_per_additional_fp": 0.3333333333333333,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8981132075471698
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9961453744493393
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9903905131874873
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7248812568505664
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "selective_fusion",
+    "primary_budget_fraction": 1.0,
+    "preserves_full_budget_baseline": true,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.6888053625637262,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": false,
+    "routed_fraction": 0.043494704992435705,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion",
+    "recall_delta": 5.534646889526762e-05,
+    "fpr_delta": 0.0003583373148590488,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9765026391963222,
+    "recall": 0.9522359973433695,
+    "f1": 0.9642166615294084,
+    "fpr": 0.04945054945054945,
+    "false_alerts_per_1000_benign": 49.45054945054945,
+    "roc_auc": 0.9931223286007387,
+    "pr_auc": 0.996789440797872,
+    "confusion_matrix": [
+      [
+        7958,
+        414
+      ],
+      [
+        863,
+        17205
+      ]
+    ],
+    "recovered_lightgbm_misses": 18,
+    "lost_lightgbm_detections": 40,
+    "additional_false_positives": 18,
+    "removed_false_positives": 27,
+    "net_additional_false_positives": -9,
+    "net_recovered_attacks": -22,
+    "recovered_per_additional_fp": 1.0,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9966960352422908
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7161125319693095
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "selective_fusion_primary_0.75",
+    "primary_budget_fraction": 0.75,
+    "preserves_full_budget_baseline": false,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5336911092122864,
+    "calibration_fpr": 0.04990990990990991,
+    "evaluation_budget_met": true,
+    "routed_fraction": 0.047125567322239034,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion_primary_0.75",
+    "recall_delta": -0.0012176223156962207,
+    "fpr_delta": -0.0010750119445771672,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9765567349719021,
+    "recall": 0.9521806508744742,
+    "f1": 0.9642146560179347,
+    "fpr": 0.04933110367892977,
+    "false_alerts_per_1000_benign": 49.331103678929765,
+    "roc_auc": 0.9931004266834607,
+    "pr_auc": 0.9967802052916923,
+    "confusion_matrix": [
+      [
+        7959,
+        413
+      ],
+      [
+        864,
+        17204
+      ]
+    ],
+    "recovered_lightgbm_misses": 18,
+    "lost_lightgbm_detections": 41,
+    "additional_false_positives": 18,
+    "removed_false_positives": 28,
+    "net_additional_false_positives": -10,
+    "net_recovered_attacks": -23,
+    "recovered_per_additional_fp": 1.0,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9018867924528302
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9966960352422908
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9901860560212635
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.7157471684325905
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9988962472406181
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "selective_fusion_primary_0.5",
+    "primary_budget_fraction": 0.5,
+    "preserves_full_budget_baseline": false,
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "threshold": 0.5349199489395076,
+    "calibration_fpr": 0.04972972972972973,
+    "evaluation_budget_met": true,
+    "routed_fraction": 0.05450075642965204,
+    "auc_score": "budget-dependent conditional ranking",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "method_configuration": "selective_fusion_primary_0.5",
+    "recall_delta": -0.0012729687845914883,
+    "fpr_delta": -0.0011944577161968478,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9891835736983623,
+    "recall": 0.8958932920079699,
+    "f1": 0.9402300185873605,
+    "fpr": 0.021141901576684184,
+    "false_alerts_per_1000_benign": 21.141901576684184,
+    "roc_auc": 0.9894133747637661,
+    "pr_auc": 0.9948483067871473,
+    "confusion_matrix": [
+      [
+        8195,
+        177
+      ],
+      [
+        1881,
+        16187
+      ]
+    ],
+    "recovered_lightgbm_misses": 23,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 71,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 71,
+    "net_recovered_attacks": 23,
+    "recovered_per_additional_fp": 0.323943661971831,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9836734693877551
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.98568281938326
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9701492537313433
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.4117647058823529
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9991860654403386
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9928256070640177
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.8309859154929577
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "naive_or",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.01,
+    "evaluation_budget_met": false,
+    "auc_score": "rank_or (naive OR has two cutoffs)",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "naive_or",
+    "recall_delta": 0.0012729687845914883,
+    "fpr_delta": 0.00848064978499761,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9729652163930662,
+    "recall": 0.9381779942439672,
+    "f1": 0.9552550014088476,
+    "fpr": 0.05625895843287148,
+    "false_alerts_per_1000_benign": 56.258958432871474,
+    "roc_auc": 0.9894133747637661,
+    "pr_auc": 0.9948483067871473,
+    "confusion_matrix": [
+      [
+        7901,
+        471
+      ],
+      [
+        1117,
+        16951
+      ]
+    ],
+    "recovered_lightgbm_misses": 31,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 182,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 182,
+    "net_recovered_attacks": 31,
+    "recovered_per_additional_fp": 0.17032967032967034,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.8943396226415095
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 0.9959183673469387
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9955947136563876
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9879370271928031
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.6306174643770551
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9983443708609272
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9577464788732394
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "naive_or",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.03,
+    "evaluation_budget_met": false,
+    "auc_score": "rank_or (naive OR has two cutoffs)",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "naive_or",
+    "recall_delta": 0.0017157405357537403,
+    "fpr_delta": 0.021739130434782615,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  },
+  {
+    "precision": 0.9600266489007329,
+    "recall": 0.9570511401372592,
+    "f1": 0.9585365853658536,
+    "fpr": 0.08600095556617296,
+    "false_alerts_per_1000_benign": 86.00095556617296,
+    "roc_auc": 0.9894133747637661,
+    "pr_auc": 0.9948483067871473,
+    "confusion_matrix": [
+      [
+        7652,
+        720
+      ],
+      [
+        776,
+        17292
+      ]
+    ],
+    "recovered_lightgbm_misses": 65,
+    "lost_lightgbm_detections": 0,
+    "additional_false_positives": 297,
+    "removed_false_positives": 0,
+    "net_additional_false_positives": 297,
+    "net_recovered_attacks": 65,
+    "recovered_per_additional_fp": 0.21885521885521886,
+    "recovery_ratio_status": "finite",
+    "withheld_family_recall": null,
+    "per_family_recall": {
+      "Analysis": {
+        "rows": 265,
+        "recall": 0.9320754716981132
+      },
+      "Backdoor": {
+        "rows": 245,
+        "recall": 1.0
+      },
+      "DoS": {
+        "rows": 1816,
+        "recall": 0.9977973568281938
+      },
+      "Exploits": {
+        "rows": 4891,
+        "recall": 0.9912083418523819
+      },
+      "Fuzzers": {
+        "rows": 2737,
+        "recall": 0.742053343076361
+      },
+      "Generic": {
+        "rows": 6143,
+        "recall": 0.9998372130880677
+      },
+      "Reconnaissance": {
+        "rows": 1812,
+        "recall": 0.9994481236203091
+      },
+      "Shellcode": {
+        "rows": 142,
+        "recall": 0.9788732394366197
+      },
+      "Worms": {
+        "rows": 17,
+        "recall": 1.0
+      }
+    },
+    "model": "naive_or",
+    "held_family": "none",
+    "seed": 2026,
+    "budget": 0.05,
+    "evaluation_budget_met": false,
+    "auc_score": "rank_or (naive OR has two cutoffs)",
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc",
+    "partition_sha256": "59ab97447e4426a86f417a1da27c82c4e76622f67282d05eca25047f19c02558",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "binary",
+    "primary_budget_fraction": 1.0,
+    "method_configuration": "naive_or",
+    "recall_delta": 0.0035975204781935055,
+    "fpr_delta": 0.035475394171046344,
+    "detector_checkpoint_sha256": "8d4a04333cd57eb681f98456c42dac8cb3c3e172bd43a1bf52c03fd759922aa6"
+  }
+]

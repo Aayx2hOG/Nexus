@@ -1,0 +1,83 @@
+{
+  "evaluation": {
+    "rows": 57921,
+    "groups": 21550,
+    "benign": 8384,
+    "families": {
+      "Exploits": 16111,
+      "Reconnaissance": 10491,
+      "DoS": 10019,
+      "Normal": 8384,
+      "Generic": 5943,
+      "Fuzzers": 4034,
+      "Analysis": 1436,
+      "Backdoor": 1316,
+      "Shellcode": 170,
+      "Worms": 17
+    }
+  },
+  "calibration": {
+    "rows": 13928,
+    "groups": 9352,
+    "benign": 5705,
+    "families": {
+      "Normal": 5705,
+      "Generic": 4067,
+      "Exploits": 2028,
+      "Fuzzers": 1625,
+      "DoS": 248,
+      "Shellcode": 113,
+      "Analysis": 79,
+      "Backdoor": 52,
+      "Worms": 11
+    }
+  },
+  "fusion": {
+    "rows": 13928,
+    "groups": 9352,
+    "benign": 5602,
+    "families": {
+      "Normal": 5602,
+      "Generic": 4102,
+      "Exploits": 2043,
+      "Fuzzers": 1665,
+      "DoS": 255,
+      "Shellcode": 122,
+      "Analysis": 67,
+      "Backdoor": 54,
+      "Worms": 18
+    }
+  },
+  "early": {
+    "rows": 14167,
+    "groups": 9352,
+    "benign": 5612,
+    "families": {
+      "Normal": 5612,
+      "Generic": 4397,
+      "Exploits": 1999,
+      "Fuzzers": 1674,
+      "DoS": 245,
+      "Shellcode": 122,
+      "Analysis": 54,
+      "Backdoor": 48,
+      "Worms": 16
+    }
+  },
+  "fit": {
+    "rows": 75397,
+    "groups": 51434,
+    "benign": 30697,
+    "families": {
+      "Normal": 30697,
+      "Generic": 21491,
+      "Exploits": 11212,
+      "Fuzzers": 9186,
+      "DoS": 1497,
+      "Shellcode": 606,
+      "Analysis": 364,
+      "Backdoor": 276,
+      "Worms": 68
+    }
+  }
+}

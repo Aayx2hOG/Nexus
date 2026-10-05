@@ -1,0 +1,62 @@
+{
+  "status": "complete",
+  "comparison_context": {
+    "partition_sha256": "3b48e470b723b28928e41eb867aef5bda3ad73c9d667f43220673f45a18648d3",
+    "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+    "calibration_policy": "benign calibration only; conservative >= cutoff with ties",
+    "evaluation_policy": "frozen decisions on grouped internal development holdout",
+    "scenario": "withheld_family",
+    "fusion_c": 1.0,
+    "gate_configuration": [
+      0.5,
+      0.99,
+      0.0
+    ],
+    "fusion_representations": [
+      "ae_plain",
+      "ae_denoising",
+      "ae_scaled"
+    ],
+    "primary_budget_fractions": [
+      1.0,
+      0.75,
+      0.5
+    ],
+    "conditions_sha256": "0b7faf22430359c6f3a96ed9e2c6945a109e3741b71552707344e8dbb69c67dc"
+  },
+  "assessment_sha256": "a4456766c442ba2e6f41f03c05daf681c67da23ffe666a0a8b3df80bb251f1ad",
+  "held_family": "Reconnaissance",
+  "seed": 2026,
+  "data_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "source_hashes": {
+    "run_novelty_experiment.py": "7f995552c15d080e629a23c165a43e928d45cdf267ed3c58ce1663afbc3271a3",
+    "anomaly_detection_models.py": "f371cec844defcc848b735b83f4286c322e747cde81f7468b7c0962b5992ab11",
+    "complementary_fusion.py": "066be279d418a64818afd3783198fc73d3a781d2dd670a2facc4b91f8da342d4",
+    "fusion_ablation.py": "3cf9fac16b758fd055ba33f01c0aaaa70082acbd9cbb81773387be94619700bb",
+    "fast_lightgbm_models.py": "81ff2ec5635c777ff089c60640e2996578ed172606865627ba9c018f591d165d"
+  },
+  "artifact_hashes": {
+    "models.joblib": "346a288a9d1c341941ee4d762cf76108466753464a70b8abc560cf487163230c",
+    "split_indices.npz": "3b48e470b723b28928e41eb867aef5bda3ad73c9d667f43220673f45a18648d3",
+    "evaluation_scores.npz": "411c56c7c7e4763b52014c5f9838732a5f753e2778fcd51a5e777d7f22f126e0",
+    "evaluation_decisions.npz": "32e538acd3d22c8b8eba8f8f5a308933234695eafaa99a5979e040cfc4a5ae6b",
+    "calibration.json": "25ae0c8e20837aa1f4375967637513da570c96e15e0f2846a7f133c686491884",
+    "metrics.json": "03b673847a44cdcaa1a5bc72a134a0caa74ae53c3f4e19bac6efc5d86bb09dc1"
+  },
+  "versions": {
+    "python": "3.14.4",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "sklearn": "1.9.1",
+    "lightgbm": "4.7.0"
+  },
+  "limitations": [
+    "Internal development holdout; official testing CSV was not opened.",
+    "Grouped identical rows do not establish session or temporal independence.",
+    "Calibration FPR caps are empirical, not guarantees under sampling or drift.",
+    "LightGBM is a controlled retrained baseline, not the frozen v1 checkpoint.",
+    "Evaluation informs development; independent confirmation remains necessary.",
+    "Withheld families simulate unseen attacks, not proven zero-day/signature bypass.",
+    "No model is automatically selected or promoted."
+  ]
+}

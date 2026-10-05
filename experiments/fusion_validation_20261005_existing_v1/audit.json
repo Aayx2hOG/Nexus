@@ -1,0 +1,168 @@
+{
+  "source": "/home/aayush/projects/Nexus/experiments/fusion_ablation_20261005T033313Z",
+  "script_sha256": "be768940e247599871c3b012ef6b008a5143dcbabefd243bbaa7d1e8275f56ad",
+  "comparison_sha256": "aba8fff1a970a6bd707403c6983749059205cfd65a5ca97f6a019810f8f124ac",
+  "runs": [
+    {
+      "family": "Exploits",
+      "seed": 42,
+      "manifest_sha256": "84f8f39235f11a877933d2e21957154f0a7526a424819a4f4de239a3465106a5",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "Exploits",
+      "seed": 123,
+      "manifest_sha256": "285208dcccc384a6a848ead3c211a1e7bed23368d697a845995c5c751b14ea80",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "Exploits",
+      "seed": 2026,
+      "manifest_sha256": "86530c1a827f6cadc611534edcce55959811c6647093de76907df277842f6670",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "Reconnaissance",
+      "seed": 42,
+      "manifest_sha256": "25b0321fdcac0397631f3f0a7c96359a990130d2ac26eb46799f13d041325549",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "Reconnaissance",
+      "seed": 123,
+      "manifest_sha256": "9f4524ec7495e94ad45766acf7d41608a9665a2881f6745feeef04616650700e",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "Reconnaissance",
+      "seed": 2026,
+      "manifest_sha256": "4a742b2cc12f790396708053d7cd68884f2792775ce5290505a9ae36c9bec9ac",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "DoS",
+      "seed": 42,
+      "manifest_sha256": "e2d539a6897472102d5c14452ebcb1b93d49fa94d0632af05ab8e8dc16bca376",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "DoS",
+      "seed": 123,
+      "manifest_sha256": "0ff16c90f8c47ca805d1ba6ec0d2b0f9da4ce0838991fd4230b2fd76d4083b30",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "DoS",
+      "seed": 2026,
+      "manifest_sha256": "cd015a56e2317d649fb7cdd2eeeb4a983b7b75ff74b95221f034ea7aca24a2cd",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "none",
+      "seed": 42,
+      "manifest_sha256": "4014a95696254d6820d5ed46b6ad22c71115bb9d5900f0243c870d8b48302ef6",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "none",
+      "seed": 123,
+      "manifest_sha256": "70087f6cc1e3730f3a822e474b4630d76d36ce1da69b40187a83b0cd7159b6c9",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    },
+    {
+      "family": "none",
+      "seed": 2026,
+      "manifest_sha256": "2ec3e8aa148a3f7ff547d346d41852d498e526af90d07a2c60f24b6231975037",
+      "verified_artifacts": [
+        "models.joblib",
+        "split_indices.npz",
+        "evaluation_scores.npz",
+        "evaluation_decisions.npz",
+        "calibration.json",
+        "metrics.json"
+      ]
+    }
+  ],
+  "verified_rows": 216,
+  "training": false,
+  "recalibration": false,
+  "model_inference": false,
+  "limitations": "Internal overlapping development holdouts; saved scores were audited, not recomputed from detector inference."
+}

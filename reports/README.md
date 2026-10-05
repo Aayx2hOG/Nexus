@@ -13,8 +13,7 @@ Canonical raw evidence stays local and Git-ignored:
 | `anomaly_comparison_v2/` | Same three seeds plus selective recovery |
 | `fusion_extra_seeds_v2/` | Five additional seeds |
 | `fusion_eight_seed_statistics_v2/` | Combined 960-row comparison and statistics |
-| `fusion_report_v1/`, `fusion_report_v2/` | Historical three-seed visualizations; not eight-seed plots |
-| `archive/cleanup_20261003/` | Older generated reports retained locally for reference |
+| `fusion_report_v2/` | Three-seed visualizations; not eight-seed plots |
 
 Duplicate single-run/subset outputs and smoke artifacts were removed after
 checking their reported metrics against the canonical suite. Do not remove the
