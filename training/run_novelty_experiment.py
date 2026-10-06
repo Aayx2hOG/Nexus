@@ -12,6 +12,7 @@ import contextlib
 import hashlib
 import json
 import platform
+import shutil
 import sys
 from pathlib import Path
 
@@ -390,7 +391,8 @@ def reuse_run(args, frame, labels, families, family, seed, output):
     if args.fusion_c != saved["fusion"].named_steps["logisticregression"].C:
         raise ValueError("--fusion-c cannot change when reusing a fitted fusion model")
     output.mkdir(parents=True, exist_ok=False)
-    np.savez_compressed(output / "split_indices.npz", **split)
+    # Preserve artifact identity: reserializing the same arrays can change ZIP bytes.
+    shutil.copyfile(source / "split_indices.npz", output / "split_indices.npz")
     write_json(
         output / "reused_from.json",
         {

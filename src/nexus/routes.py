@@ -137,7 +137,7 @@ async def get_model_summary(request: Request) -> ModelSummaryResponse:
 
 
 @predictions.post("", dependencies=[Depends(no_query)])
-async def predict(batch: FlowBatch, request: Request, store: Store) -> BatchPredictionResponse:
+def predict(batch: FlowBatch, request: Request, store: Store) -> BatchPredictionResponse:
     loader = getattr(request.app.state, "bundle_loader", None)
     if loader is None or not loader.is_ready or loader.loaded_bundle is None:
         raise APIError(503, "model_unavailable", "No evaluated model bundle is configured.")
@@ -176,7 +176,33 @@ async def predict(batch: FlowBatch, request: Request, store: Store) -> BatchPred
         )
         for p, rec in recorded
     ]
+    shadow_service = getattr(request.app.state, "shadow_service", None)
+    shadow_report = None
+    if shadow_service is not None:
+        shadow_report = shadow_service.evaluate(batch.flows)
+        if shadow_report["results"]:
+            try:
+                shadow_report["results"] = store.record_shadow(
+                    bundle.manifest.bundle_version, shadow_report
+                )
+                shadow_report["status"] = (
+                    "scored"
+                    if all(r["status"] == "scored" for r in shadow_report["results"])
+                    else "error"
+                )
+                shadow_report["persisted"] = True
+            except Exception:
+                import logging
+
+                logging.getLogger(__name__).exception("Shadow persistence failed")
+                shadow_report.update(
+                    status="error",
+                    error_code="shadow_persistence_failed",
+                    persisted=False,
+                    results=[],
+                )
     return BatchPredictionResponse(
+        shadow=shadow_report,
         bundle_version=bundle.manifest.bundle_version,
         predictions=items,
         alert_count=len(alerts_to_create),

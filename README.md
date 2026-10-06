@@ -9,8 +9,15 @@ LightGBM with complementary anomaly scores through learned and selective fusion.
 Alerts go to analysts; the project does not automatically block traffic.
 
 The local application already serves LightGBM predictions with TreeSHAP
-explanations, prediction logging and an analyst dashboard. **Fusion results are
-currently offline research; the new policy is not yet integrated into serving.**
+explanations, prediction logging and an analyst dashboard. **Selective fusion now supports opt-in shadow serving with frozen-checkpoint parity
+verification. It never creates live alerts; independent confirmation is deferred.**
+
+## Documentation
+
+For the maintained documentation index, see
+[docs/README.md](docs/README.md). It links to the local demo, API contract,
+shadow-fusion guide, research status, roadmap and the repository-specific
+training, report, experiment and frontend guides.
 
 | Start here | Contents |
 | --- | --- |
@@ -18,10 +25,101 @@ currently offline research; the new policy is not yet integrated into serving.**
 | [Current model assessment](reports/current_model_assessment.md) | Eight-seed results, failures, research contribution and next experiments |
 | [Experiment commands](training/FUSION_EXPERIMENTS.md) | Reuse, training, calibration, evaluation, extra seeds and plots |
 | [Training workflows](training/README.md) | Active entry points and historical-code boundaries |
+| [Shadow fusion](docs/SHADOW_FUSION.md) | Frozen candidate export, parity, activation and evidence |
 | [Local demo](docs/LOCAL_DEMO.md) | Backend, frontend and historical dataset replay |
+| [Demo edge and improvement roadmap](docs/PROJECT_ROADMAP.md) | Policy Lab, latest research caveats, priorities and judging walkthrough |
 | [API contract](docs/api.md) | Prediction, alert and analyst-feedback endpoints |
 
+## Teacher demonstration: main model and shadow fusion
+
+Both model bundles, the frontend build and the curated demo files must exist
+locally. They are already prepared in the development workspace; on a fresh clone,
+follow [local setup](docs/LOCAL_DEMO.md) and [shadow export](docs/SHADOW_FUSION.md).
+The paths below use this workspace. Leave terminals 1 and 2 running.
+
+**Terminal 1 — start the API with live LightGBM and optional shadow fusion:**
+
+```sh
+cd /home/aayush/projects/Nexus
+export NEXUS_BUNDLE_VERSION=v1.0.0
+export NEXUS_SHADOW_BUNDLE_DIR=artifacts/shadow_bundles/selective-exploits-s42-b03-v2
+export NEXUS_DATABASE_PATH="artifacts/teacher-demo-$(date +%Y%m%d-%H%M%S).sqlite3"
+export NEXUS_API_TOKEN="test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+export NEXUS_REVIEWER_ID=local-analyst
+.venv/bin/uvicorn nexus.api:app --host 127.0.0.1 --port 8000
+```
+
+The timestamped database isolates this demonstration from previous runs.
+The token above is a local demo credential and must match in each terminal.
+
+**Terminal 2 — start the already-built dashboard:**
+
+```sh
+cd /home/aayush/projects/Nexus/web
+export NEXUS_BACKEND_URL=http://127.0.0.1:8000
+export NEXUS_API_TOKEN="test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+npm run start -- --hostname 127.0.0.1 -p 3000
+```
+
+If the frontend build is missing or its source has changed, run
+`npm run build -- --webpack` in `web/` before starting it.
+Open [Traffic & Ingestion](http://127.0.0.1:3000/traffic), load the mixed CSV preset
+and click **Run Detection**. Open [Alerts](http://127.0.0.1:3000/alerts) and show an
+alert's feature explanations. Operational alerts come from the live LightGBM.
+
+**Terminal 3 — submit the curated shadow examples and their separate truth labels:**
+
+```sh
+cd /home/aayush/projects/Nexus
+export NEXUS_API_TOKEN="test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+
+curl --fail-with-body -sS http://127.0.0.1:8000/api/v1/predictions \
+  -H 'Content-Type: application/json' \
+  --data-binary @artifacts/shadow_demo_v2/predictions.json \
+  -o /tmp/nexus-teacher-predictions.json
+
+curl --fail-with-body -sS http://127.0.0.1:8000/api/v1/replay/truth \
+  -H "Authorization: Bearer $NEXUS_API_TOKEN" \
+  -H 'Content-Type: application/json' \
+  --data-binary @artifacts/shadow_demo_v2/truth.json
+```
+
+Open [Shadow Fusion](http://127.0.0.1:3000/shadow) and click **Refresh evidence**.
+For these 15 labeled examples, **Compared with its research baseline** shows
+3 recovered attacks, 3 added false positives and 0 lost baseline detections;
+3 persistent attack misses remain. The mixed CSV UI preset does not attach truth,
+so those earlier rows contribute to coverage/disagreement, not these labeled metrics.
+These are deliberately selected examples, not representative accuracy results.
+Expand flow evidence to show routing, reconstruction error, anomaly rank and the
+fusion cutoff. Press **Ctrl+C** in terminals 1 and 2 when finished.
+
+### Where the shadow model and results live
+
+| Item | Location |
+| --- | --- |
+| Inference, routing and bundle verification | [src/nexus/shadow.py](src/nexus/shadow.py) |
+| Frozen model and policy | `artifacts/shadow_bundles/selective-exploits-s42-b03-v2/models.joblib` and `manifest.json` |
+| Full raw-input parity evidence | `artifacts/shadow_bundles/selective-exploits-s42-b03-v2/parity.json`: 68,643 rows, zero decision mismatches |
+| Dashboard and authenticated results API | `/shadow`; `GET /api/v1/shadow`; `GET /api/v1/shadow/predictions` |
+| Persisted runtime results | `shadow_predictions` table in `NEXUS_DATABASE_PATH`; the commands above create `artifacts/teacher-demo-<timestamp>.sqlite3` |
+| Curated cases and expected results | `artifacts/shadow_demo_v2/evidence.json`, `predictions.json`, `truth.json` |
+| Original candidate evaluation | [Exploits / seed 42 metrics](experiments/fusion_ablation_20261005T033313Z/Exploits/seed_42/metrics.json), filtering budget `0.03` and model `selective_fusion` |
+| Reproduction, failure behavior and verification | [Shadow fusion guide](docs/SHADOW_FUSION.md) |
+
+For that **single frozen research run**, overall attack recall moves from
+93.8875% to 93.9040%: 10 additional attacks detected, zero lost detections and
+6 additional false positives. Observed benign FPR moves from 2.5064% to 2.5790%.
+These are internal development-evaluation results against the research LightGBM,
+not against the live release and not independent confirmation. Parity measures
+faithful implementation, not model improvement. Local bundles and runtime databases
+are Git-ignored; committing code does not upload those artifacts.
+
 ## Where we stand
+
+The eight-seed findings below describe the earlier selective-fusion suite. Later
+three-seed score-only and AE/latent ablations are already complete; see the
+[updated assessment and roadmap](docs/PROJECT_ROADMAP.md#current-research-evidence-takes-precedence-over-older-plans)
+before treating the older “next experiments” list as pending work.
 
 The latest evaluation contains **960 result rows**: four scenarios, ten methods,
 three calibration FPR budgets and eight seeds. The scenarios are closed-set
@@ -87,7 +185,7 @@ flowchart TD
     I -->|No| G
 ```
 
-This diagram describes the offline selective-fusion candidate. Its operating
+This diagram describes the selective-fusion candidate, now available in opt-in shadow mode. Its operating
 policy preserves LightGBM positives and considers uncertain or anomalous
 negatives for recovery. Score gates are configurable; they are not calibrated
 probabilities or proof that a flow is malicious.
@@ -192,8 +290,8 @@ Everything runs in the foreground. No experiment starts automatically.
 
 Next model work: a LightGBM-score-only fusion control, plain-AE versus denoising-AE
 fusion ablations, explicit budget allocation, and independent confirmation.
-Measure latency and drift before claiming operational improvement. Fusion
-integration with the application remains a separate milestone.
+Measure latency and drift before claiming operational improvement. Shadow fusion integration is implemented; production promotion and independent
+confirmation remain separate milestones.
 
 ## Repository layout
 

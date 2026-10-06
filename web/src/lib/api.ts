@@ -164,3 +164,51 @@ export async function liveProbe(payload: {
   });
 }
 
+export type PolicyMetrics = {
+  true_negatives: number; false_positives: number; false_negatives: number;
+  true_positives: number; recall: number | null; precision: number | null;
+  false_positive_rate: number | null; alert_count: number;
+};
+export type PolicyReport = {
+  bundle_version: string; threshold: number; total_predictions: number;
+  labeled_predictions: number; unlabeled_predictions: number; last_sequence: number;
+  baseline: PolicyMetrics; candidate: PolicyMetrics;
+  recovered_attacks: number; lost_attacks: number;
+  added_false_positives: number; removed_false_positives: number;
+  families: { family: string; total: number; baseline_detected: number; candidate_detected: number }[];
+  note: string;
+};
+export function fetchPolicyReport(bundle: string, threshold: number): Promise<PolicyReport> {
+  return request<PolicyReport>(`replay/policy?${new URLSearchParams({
+    bundle_version: bundle, threshold: String(threshold),
+  })}`);
+}
+
+export type ShadowSummary = {
+  status: "disabled" | "unavailable" | "ready";
+  mode: "shadow"; error_code: string | null;
+  bundle_version: string | null; production_bundle_version: string | null;
+  manifest_sha256: string | null; budget: number | null;
+  held_family: string | null; seed: number | null; note: string;
+  parity: { status: string; rows: number; decision_mismatches: number; note: string } | null;
+  total_predictions: number; scored: number; errors: number; not_shadowed: number;
+  labeled_scored: number; unlabeled_scored: number;
+  candidate_additions_vs_live: number; candidate_removals_vs_live: number;
+  metrics: { live: PolicyMetrics; reference: PolicyMetrics; candidate: PolicyMetrics };
+  vs_live: ShadowDelta; vs_reference: ShadowDelta;
+  families: { family: string; total: number; live_detected: number; reference_detected: number; candidate_detected: number }[];
+};
+type ShadowDelta = { recovered_attacks: number; lost_attacks: number; added_false_positives: number; removed_false_positives: number };
+export type ShadowPrediction = {
+  flow_id: string; status: "scored" | "error"; sequence: number; created_at: string;
+  live_decision: string; reference_decision?: string; decision?: string;
+  reference_score?: number; reconstruction_error?: number; latent_distance?: number;
+  anomaly_rank?: number; fusion_score?: number; recovery_threshold?: number;
+  eligible?: boolean; reason?: string; error_code?: string;
+};
+export function fetchShadowSummary(): Promise<ShadowSummary> {
+  return request<ShadowSummary>("shadow");
+}
+export function fetchShadowPredictions(after = 0): Promise<{ items: ShadowPrediction[]; next_after: number | null }> {
+  return request(`shadow/predictions?limit=20&after=${after}`);
+}

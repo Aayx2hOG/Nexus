@@ -33,7 +33,7 @@ def test_schema_migration_v1_to_v2(tmp_path: Path):
 
     with store.connection() as db:
         v = db.execute("PRAGMA user_version").fetchone()[0]
-        assert v == 2
+        assert v == 3
 
         # Check prediction_log table exists
         cols = [r[1] for r in db.execute("PRAGMA table_info(prediction_log)").fetchall()]

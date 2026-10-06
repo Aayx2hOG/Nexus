@@ -193,6 +193,9 @@ def test_small_training_reuse_and_csv_summary(tmp_path):
     reused = tmp_path / "reused" / "DoS" / "seed_42"
     repeated = run(args, frame, labels, families, "DoS", 42, reused)
     assert original == json.loads((reused / "calibration.json").read_text())
+    assert (trained / "split_indices.npz").read_bytes() == (
+        reused / "split_indices.npz"
+    ).read_bytes()
     assert results == repeated
     table = enrich(pd.DataFrame(results))
     summary = statistical_summary(table)

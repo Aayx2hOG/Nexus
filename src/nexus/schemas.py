@@ -140,6 +140,7 @@ class PredictionSummaryItem(StrictModel):
 
 
 class BatchPredictionResponse(StrictModel):
+    shadow: dict[str, Any] | None = None
     bundle_version: str
     predictions: list[PredictionSummaryItem]
     alert_count: int

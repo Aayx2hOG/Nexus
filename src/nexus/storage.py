@@ -154,6 +154,26 @@ PRAGMA user_version = 2;
 """
 
 
+MIGRATION_V2_TO_V3 = """
+CREATE TABLE shadow_predictions (
+    sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+    flow_id TEXT NOT NULL,
+    production_bundle_version TEXT NOT NULL,
+    shadow_bundle_version TEXT NOT NULL,
+    manifest_sha256 TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('scored', 'error')),
+    payload TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    UNIQUE(flow_id, production_bundle_version, manifest_sha256),
+    FOREIGN KEY(flow_id, production_bundle_version)
+        REFERENCES prediction_log(flow_id, bundle_version)
+);
+CREATE INDEX shadow_predictions_cohort
+    ON shadow_predictions(production_bundle_version, manifest_sha256, sequence);
+PRAGMA user_version = 3;
+"""
+
+
 def now() -> str:
     return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
@@ -205,13 +225,15 @@ class AlertStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connection() as db:
             version = db.execute("PRAGMA user_version").fetchone()[0]
-            if version not in (0, 1, 2):
+            if version not in (0, 1, 2, 3):
                 raise RuntimeError("Unsupported Nexus database schema version")
             db.execute("PRAGMA journal_mode = WAL")
             if version == 0:
                 db.executescript("BEGIN IMMEDIATE;\n" + SCHEMA_V2 + "\nCOMMIT;")
             elif version == 1:
                 db.executescript("BEGIN IMMEDIATE;\n" + MIGRATION_V1_TO_V2 + "\nCOMMIT;")
+            if version < 3:
+                db.executescript("BEGIN IMMEDIATE;\n" + MIGRATION_V2_TO_V3 + "\nCOMMIT;")
 
     @staticmethod
     def _find_alert(db: sqlite3.Connection, alert_id: str) -> sqlite3.Row:
@@ -328,9 +350,33 @@ class AlertStore:
         alert_map: dict[str, AlertData] = {a.flow_id: a for a in alerts}
 
         with self.connection(write=True) as db:
+            # Resolve retries before creating alerts, including older random alert IDs.
+            retried: dict[str, AlertRecord | None] = {}
+            for pred in predictions:
+                existing = db.execute(
+                    "SELECT * FROM prediction_log WHERE flow_id = ? AND bundle_version = ?",
+                    (pred.flow_id, bundle_version),
+                ).fetchone()
+                if existing is None:
+                    continue
+                if (
+                    existing["decision"] != pred.decision
+                    or abs(existing["score"] - pred.score) > 1e-6
+                    or existing["threshold"] != pred.threshold
+                    or existing["event_time"] != pred.event_time
+                    or json.loads(existing["features"]) != pred.raw_features
+                ):
+                    raise APIError(409, "prediction_conflict", "Flow ID has different content.")
+                retried[pred.flow_id] = (
+                    alert_record(self._find_alert(db, existing["alert_id"]))
+                    if existing["alert_id"]
+                    else None
+                )
             # 1. Insert alerts
             created_alert_records: dict[str, AlertRecord] = {}
             for flow_id, alert in alert_map.items():
+                if flow_id in retried:
+                    continue
                 payload = alert.model_dump_json()
                 db.execute(
                     "INSERT INTO alerts(alert_id, severity, payload, created_at) "
@@ -344,6 +390,9 @@ class AlertStore:
 
             # 2. Insert prediction log entries
             for pred in predictions:
+                if pred.flow_id in retried:
+                    results.append((pred, retried[pred.flow_id]))
+                    continue
                 feat_json = json.dumps(pred.raw_features)
                 alert_rec = created_alert_records.get(pred.flow_id)
                 alert_id = alert_rec.alert_id if alert_rec else None
@@ -550,6 +599,94 @@ class AlertStore:
                 "reviewer_id": row["reviewer_id"],
                 "created_at": row["created_at"],
             }
+
+    def record_shadow(self, production_version: str, report: dict) -> list[dict]:
+        """Append shadow evidence only after live predictions commit; first result wins."""
+        results = []
+        with self.connection(write=True) as db:
+            for result in report["results"]:
+                db.execute(
+                    "INSERT INTO shadow_predictions(flow_id, production_bundle_version, "
+                    "shadow_bundle_version, manifest_sha256, status, payload, created_at) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT "
+                    "(flow_id, production_bundle_version, manifest_sha256) DO NOTHING",
+                    (
+                        result["flow_id"],
+                        production_version,
+                        report["bundle_version"],
+                        report["manifest_sha256"],
+                        result["status"],
+                        json.dumps(result, allow_nan=False),
+                        now(),
+                    ),
+                )
+                row = db.execute(
+                    "SELECT payload FROM shadow_predictions WHERE flow_id = ? "
+                    "AND production_bundle_version = ? AND manifest_sha256 = ?",
+                    (result["flow_id"], production_version, report["manifest_sha256"]),
+                ).fetchone()
+                results.append(json.loads(row["payload"]))
+        return results
+
+    def list_shadow(self, production_version: str, manifest_sha256: str, query: PageQuery) -> dict:
+        with self.connection() as db:
+            rows = db.execute(
+                "SELECT s.sequence, s.payload, s.created_at, p.decision AS live_decision "
+                "FROM shadow_predictions s JOIN prediction_log p ON s.flow_id = p.flow_id "
+                "AND s.production_bundle_version = p.bundle_version "
+                "WHERE s.production_bundle_version = ? AND s.manifest_sha256 = ? "
+                "AND s.sequence > ? ORDER BY s.sequence LIMIT ?",
+                (production_version, manifest_sha256, query.after, query.limit + 1),
+            ).fetchall()
+        items = [
+            {
+                **json.loads(row["payload"]),
+                "sequence": row["sequence"],
+                "created_at": row["created_at"],
+                "live_decision": row["live_decision"],
+            }
+            for row in rows[: query.limit]
+        ]
+        return {
+            "items": items,
+            "next_after": items[-1]["sequence"] if len(rows) > query.limit else None,
+        }
+
+    def shadow_counts(self, production_version: str, manifest_sha256: str) -> list[dict]:
+        with self.connection() as db:
+            rows = db.execute(
+                """
+                SELECT s.status, p.decision AS live,
+                    json_extract(s.payload, '$.reference_decision') AS reference,
+                    json_extract(s.payload, '$.decision') AS candidate,
+                    t.label, t.attack_cat, COUNT(*) AS n
+                FROM prediction_log p
+                LEFT JOIN shadow_predictions s ON s.flow_id = p.flow_id
+                    AND s.production_bundle_version = p.bundle_version
+                    AND s.manifest_sha256 = ?
+                LEFT JOIN replay_truth t ON t.flow_id = p.flow_id
+                WHERE p.bundle_version = ?
+                GROUP BY s.status, live, reference, candidate, t.label, t.attack_cat
+                """,
+                (manifest_sha256, production_version),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def get_policy_counts(self, bundle_version: str, threshold: float) -> list[dict[str, Any]]:
+        """Aggregate a single consistent replay snapshot without loading raw features."""
+        with self.connection() as db:
+            rows = db.execute(
+                """
+                SELECT t.label, t.attack_cat, p.decision AS baseline,
+                       (p.score >= ?) AS candidate, COUNT(*) AS n,
+                       MAX(p.sequence) AS last_sequence
+                FROM prediction_log p LEFT JOIN replay_truth t ON p.flow_id = t.flow_id
+                WHERE p.bundle_version = ?
+                GROUP BY t.label, t.attack_cat, p.decision, candidate
+                """,
+                (threshold, bundle_version),
+            ).fetchall()
+        return [dict(row) for row in rows]
 
     def get_replay_summary(self) -> dict[str, Any]:
         """Compute empirical replay confusion matrix and FPR vs replay_truth."""

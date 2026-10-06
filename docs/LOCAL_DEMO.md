@@ -1,6 +1,6 @@
 # Local LightGBM demo
 
-This demo serves the existing LightGBM release. Research fusion models are not yet integrated.
+This demo serves the existing LightGBM release. Selective fusion can run alongside it in opt-in [shadow mode](SHADOW_FUSION.md); live alerts remain LightGBM-only.
 Run commands from the repository root unless a command changes directories.
 
 Nexus consists of three operational components:
@@ -213,3 +213,57 @@ with `NEXUS_BUNDLE_VERSION=v1.0.0` and the same API token as the frontend, follo
 Step 3. For the presentation, use `/traffic` → mixed preset → Run Detection, then
 open a resulting alert. The website probe includes estimated/fixed inputs and is
 not a validated website security assessment.
+
+## Policy Lab: demonstrate detection benefit versus analyst cost
+
+Open **/policy** after starting the API and UI. The lab reads predictions and
+separately recorded dataset truth for the serving bundle. The mixed CSV UI preset
+alone does not record truth. For a labeled historical demonstration, run from the
+repository root with the same token as the backend:
+
+```sh
+.venv/bin/python -m nexus.replay \
+  --csv 'data/raw/CSV_Files/Training and Testing Sets/UNSW_NB15_training-set.csv' \
+  --split-file models/lightgbm_validated_v1/split_indices.npz \
+  --split selection --limit 500 --rate 50 \
+  --url http://127.0.0.1:8000 --token "$NEXUS_API_TOKEN" \
+  --db /tmp/nexus-unused-replay-truth.sqlite3
+```
+
+The CSV above is explicit so the existing adapter applies its selection indices
+to the 175,341-row training file. It still uses a row-count heuristic rather than
+a dataset hash check; this is historical demonstration evidence, not a new
+independent evaluation. The `--db` path must not exist: this makes the adapter
+submit truth via the authenticated API, avoiding accidental writes to a different
+local database. No database at that path needs to be created.
+
+1. Click **Refresh replay**. Check labeled and unlabeled counts.
+2. Reset to the release threshold: hypothetical and recorded decisions should agree.
+3. Lower the threshold: show recovered attacks alongside added false alerts.
+4. Raise it: show lost detections and false alerts removed.
+5. Inspect family coverage and lower assumed attack prevalence to illustrate
+   why benchmark precision does not imply a manageable production alert queue.
+6. Export evidence JSON and identify its bundle, threshold and cohort watermark.
+
+All saved replay runs for the selected bundle contribute; repeated CLI executions
+create new flow IDs. Use a fresh `NEXUS_DATABASE_PATH` when you need one isolated
+presentation cohort. The lab does not deploy a threshold or execute fusion.
+See [the roadmap and rubric walkthrough](PROJECT_ROADMAP.md) for the novelty pitch,
+research caveats and next model/backend/system improvements.
+
+### Policy Lab verification — 2026-10-06
+
+- Full backend/research regression suite: **253 passed** (14 dependency/training warnings).
+- Real-model integration: 100 mixed preset flows scored through the API, retried
+  with identical results and no extra alerts/predictions, joined to separate truth,
+  and compared in the lab. Release-threshold metrics match recorded decisions;
+  threshold zero alerts on all labeled rows.
+- Counterfactual tests cover bundle isolation, absent labels/denominators, exact
+  threshold equality, family counts, recovered/lost detections, false-alert cost,
+  authentication and invalid/duplicate queries.
+- Production frontend build (webpack), TypeScript, changed-file ESLint, and
+  changed-file Python lint/format checks pass. Browser interaction was not automated.
+- Repository-wide Python lint/format checks still flag pre-existing issues in
+  unrelated probe and historical test files.
+- Fixed the research reuse regression by preserving the frozen split archive's
+  bytes; the suite verifies identical split artifacts and metrics across reuse.

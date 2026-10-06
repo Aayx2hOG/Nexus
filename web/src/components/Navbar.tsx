@@ -10,13 +10,15 @@ export function Navbar() {
     { href: "/alerts", label: "Alerts" },
     { href: "/traffic", label: "Traffic & Ingestion" },
     { href: "/review-sample", label: "Missed Attack Review" },
+    { href: "/shadow", label: "Shadow Fusion" },
+    { href: "/policy", label: "Policy Lab" },
     { href: "/model", label: "Model & Manifest" },
   ];
 
   return (
     <header className="bg-[#13151A] border-b border-[#282C35] sticky top-0 z-30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-        <div className="flex items-center space-x-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-14 flex items-center justify-between">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 py-2 min-w-0">
           <Link href="/alerts" className="flex items-center space-x-2">
             <div className="w-7 h-7 bg-[#282C35] text-[#F1F3F6] border border-[#3B414E] rounded-sm flex items-center justify-center font-bold text-xs">
               N
@@ -31,7 +33,7 @@ export function Navbar() {
             </div>
           </Link>
 
-          <nav className="flex items-center space-x-1">
+          <nav className="flex flex-wrap items-center gap-1" aria-label="Main navigation">
             {navLinks.map((link) => {
               const active = pathname.startsWith(link.href);
               return (
