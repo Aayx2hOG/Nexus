@@ -11,7 +11,6 @@ export function Navbar() {
     { href: "/traffic", label: "Traffic & Ingestion" },
     { href: "/review-sample", label: "Missed Attack Review" },
     { href: "/shadow", label: "Shadow Fusion" },
-    { href: "/policy", label: "Policy Lab" },
     { href: "/model", label: "Model & Manifest" },
   ];
 

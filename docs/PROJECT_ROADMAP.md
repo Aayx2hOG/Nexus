@@ -6,20 +6,19 @@ LightGBM with explanations, durable alerts, analyst feedback and non-alert revie
 Selective anomaly-assisted recovery now has opt-in [shadow serving](SHADOW_FUSION.md);
 independent confirmation and production promotion remain pending.
 
-This update adds a read-only **Policy Lab** at `/policy`: hypothetical threshold
-comparison on actual persisted scores, recovered/lost attack counts, gross
-added/removed false positives, family coverage, label coverage, a prevalence
-workload illustration and downloadable JSON evidence. It isolates one model
-bundle and leaves operational thresholds unchanged. It also fixes prediction
-retries creating duplicate alerts and rejects changed inputs under an existing
-flow/bundle identity. Research artifact reuse now copies the original split archive
-so file-hash provenance remains stable. No benchmark detector was retrained or promoted.
+The product uses a frozen release threshold and a frozen Shadow Fusion recovery
+policy; operators do not tune thresholds in the dashboard. Operational alerts
+remain driven by the serving model, while Shadow Fusion reports observational
+recovery evidence. Prediction retries do not create duplicate alerts and changed
+inputs are rejected under an existing flow/bundle identity. Research artifact
+reuse copies the original split archive so file-hash provenance remains stable.
+No benchmark detector was retrained or promoted.
 
 ## What is differentiated, and what is not
 
 | Comparison | Defensible edge | Evidence boundary |
 | --- | --- | --- |
-| A classifier accuracy dashboard | Explain decisions, audit non-alerts, expose detection regressions and gross false-alert cost, and export replay evidence | The lab is threshold simulation, not the fusion algorithm |
+| A classifier accuracy dashboard | Explain decisions, audit non-alerts, expose detection regressions and gross false-alert cost, and export replay evidence | Metrics are historical evidence, not an operator threshold control |
 | LightGBM alone | Offline selective fusion can recover additional attacks while preserving every baseline alert by construction | Strongest for withheld Exploits; improvement is small elsewhere and variable across seeds |
 | Naive detector OR | Explicit accounting of the combined false-alert budget and preserved baseline detections | Calibration budgets do not guarantee future/evaluation FPR |
 | Established IDS platforms | Potential complementary flow-scoring and recovery layer with reproducible paired experiments | No same-traffic signature-IDS benchmark establishes superiority |
@@ -87,7 +86,7 @@ and notification outbox → analyst API/dashboard/SIEM. A separate offline path
 curates labels, trains candidates, checks evaluation gates and supports human
 promotion/rollback. Training never belongs in the prediction request path.
 
-The current Policy Lab aggregates all rows for one bundle in SQL. Large deployments
+The current evidence view aggregates all rows for one bundle in SQL. Large deployments
 will need run/time filters, a bundle-oriented index and cached cohort aggregates.
 `last_sequence` is a useful prediction watermark, not an immutable snapshot ID;
 late truth labels can change the same cohort's metrics. Exported JSON records the
@@ -100,13 +99,13 @@ aggregate evidence at the moment of export.
 | 0:00–0:45 | Readiness, bundle version, problem: recover misses without flooding analysts | Problem fit & coverage (15) |
 | 0:45–2:15 | Submit actual CSV flows, open a persisted alert, explain signed TreeSHAP contributions | Working demonstration (25) |
 | 2:15–3:00 | Submit analyst feedback and inspect a non-alert flow | Demonstration depth (15) |
-| 3:00–4:30 | Policy Lab: baseline threshold, lower threshold, recovered attacks vs extra FPs, family coverage, prevalence slider, JSON export | Working demonstration and depth (40 combined) |
+| 3:00–4:30 | Shadow Fusion: fixed policy, recovered attacks vs extra FPs, family coverage, parity evidence | Working demonstration and depth (40 combined) |
 | 4:30–5:30 | Offline selective-fusion evidence, preserved detections, one mixed/negative outcome | Technical implementation (20) |
 | 5:30–6:30 | Walk code: inference, transaction retry handling, policy aggregation and regression tests | Technical implementation (20) |
 | 6:30–7:15 | Shadow integration and measured scaling plan; name current limits | Product potential & scalability (15) |
 | 7:15–8:00 | Each teammate explains their actual contribution and answers one question in their area | Team effort & clarity (10) |
 
 Use real contribution history for team ownership; do not invent assignments.
-Rehearse backend failure and missing-data states. The Policy Lab should show
+Rehearse backend failure and missing-data states. Shadow Fusion should show
 “unavailable” for undefined rates rather than a misleading zero. Live website
 probes estimate/fix some flow inputs; use dataset flows as the reliable model demo.

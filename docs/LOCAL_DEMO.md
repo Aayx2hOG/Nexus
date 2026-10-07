@@ -214,11 +214,11 @@ Step 3. For the presentation, use `/traffic` → mixed preset → Run Detection,
 open a resulting alert. The website probe includes estimated/fixed inputs and is
 not a validated website security assessment.
 
-## Policy Lab: demonstrate detection benefit versus analyst cost
-
-Open **/policy** after starting the API and UI. The lab reads predictions and
-separately recorded dataset truth for the serving bundle. The mixed CSV UI preset
-alone does not record truth. For a labeled historical demonstration, run from the
+The product uses the frozen release threshold and frozen Shadow Fusion recovery
+policy; users do not tune thresholds in the dashboard. The former Policy Lab was
+an internal, read-only threshold simulator and has been removed from the product
+UI to avoid suggesting that operators need to calibrate the model themselves.
+For a labeled historical demonstration of the fixed policy, run from the
 repository root with the same token as the backend:
 
 ```sh
@@ -237,27 +237,19 @@ independent evaluation. The `--db` path must not exist: this makes the adapter
 submit truth via the authenticated API, avoiding accidental writes to a different
 local database. No database at that path needs to be created.
 
-1. Click **Refresh replay**. Check labeled and unlabeled counts.
-2. Reset to the release threshold: hypothetical and recorded decisions should agree.
-3. Lower the threshold: show recovered attacks alongside added false alerts.
-4. Raise it: show lost detections and false alerts removed.
-5. Inspect family coverage and lower assumed attack prevalence to illustrate
-   why benchmark precision does not imply a manageable production alert queue.
-6. Export evidence JSON and identify its bundle, threshold and cohort watermark.
+Inspect **/shadow** after the replay and compare the fixed candidate with the
+research baseline and live release. All saved replay runs for the selected bundle
+contribute; repeated CLI executions create new flow IDs. Use a fresh
+`NEXUS_DATABASE_PATH` when you need one isolated presentation cohort. See
+[the roadmap and rubric walkthrough](PROJECT_ROADMAP.md) for research caveats and
+next model/backend/system improvements.
 
-All saved replay runs for the selected bundle contribute; repeated CLI executions
-create new flow IDs. Use a fresh `NEXUS_DATABASE_PATH` when you need one isolated
-presentation cohort. The lab does not deploy a threshold or execute fusion.
-See [the roadmap and rubric walkthrough](PROJECT_ROADMAP.md) for the novelty pitch,
-research caveats and next model/backend/system improvements.
-
-### Policy Lab verification — 2026-10-06
+### Fixed-policy verification — 2026-10-06
 
 - Full backend/research regression suite: **253 passed** (14 dependency/training warnings).
 - Real-model integration: 100 mixed preset flows scored through the API, retried
-  with identical results and no extra alerts/predictions, joined to separate truth,
-  and compared in the lab. Release-threshold metrics match recorded decisions;
-  threshold zero alerts on all labeled rows.
+  with identical results and no extra alerts/predictions, then joined to separate
+  truth and compared in Shadow Fusion evidence.
 - Counterfactual tests cover bundle isolation, absent labels/denominators, exact
   threshold equality, family counts, recovered/lost detections, false-alert cost,
   authentication and invalid/duplicate queries.

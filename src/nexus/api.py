@@ -49,7 +49,7 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
     app.state.store = store
     app.add_middleware(StrictRequests, limits=limits or RequestLimits())
     register_error_handlers(app)
-    from nexus import live_probe, policy, shadow_routes, traffic_presets
+    from nexus import live_probe, shadow_routes, traffic_presets
 
     for router in (
         routes.health,
@@ -58,7 +58,6 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
         routes.predictions,
         routes.stats,
         routes.replay,
-        policy.router,
         shadow_routes.router,
         traffic_presets.router,
         live_probe.router,

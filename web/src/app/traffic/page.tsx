@@ -7,6 +7,7 @@ import {
   fetchPresetData,
   submitBatchPredictions,
   fetchModelSummary,
+  fetchShadowSummary,
   liveProbe,
 } from "@/lib/api";
 import { parseCSVText, chunkFlows, ParsedFlow } from "@/lib/csv";
@@ -41,6 +42,11 @@ export default function TrafficPage() {
   const { data: model } = useQuery({
     queryKey: ["modelSummary"],
     queryFn: fetchModelSummary,
+  });
+  const { data: shadow, isLoading: isShadowLoading } = useQuery({
+    queryKey: ["shadow"],
+    queryFn: fetchShadowSummary,
+    retry: false,
   });
 
   // --- CSV Ingestion State ---
@@ -198,6 +204,7 @@ export default function TrafficPage() {
     if (filterVerdict === "normal") return r.decision === "normal";
     return true;
   });
+  const shadowReady = shadow?.status === "ready";
 
   return (
     <div className="space-y-6">
@@ -246,6 +253,53 @@ export default function TrafficPage() {
       {/* ============================================================== */}
       {activeTab === "csv" && (
         <div className="space-y-6">
+          <div className={`border rounded-sm p-4 ${
+            shadowReady
+              ? "bg-[#064E3B]/15 border-[#34D399]/40"
+              : "bg-[#13151A] border-[#282C35]"
+          }`}>
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className={`mt-0.5 w-2 h-2 rounded-full shrink-0 ${
+                  shadowReady ? "bg-[#34D399]" : "bg-[#FBBF24]"
+                }`} />
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
+                      Detection mode
+                    </h2>
+                    <span className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded-sm border ${
+                      shadowReady
+                        ? "text-[#34D399] border-[#34D399]/40 bg-[#064E3B]/20"
+                        : "text-[#FBBF24] border-[#FBBF24]/40 bg-[#78350F]/20"
+                    }`}>
+                      {isShadowLoading ? "Checking..." : shadowReady ? "Fusion enabled" : "LightGBM only"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#D1D5DB] mt-1">
+                    {isShadowLoading
+                      ? "Checking whether the frozen Shadow Fusion bundle is available."
+                      : shadowReady
+                        ? "CSV flows are scored by live LightGBM and the frozen Shadow Fusion candidate."
+                        : "CSV flows are scored by live LightGBM. Shadow Fusion is not available for this session."}
+                  </p>
+                  <p className="text-[11px] text-[#939AA6] mt-1">
+                    {shadowReady
+                      ? "LightGBM creates operational alerts; Shadow Fusion is observational and never changes live alerts."
+                      : "Start the backend with NEXUS_SHADOW_BUNDLE_DIR to enable the additional shadow score."}
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/shadow"
+                className="shrink-0 inline-flex items-center gap-1.5 text-xs text-[#34D399] hover:text-white underline"
+              >
+                View Shadow Fusion evidence
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+
           {/* Ingestion Control Box */}
           <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -579,6 +633,28 @@ export default function TrafficPage() {
       {/* TAB 2: Live Website Probe (REAL HTTP CONNECTION)               */}
       {/* ============================================================== */}
       {activeTab === "probe" && (
+        <>
+        <div className="mb-6 bg-[#13151A] border border-[#282C35] rounded-sm p-4">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 w-2 h-2 rounded-full bg-[#60A5FA] shrink-0" />
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
+                  Detection mode
+                </h2>
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-sm border text-[#60A5FA] border-[#60A5FA]/40 bg-[#1E3A8A]/20">
+                  LightGBM only
+                </span>
+              </div>
+              <p className="text-xs text-[#D1D5DB] mt-1">
+                Website probe traffic uses the live LightGBM model and does not run Shadow Fusion.
+              </p>
+              <p className="text-[11px] text-[#939AA6] mt-1">
+                Use CSV Flow Ingestion to send flows through both models when Shadow Fusion is enabled.
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Probe Configuration */}
           <div className="lg:col-span-5 space-y-5">
@@ -961,6 +1037,7 @@ export default function TrafficPage() {
             )}
           </div>
         </div>
+        </>
       )}
     </div>
   );

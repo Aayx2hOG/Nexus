@@ -17,7 +17,7 @@ experiments and the frontend.
 | Document | Purpose |
 | --- | --- |
 | [Current model and cleanup status](MODEL_IMPROVEMENT_STATUS.md) | Serving checkpoint, selection metrics and candidate outcomes |
-| [Project roadmap](PROJECT_ROADMAP.md) | Current research evidence, Policy Lab status and next improvements |
+| [Project roadmap](PROJECT_ROADMAP.md) | Current research evidence and next improvements |
 | [Current model assessment](../reports/current_model_assessment.md) | Multi-seed evaluation, limitations and evidence boundaries |
 | [Experiment guide](../training/FUSION_EXPERIMENTS.md) | Reproduce fusion training, calibration and evaluation |
 

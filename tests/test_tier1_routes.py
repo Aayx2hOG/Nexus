@@ -241,8 +241,8 @@ def test_api_scores_match_frozen_winner_for_submitted_values(auth_client):
             assert alert["predicted_class"] == "Attack"
 
 
-def test_real_model_policy_lab_and_prediction_retry(loaded_app):
-    """Real preset -> inference -> persistence -> truth join -> counterfactuals."""
+def test_real_model_prediction_retry(loaded_app):
+    """Real preset -> inference -> persistence -> idempotent retry."""
     from nexus.replay import row_to_flow
 
     client, app = loaded_app
@@ -261,27 +261,3 @@ def test_real_model_policy_lab_and_prediction_retry(loaded_app):
     with app.state.store.connection() as db:
         assert db.execute("SELECT COUNT(*) FROM prediction_log").fetchone()[0] == len(rows)
         assert db.execute("SELECT COUNT(*) FROM alerts").fetchone()[0] == original["alert_count"]
-    truth = {
-        "items": [
-            {"flow_id": flow["flow_id"], "label": row["label"], "attack_cat": row["attack_cat"]}
-            for flow, row in zip(flows, rows, strict=True)
-        ]
-    }
-    assert client.post("/api/v1/replay/truth", json=truth).status_code == 200
-    query = {
-        "bundle_version": original["bundle_version"],
-        "threshold": original["predictions"][0]["threshold"],
-    }
-    report = client.get("/api/v1/replay/policy", params=query)
-    assert report.status_code == 200
-    evidence = report.json()
-    assert evidence["baseline"] == evidence["candidate"]
-    assert evidence["labeled_predictions"] == len(rows)
-    assert evidence["recovered_attacks"] == evidence["lost_attacks"] == 0
-    query["threshold"] = 0
-    all_alerts = client.get("/api/v1/replay/policy", params=query).json()
-    assert all_alerts["candidate"]["alert_count"] == len(rows)
-    assert all_alerts["candidate"]["recall"] == 1
-    assert all_alerts["candidate"]["false_positive_rate"] == 1
-    assert all_alerts["recovered_attacks"] == evidence["baseline"]["false_negatives"]
-    assert all_alerts["added_false_positives"] == evidence["baseline"]["true_negatives"]

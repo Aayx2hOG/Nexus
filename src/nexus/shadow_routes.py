@@ -5,12 +5,24 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query, Request
 
 from nexus.alerts import PageQuery
-from nexus.policy import metrics
 from nexus.routes import Store, no_query, require_analyst
 
 router = APIRouter(
     prefix="/api/v1/shadow", tags=["shadow"], dependencies=[Depends(require_analyst)]
 )
+
+
+def metrics(tn: int, fp: int, fn: int, tp: int) -> dict:
+    return {
+        "true_negatives": tn,
+        "false_positives": fp,
+        "false_negatives": fn,
+        "true_positives": tp,
+        "recall": tp / (tp + fn) if tp + fn else None,
+        "precision": tp / (tp + fp) if tp + fp else None,
+        "false_positive_rate": fp / (tn + fp) if tn + fp else None,
+        "alert_count": tp + fp,
+    }
 
 
 def summarize(rows: list[dict]) -> dict:

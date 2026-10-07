@@ -672,22 +672,6 @@ class AlertStore:
             ).fetchall()
         return [dict(row) for row in rows]
 
-    def get_policy_counts(self, bundle_version: str, threshold: float) -> list[dict[str, Any]]:
-        """Aggregate a single consistent replay snapshot without loading raw features."""
-        with self.connection() as db:
-            rows = db.execute(
-                """
-                SELECT t.label, t.attack_cat, p.decision AS baseline,
-                       (p.score >= ?) AS candidate, COUNT(*) AS n,
-                       MAX(p.sequence) AS last_sequence
-                FROM prediction_log p LEFT JOIN replay_truth t ON p.flow_id = t.flow_id
-                WHERE p.bundle_version = ?
-                GROUP BY t.label, t.attack_cat, p.decision, candidate
-                """,
-                (threshold, bundle_version),
-            ).fetchall()
-        return [dict(row) for row in rows]
-
     def get_replay_summary(self) -> dict[str, Any]:
         """Compute empirical replay confusion matrix and FPR vs replay_truth."""
         with self.connection() as db:

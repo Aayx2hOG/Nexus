@@ -68,23 +68,6 @@ The server records reviewer identity from configuration, the creation timestamp,
 - [SQLite connections and transaction control](https://docs.python.org/3/library/sqlite3.html)
 - [Pydantic model configuration](https://docs.pydantic.dev/latest/api/config/)
 
-## Replay policy comparison
-
-`GET /api/v1/replay/policy?bundle_version=v1.0.0&threshold=0.5`
-
-Requires the analyst bearer token. Both query parameters are required:
-`bundle_version` is 1–128 characters; `threshold` must be finite and in [0, 1].
-Duplicate or unknown parameters are rejected. Decisions use `score >= threshold`,
-matching serving. The endpoint is read-only and does not require loading a model.
-
-Returns recorded-baseline and hypothetical confusion counts, recall, precision,
-FPR and alert counts; recovered/lost attacks; gross added/removed false positives;
-attack-family coverage; labeled/unlabeled counts; and a prediction sequence watermark.
-Undefined rates are JSON null. Only rows with replay truth contribute to metrics;
-all rows for the requested bundle contribute to coverage counts. Family names are
-dataset truth, never predicted attack types. No rows returns an empty report.
-
-This is exploratory historical replay, not release calibration or fusion inference.
 Prediction retry semantics: an identical flow/bundle retry returns the original
 alert without adding alerts or predictions. Changed features, event timestamp,
 threshold, decision or materially changed score produce 409. Existing duplicates

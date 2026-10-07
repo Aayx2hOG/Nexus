@@ -164,26 +164,11 @@ export async function liveProbe(payload: {
   });
 }
 
-export type PolicyMetrics = {
+type PolicyMetrics = {
   true_negatives: number; false_positives: number; false_negatives: number;
   true_positives: number; recall: number | null; precision: number | null;
   false_positive_rate: number | null; alert_count: number;
 };
-export type PolicyReport = {
-  bundle_version: string; threshold: number; total_predictions: number;
-  labeled_predictions: number; unlabeled_predictions: number; last_sequence: number;
-  baseline: PolicyMetrics; candidate: PolicyMetrics;
-  recovered_attacks: number; lost_attacks: number;
-  added_false_positives: number; removed_false_positives: number;
-  families: { family: string; total: number; baseline_detected: number; candidate_detected: number }[];
-  note: string;
-};
-export function fetchPolicyReport(bundle: string, threshold: number): Promise<PolicyReport> {
-  return request<PolicyReport>(`replay/policy?${new URLSearchParams({
-    bundle_version: bundle, threshold: String(threshold),
-  })}`);
-}
-
 export type ShadowSummary = {
   status: "disabled" | "unavailable" | "ready";
   mode: "shadow"; error_code: string | null;

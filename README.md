@@ -27,7 +27,7 @@ training, report, experiment and frontend guides.
 | [Training workflows](training/README.md) | Active entry points and historical-code boundaries |
 | [Shadow fusion](docs/SHADOW_FUSION.md) | Frozen candidate export, parity, activation and evidence |
 | [Local demo](docs/LOCAL_DEMO.md) | Backend, frontend and historical dataset replay |
-| [Demo edge and improvement roadmap](docs/PROJECT_ROADMAP.md) | Policy Lab, latest research caveats, priorities and judging walkthrough |
+| [Demo edge and improvement roadmap](docs/PROJECT_ROADMAP.md) | Latest research caveats, priorities and judging walkthrough |
 | [API contract](docs/api.md) | Prediction, alert and analyst-feedback endpoints |
 
 ## Teacher demonstration: main model and shadow fusion
