@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Binary only",
+    "tn": 30665,
+    "fp": 6335,
+    "fn": 1570,
+    "tp": 43762,
+    "recall": 0.9653666284302479,
+    "fpr": 0.17121621621621622,
+    "precision": 0.8735453220751742,
+    "f1": 0.9171635456726991,
+    "accuracy": 0.9039862993732692
+  },
+  {
+    "name": "Fixed four-mode",
+    "tn": 32585,
+    "fp": 4415,
+    "fn": 7507,
+    "tp": 37825,
+    "recall": 0.8343995411629754,
+    "fpr": 0.11932432432432433,
+    "precision": 0.8954782196969697,
+    "f1": 0.8638605947106381,
+    "accuracy": 0.855196035563329,
+    "recovered_attacks": 558,
+    "lost_attacks": 6495,
+    "removed_false_alarms": 4284,
+    "added_false_alarms": 2364
+  },
+  {
+    "name": "Selected four-mode",
+    "tn": 30547,
+    "fp": 6453,
+    "fn": 1570,
+    "tp": 43762,
+    "recall": 0.9653666284302479,
+    "fpr": 0.17440540540540542,
+    "precision": 0.8714925818978393,
+    "f1": 0.9160308539252933,
+    "accuracy": 0.9025530777826362,
+    "recovered_attacks": 0,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 118
+  }
+]

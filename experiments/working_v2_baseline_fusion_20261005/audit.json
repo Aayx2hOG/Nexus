@@ -1,0 +1,13 @@
+{
+  "lightgbm_hash_verified": true,
+  "historical_lightgbm_matrix_reproduced": true,
+  "grouped_partitions_verified": true,
+  "official_test_overlap_rows": 8541,
+  "lightgbm_threshold": 0.5776925765603604,
+  "limitations": [
+    "Official test and selection set previously used in development; no fresh holdout claim.",
+    "AE architecture matches script defaults; historical config unavailable.",
+    "Normal-only preprocessing refitted to avoid fitting on calibration/selection rows.",
+    "Single seed; empirical recall constraint, not a confidence bound."
+  ]
+}

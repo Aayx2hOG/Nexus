@@ -1,0 +1,9 @@
+{
+  "format_version": 1,
+  "model_id": "uncertainty_band_ae10",
+  "sha256": {
+    "config.json": "7e55ac65f86bf24bd50dcfa8e53a659eba1ebe3f6d669f99d444542612dfee62",
+    "weights.joblib": "e640d10ceec753561316998f5c18d2fd97477372b4d9746ca82cd8bac2a99c9a",
+    "metrics.json": "855ec7f25fcd4d2c366e12cb1aec7267c6e8104f85673abe34ed87f739e9355a"
+  }
+}

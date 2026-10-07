@@ -1,34 +1,50 @@
-# Model research
+# Final-model training pipeline
 
-The active workflow keeps LightGBM as the supervised baseline and measures the
-incremental value of anomaly-assisted recovery.
+The active directory contains the scripts and dependencies used to create and verify the final **LightGBM + baseline AE** packages. Exact settings are in [configs.md](configs.md); model usage and results are in [working_v2.md](../working_v2.md).
 
-| Workflow | Entry point | Instructions |
-| --- | --- | --- |
-| Controlled model/fusion experiments | `run_novelty_experiment.py` | [Complete command guide](FUSION_EXPERIMENTS.md) |
-| Aggregate CSVs, seed statistics, six plots | `summarize_anomaly_results.py` | [Reporting commands](FUSION_EXPERIMENTS.md#aggregate-csvs-and-statistical-summaries) |
-| Frozen binary checkpoint training/evaluation | `train_validated_lightgbm.py`, `evaluate_frozen_lightgbm.py` | [Validated training](VALIDATED_TRAINING.md) |
-| Release export for the existing app | `export_release_bundle.py` | [Local demo](../docs/LOCAL_DEMO.md) |
+## Pipeline
 
-Preprocessing runs inside the current experiment workflow on isolated fitting
-rows. No separate whole-dataset preprocessing is required. Keep outputs under
-Git-ignored `artifacts/`; every run must use a new directory. Model fitting,
-calibration and evaluation run in the foreground with visible progress.
+1. `train_validated_lightgbm.py` selects the binary LightGBM configuration.
+2. `experiment_four_mode_ae.py` retrains that binary configuration and a normal-only baseline AE using `train_autoencoder.py`.
+3. `experiment_confidence_ae.py` and `experiment_uncertainty_residuals.py` produce confidence cutoffs, the uncertainty interval and cached features.
+4. `experiment_ae_fpr_sweep.py` calibrates AE 5%/10% FPR cutoffs and evaluates the rules.
+5. `export_selected_fusion_models.py` packages the selected configurations and verifies every official-test prediction.
 
-See the [current assessment](../reports/current_model_assessment.md) for the
-eight-seed results and limitations. The optional attack-type classifier is a
-conditional offline diagnostic, not a complete unknown-attack classifier.
+The scripts preserve their historical artifact paths. Existing output directories are not overwritten. Consult each script’s `--help` where supported and the provenance notes in configs.md before starting a new run; do not run the exporter again over the existing selected packages.
 
-## Historical code
+## Retained Python files
 
-Older training, tuning, preprocessing and official-test scripts remain for
-reproduction and compatibility. The frozen validated runner imports some of
-these helpers and records source hashes, so removing them would break existing
-experiments. They are not the recommended entry point for new fusion research.
-Use each script's `--help` and its existing frozen manifest when reproducing a run.
+| File | Why it remains |
+|---|---|
+| [anomaly_detection_models.py](anomaly_detection_models.py) | Conservative FPR cutoff helper and imported seed42 classes used by the final sweep. |
+| [compare_lightgbm.py](compare_lightgbm.py) | Shared LightGBM training/refit helpers imported by validated training. |
+| [compare_working_v2_fusion.py](compare_working_v2_fusion.py) | Provides metrics used throughout the retained final-fusion scripts. |
+| [evaluate_frozen_lightgbm.py](evaluate_frozen_lightgbm.py) | Validates frozen LightGBM artifacts; covered by the active validated-training tests. |
+| [evaluate_imported_seed42_test.py](evaluate_imported_seed42_test.py) | Provides imported_scores used by the sweep to reproduce the seed42 comparison. |
+| [experiment_ae_fpr_sweep.py](experiment_ae_fpr_sweep.py) | Calibrated the final 5%/10% AE boundaries and evaluated both selected configurations. |
+| [experiment_confidence_ae.py](experiment_confidence_ae.py) | Produced the frozen confidence cutoffs used by the final mode-confidence rule. |
+| [experiment_four_mode_ae.py](experiment_four_mode_ae.py) | Actually retrained the LightGBM + baseline AE checkpoints used in both final packages. |
+| [experiment_uncertainty_residuals.py](experiment_uncertainty_residuals.py) | Produced the selected confidence band and cached features used by the final sweep. |
+| [export_release_bundle.py](export_release_bundle.py) | Existing LightGBM serving-bundle exporter, also used by active API/inference tests. |
+| [export_selected_fusion_models.py](export_selected_fusion_models.py) | Exports and verifies the two final self-contained model packages. |
+| [fast_lightgbm_models.py](fast_lightgbm_models.py) | Fitted preprocessing/model wrappers required by training and source-model deserialization. |
+| [multiclass_training_utils.py](multiclass_training_utils.py) | Imported by shared tuning helpers; no standalone multiclass trainer is retained. |
+| [train_autoencoder.py](train_autoencoder.py) | Baseline normal-only AE fitting, scaling and reconstruction-error implementation. |
+| [train_isolation_forest.py](train_isolation_forest.py) | AE imports its operating-point calibration helper; not a selected final detector. |
+| [train_validated_lightgbm.py](train_validated_lightgbm.py) | Original binary LightGBM hyperparameter selection, grouped splits and refit. |
+| [training_utils.py](training_utils.py) | Shared data loading and binary evaluation utilities. |
+| [tune_lightgbm.py](tune_lightgbm.py) | Shared weights, thresholds, metrics and JSON helpers. |
+| [tune_lightgbm_fast.py](tune_lightgbm_fast.py) | Grouped splitting, recall calibration and candidate evaluation helpers. |
 
-Obsolete standalone official-test evaluators and threshold scripts were removed
-along with their retired model artifacts. Frozen-manifest dependencies remain.
-See [cleanup and current model status](../docs/MODEL_IMPROVEMENT_STATUS.md).
-Earlier official-test results are historical diagnostics, not independent
-confirmation of the new fusion policy.
+## Removed from active training
+
+26 unrelated research scripts and eight research-only test modules were moved to [the historical archive](../experiments/archived_training_20261007/README.md). The archive includes original paths and byte hashes, preserving existing local/staged edits. Baseline-AE and anomaly helper tests remain active; research-only cases from mixed test modules are preserved in their original archived copies.
+
+Model weights, configs, datasets, saved experiment results and application serving were not changed. `FUSION_EXPERIMENTS.md` is historical documentation. The retained dependency modules sometimes contain older optional workflows; their imported helpers are still needed, so their source is preserved.
+
+## Selective-fusion shadow dependencies
+
+Shadow serving requires `complementary_fusion.py`. The active regression suite
+also retains `run_novelty_experiment.py`, `calibration_evidence.py`,
+`fusion_ablation.py` and `summarize_anomaly_results.py` to verify the frozen
+selective policy and training reuse. Historical copies remain in the archive.

@@ -1,0 +1,71 @@
+{
+  "rows": 175341,
+  "unique_feature_rows": 101040,
+  "duplicate_rows_beyond_first": 74301,
+  "conflicting_label_groups": 1772,
+  "rows_in_conflicting_groups": 30528,
+  "conflicting_rows_by_class": {
+    "4": 13299,
+    "3": 9746,
+    "5": 2078,
+    "7": 1889,
+    "1": 1441,
+    "2": 1340,
+    "0": 396,
+    "6": 319,
+    "9": 13,
+    "8": 7
+  },
+  "grouping": "Exact predictor-row hashes; no inferred session or temporal groups.",
+  "split_class_counts": {
+    "fit": {
+      "Normal": 31861,
+      "Analysis": 1125,
+      "Backdoor": 993,
+      "DoS": 6999,
+      "Exploits": 19024,
+      "Fuzzers": 10449,
+      "Generic": 22247,
+      "Reconnaissance": 6361,
+      "Shellcode": 645,
+      "Worms": 74
+    },
+    "early": {
+      "Normal": 7944,
+      "Analysis": 303,
+      "Backdoor": 246,
+      "DoS": 1769,
+      "Exploits": 4833,
+      "Fuzzers": 2617,
+      "Generic": 5825,
+      "Reconnaissance": 1368,
+      "Shellcode": 161,
+      "Worms": 17
+    },
+    "calibration": {
+      "Normal": 8002,
+      "Analysis": 294,
+      "Backdoor": 251,
+      "DoS": 1754,
+      "Exploits": 4776,
+      "Fuzzers": 2568,
+      "Generic": 6230,
+      "Reconnaissance": 1390,
+      "Shellcode": 162,
+      "Worms": 22
+    },
+    "selection": {
+      "Normal": 8193,
+      "Analysis": 278,
+      "Backdoor": 256,
+      "DoS": 1742,
+      "Exploits": 4760,
+      "Fuzzers": 2550,
+      "Generic": 5698,
+      "Reconnaissance": 1372,
+      "Shellcode": 165,
+      "Worms": 17
+    }
+  },
+  "conflict_policy": "Keep all labels; identical predictors stay in the same partition."
+}

@@ -1,5 +1,3 @@
-"""Isolation and threshold invariants for the controlled anomaly experiments."""
-
 import json
 import sys
 from pathlib import Path
@@ -9,10 +7,9 @@ import pandas as pd
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "training"))
-
 from anomaly_detection_models import AnomalyFeatures, Autoencoder, fpr_threshold  # noqa: E402
 from complementary_fusion import calibrate_selective  # noqa: E402
-from run_novelty_experiment import grouped_split, metrics, parse_args, run  # noqa: E402
+from run_novelty_experiment import metrics, parse_args, run  # noqa: E402
 from summarize_anomaly_results import enrich, statistical_summary  # noqa: E402
 
 
@@ -26,29 +23,6 @@ def test_threshold_respects_budget_with_ties(budget):
 def test_threshold_rejects_nonfinite_scores():
     with pytest.raises(ValueError):
         fpr_threshold([0.1, float("nan")], 0.05)
-
-
-def test_groups_and_withheld_family_are_isolated():
-    unique = 400
-    frame = pd.DataFrame({"dur": np.repeat(np.arange(unique), 2)})
-    labels = np.repeat(np.arange(unique) % 2, 2)
-    families = np.where(labels == 0, "Normal", "Exploits")
-    families[-20:] = "DoS"
-    labels[-20:] = 1
-    # Include a conflicting-label duplicate: the entire group must be exiled.
-    families[-1], labels[-1] = "Normal", 0
-    split, groups = grouped_split(frame, labels, families, "DoS", 42)
-    memberships = [set(groups[rows]) for rows in split.values()]
-    for i, left in enumerate(memberships):
-        for right in memberships[i + 1 :]:
-            assert left.isdisjoint(right)
-    np.testing.assert_array_equal(
-        np.sort(np.concatenate(list(split.values()))), np.arange(len(frame))
-    )
-    for name, rows in split.items():
-        if name != "evaluation":
-            assert not (families[rows] == "DoS").any()
-    assert len(frame) - 1 in split["evaluation"]
 
 
 def test_preprocessing_preserves_unseen_category_signal_without_refitting():

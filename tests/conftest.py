@@ -104,3 +104,17 @@ def asgi_request():
         return asyncio.run(run())
 
     return request
+
+
+@pytest.fixture(scope="session")
+def v2_bundle_dir(tmp_path_factory):
+    """Export the available frozen v2 checkpoint without relying on a local release."""
+    import sys
+
+    root = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(root))
+    from training.export_release_bundle import export_bundle
+
+    bundles = tmp_path_factory.mktemp("v2-bundles")
+    export_bundle(root / "experiments/lightgbm_validated_v2", bundles, "v2.0.0")
+    return bundles

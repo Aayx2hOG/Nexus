@@ -1,0 +1,302 @@
+{
+  "format_version": 1,
+  "model_id": "mode_confidence_ae05",
+  "display_name": "Mode confidence",
+  "seed": 42,
+  "labels": {
+    "0": "normal",
+    "1": "attack"
+  },
+  "feature_columns": [
+    "dur",
+    "proto",
+    "service",
+    "state",
+    "spkts",
+    "dpkts",
+    "sbytes",
+    "dbytes",
+    "rate",
+    "sttl",
+    "dttl",
+    "sload",
+    "dload",
+    "sloss",
+    "dloss",
+    "sinpkt",
+    "dinpkt",
+    "sjit",
+    "djit",
+    "swin",
+    "stcpb",
+    "dtcpb",
+    "dwin",
+    "tcprtt",
+    "synack",
+    "ackdat",
+    "smean",
+    "dmean",
+    "trans_depth",
+    "response_body_len",
+    "ct_srv_src",
+    "ct_state_ttl",
+    "ct_dst_ltm",
+    "ct_src_dport_ltm",
+    "ct_dst_sport_ltm",
+    "ct_dst_src_ltm",
+    "is_ftp_login",
+    "ct_ftp_cmd",
+    "ct_flw_http_mthd",
+    "ct_src_ltm",
+    "ct_srv_dst",
+    "is_sm_ips_ports"
+  ],
+  "inference_batch_size": 2048,
+  "decision_rule": {
+    "kind": "mode_confidence",
+    "mode_attack_cutoffs": [
+      0.65,
+      0.5776925765603604,
+      0.5776925765603604,
+      0.5776925765603604
+    ]
+  },
+  "binary": {
+    "decision_threshold": 0.5776925765603604,
+    "parameters": {
+      "boosting_type": "gbdt",
+      "class_weight": {
+        "0": 1.5684084913955534,
+        "1": 0.7339928987960873
+      },
+      "colsample_bytree": 0.85,
+      "importance_type": "split",
+      "learning_rate": 0.03,
+      "max_depth": -1,
+      "min_child_samples": 100,
+      "min_child_weight": 0.001,
+      "min_split_gain": 0.0,
+      "n_estimators": 1318,
+      "n_jobs": 4,
+      "num_leaves": 63,
+      "objective": "binary",
+      "random_state": 42,
+      "reg_alpha": 0.0,
+      "reg_lambda": 1.0,
+      "subsample": 0.85,
+      "subsample_for_bin": 200000,
+      "subsample_freq": 1,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true,
+      "metric": "None"
+    }
+  },
+  "ae": {
+    "calibration_fpr_target": 0.05,
+    "boundaries": [
+      0.008725384250283243,
+      0.015471044927835466,
+      0.04816404730081559
+    ],
+    "mode_names": [
+      "no_anomaly",
+      "low",
+      "mid",
+      "high"
+    ],
+    "boundary_equality": "higher mode",
+    "numeric_columns": [
+      "dur",
+      "spkts",
+      "dpkts",
+      "sbytes",
+      "dbytes",
+      "rate",
+      "sttl",
+      "dttl",
+      "sload",
+      "dload",
+      "sloss",
+      "dloss",
+      "sinpkt",
+      "dinpkt",
+      "sjit",
+      "djit",
+      "swin",
+      "stcpb",
+      "dtcpb",
+      "dwin",
+      "tcprtt",
+      "synack",
+      "ackdat",
+      "smean",
+      "dmean",
+      "trans_depth",
+      "response_body_len",
+      "ct_srv_src",
+      "ct_state_ttl",
+      "ct_dst_ltm",
+      "ct_src_dport_ltm",
+      "ct_dst_sport_ltm",
+      "ct_dst_src_ltm",
+      "is_ftp_login",
+      "ct_ftp_cmd",
+      "ct_flw_http_mthd",
+      "ct_src_ltm",
+      "ct_srv_dst",
+      "is_sm_ips_ports"
+    ],
+    "categorical_columns": [
+      "proto",
+      "service",
+      "state"
+    ],
+    "error": "Mean squared reconstruction error over standardized numeric and one-hot inputs",
+    "parameters": {
+      "activation": "relu",
+      "alpha": 0.0001,
+      "batch_size": 117,
+      "beta_1": 0.9,
+      "beta_2": 0.999,
+      "early_stopping": false,
+      "epsilon": 1e-08,
+      "hidden_layer_sizes": [
+        128,
+        32,
+        128
+      ],
+      "learning_rate": "constant",
+      "learning_rate_init": 0.001,
+      "loss": "squared_error",
+      "max_fun": 15000,
+      "max_iter": 1,
+      "momentum": 0.9,
+      "n_iter_no_change": 10,
+      "nesterovs_momentum": true,
+      "power_t": 0.5,
+      "random_state": 42,
+      "shuffle": false,
+      "solver": "adam",
+      "tol": 0.0001,
+      "validation_fraction": 0.1,
+      "verbose": false,
+      "warm_start": false
+    },
+    "training": {
+      "history": [
+        {
+          "epoch": 1,
+          "normal_validation_mse": 0.17445362934550554
+        },
+        {
+          "epoch": 2,
+          "normal_validation_mse": 0.06520325450308964
+        },
+        {
+          "epoch": 3,
+          "normal_validation_mse": 0.03531468841985261
+        },
+        {
+          "epoch": 4,
+          "normal_validation_mse": 0.020881250220690203
+        },
+        {
+          "epoch": 5,
+          "normal_validation_mse": 0.014601986328805685
+        },
+        {
+          "epoch": 6,
+          "normal_validation_mse": 0.011236591045117797
+        },
+        {
+          "epoch": 7,
+          "normal_validation_mse": 0.009432359974732308
+        },
+        {
+          "epoch": 8,
+          "normal_validation_mse": 0.007459133698930389
+        },
+        {
+          "epoch": 9,
+          "normal_validation_mse": 0.006423907733146263
+        },
+        {
+          "epoch": 10,
+          "normal_validation_mse": 0.005849493802339504
+        },
+        {
+          "epoch": 11,
+          "normal_validation_mse": 0.005079270126279165
+        },
+        {
+          "epoch": 12,
+          "normal_validation_mse": 0.004971718059795772
+        },
+        {
+          "epoch": 13,
+          "normal_validation_mse": 0.00433373204636565
+        },
+        {
+          "epoch": 14,
+          "normal_validation_mse": 0.003969151002093352
+        },
+        {
+          "epoch": 15,
+          "normal_validation_mse": 0.0035679361117968967
+        },
+        {
+          "epoch": 16,
+          "normal_validation_mse": 0.0033604322516615753
+        },
+        {
+          "epoch": 17,
+          "normal_validation_mse": 0.0032178310851728076
+        },
+        {
+          "epoch": 18,
+          "normal_validation_mse": 0.0029691451488277707
+        },
+        {
+          "epoch": 19,
+          "normal_validation_mse": 0.0028100874028702118
+        },
+        {
+          "epoch": 20,
+          "normal_validation_mse": 0.00264827888956524
+        }
+      ],
+      "best_epoch": 20,
+      "normal_fit_rows": 31861,
+      "architecture": [
+        128,
+        32,
+        128
+      ]
+    },
+    "calibration": {
+      "model": "Recent AE",
+      "target": 0.05,
+      "threshold": 0.008725384250283243,
+      "normal_rows": 8002,
+      "false_positives": 400,
+      "observed_fpr": 0.04998750312421894
+    }
+  },
+  "preprocessing": "All fitted binary and AE encoders, numeric imputer/scaler are in weights.joblib",
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "scikit_learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "joblib": "1.6.0"
+  },
+  "source_experiment": "experiments/ae_fpr_5_10_20261007",
+  "source_sha256": {
+    "binary.joblib": "ac0e6d33bfba56eb610adbd5dcf58a750a10c22758ba26f851d633386205d2e2",
+    "autoencoder.joblib": "5315d021f9f17e7d4baf6a73b6276187cbe819bbb467e2107148f668f89ad8b5"
+  },
+  "score_semantics": "LightGBM attack score is not a calibrated final attack probability"
+}

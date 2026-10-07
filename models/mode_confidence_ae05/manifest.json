@@ -1,0 +1,9 @@
+{
+  "format_version": 1,
+  "model_id": "mode_confidence_ae05",
+  "sha256": {
+    "config.json": "71add817d0eb15600be5738e1d789d180088c108c90043bef1cd62190ed5ebeb",
+    "weights.joblib": "e640d10ceec753561316998f5c18d2fd97477372b4d9746ca82cd8bac2a99c9a",
+    "metrics.json": "afc3cf372c8adb4e6d801bc4185e0efd4753477841f50fde00337ed54d7ea16d"
+  }
+}

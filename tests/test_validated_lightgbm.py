@@ -13,10 +13,38 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "training"))
 
 from evaluate_frozen_lightgbm import verify_frozen  # noqa: E402
-from train_validated_lightgbm import canonical_features, evaluate, search_plan  # noqa: E402
+from train_validated_lightgbm import (  # noqa: E402
+    canonical_features,
+    evaluate,
+    load_split_indices,
+    search_plan,
+)
 from tune_lightgbm_fast import read_data  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.mark.parametrize("extracted", [False, True])
+def test_saved_splits_preserve_rows_and_reject_leakage(tmp_path, extracted):
+    split = dict(zip(("fit", "early", "calibration", "selection"),
+                     np.arange(8).reshape(4, 2), strict=True))
+    path = tmp_path / "split_indices.npz"
+    if extracted:
+        path.mkdir()
+        for part, indices in split.items():
+            np.save(path / f"{part}.npy", indices)
+    else:
+        np.savez(path, **split)
+    y = np.tile([0, 1], 4)
+    groups = np.arange(8)
+    loaded = load_split_indices(path, y, groups)
+    for part in split:
+        np.testing.assert_array_equal(loaded[part], split[part])
+    groups[2] = groups[0]
+    with pytest.raises(ValueError, match="cross partition boundaries"):
+        load_split_indices(path, y, groups)
+    with pytest.raises(ValueError, match="cover every training row"):
+        load_split_indices(path, np.r_[y, 0], np.arange(9))
 
 
 def invoke(script, *args):

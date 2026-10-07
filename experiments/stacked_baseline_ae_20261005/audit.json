@@ -1,0 +1,20 @@
+{
+  "source_hashes": {
+    "experiments/working_v2_baseline_fusion_20261005/frozen_selection.json": "715c9a28046ffa26ec6502c151479d3d41cc05f9b483b767d6b3ad7d9978fd3b",
+    "experiments/working_v2_baseline_fusion_20261005/autoencoder.joblib": "8e4522ce69bf6b27e348066541b337a083ea94c03858ab54ddbdb0bcf4d7e063",
+    "experiments/working_v2_baseline_fusion_20261005/audit.json": "51925b49044f2e1b0a77f1d41ea744c9885f86abbb2b20ceca2bf55efcd3fa59",
+    "experiments/working_v2_baseline_fusion_20261005/scores.npz": "bd47f71c2aea192e7e2adf70af2d7288a966f7e95a5c03d6692897bc481b7fc0",
+    "experiments/working_v2_baseline_fusion_20261005/official_test.csv": "bbb88f29dba2f0bd3a717da4bbca19875e211abef7c5f2d3bb82c8848dc6f2f3",
+    "experiments/working_v2_baseline_fusion_20261005/autoencoder_config.json": "db8d7c4354f0a6a9f29f832983898f4f0dda9196b80274394c04fe1379bdaf71",
+    "experiments/working_v2_baseline_fusion_20261005/selection.csv": "d15bafb13fa38c4e8e87aaeb7b48101d78ac2820454246f09d3bd18421e3046a",
+    "experiments/working_v2_baseline_fusion_20261005/REPORT.md": "2b65f41c2b69aea84f5c45a113be0ae70d390e02a28ae7eaa5e3bd17e8f191b2",
+    "training/compare_working_v2_fusion.py": "476bf36966af5ae479138e0435c73008485ca183d67a5a97f797bcc50b803878"
+  },
+  "train_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "meta_fit_rows": 13114,
+  "threshold_rows": 12335,
+  "selection_rows": 25031,
+  "grouped_splits_verified": true,
+  "selection_lightgbm_scores_reproduced": true,
+  "script_sha256": "1666b5aff07fc689fd883af9af7ce9688d43999daaf24fd1ebbeae1fde0bc8f5"
+}

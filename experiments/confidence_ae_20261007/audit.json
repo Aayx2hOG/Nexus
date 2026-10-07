@@ -1,0 +1,8 @@
+{
+  "train_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "test_sha256": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+  "overlap_rows": 8541,
+  "nonoverlap_rows": 73791,
+  "source_models_reused": true,
+  "group_disjoint_internal_splits": true
+}

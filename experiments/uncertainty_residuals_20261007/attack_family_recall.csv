@@ -1,0 +1,64 @@
+model,attack_family,rows,detected,recall
+Binary threshold,Analysis,677,649,0.9586410635155096
+Binary threshold,Backdoor,583,581,0.9965694682675815
+Binary threshold,DoS,4089,4076,0.9968207385668868
+Binary threshold,Exploits,11132,11025,0.9903880704275961
+Binary threshold,Fuzzers,6062,4599,0.7586605080831409
+Binary threshold,Generic,18871,18866,0.9997350431879604
+Binary threshold,Reconnaissance,3496,3486,0.9971395881006865
+Binary threshold,Shellcode,378,370,0.9788359788359788
+Binary threshold,Worms,44,44,1.0
+Uncertainty band,Analysis,677,650,0.9601181683899557
+Uncertainty band,Backdoor,583,581,0.9965694682675815
+Uncertainty band,DoS,4089,4075,0.9965761799951088
+Uncertainty band,Exploits,11132,11020,0.9899389148401007
+Uncertainty band,Fuzzers,6062,4629,0.7636093698449357
+Uncertainty band,Generic,18871,18866,0.9997350431879604
+Uncertainty band,Reconnaissance,3496,3486,0.9971395881006865
+Uncertainty band,Shellcode,378,371,0.9814814814814815
+Uncertainty band,Worms,44,44,1.0
+Score-only logistic,Analysis,677,652,0.9630723781388478
+Score-only logistic,Backdoor,583,582,0.9982847341337907
+Score-only logistic,DoS,4089,4080,0.9977989728539985
+Score-only logistic,Exploits,11132,11042,0.9919151994250809
+Score-only logistic,Fuzzers,6062,4806,0.7928076542395249
+Score-only logistic,Generic,18871,18868,0.9998410259127762
+Score-only logistic,Reconnaissance,3496,3488,0.9977116704805492
+Score-only logistic,Shellcode,378,371,0.9814814814814815
+Score-only logistic,Worms,44,44,1.0
+Total-error logistic,Analysis,677,650,0.9601181683899557
+Total-error logistic,Backdoor,583,581,0.9965694682675815
+Total-error logistic,DoS,4089,4076,0.9968207385668868
+Total-error logistic,Exploits,11132,11026,0.9904779015450952
+Total-error logistic,Fuzzers,6062,4596,0.7581656219069614
+Total-error logistic,Generic,18871,18866,0.9997350431879604
+Total-error logistic,Reconnaissance,3496,3486,0.9971395881006865
+Total-error logistic,Shellcode,378,370,0.9788359788359788
+Total-error logistic,Worms,44,44,1.0
+Per-feature logistic,Analysis,677,650,0.9601181683899557
+Per-feature logistic,Backdoor,583,581,0.9965694682675815
+Per-feature logistic,DoS,4089,4075,0.9965761799951088
+Per-feature logistic,Exploits,11132,11031,0.9909270571325908
+Per-feature logistic,Fuzzers,6062,5008,0.8261299901022765
+Per-feature logistic,Generic,18871,18865,0.9996820518255525
+Per-feature logistic,Reconnaissance,3496,3487,0.9974256292906178
+Per-feature logistic,Shellcode,378,371,0.9814814814814815
+Per-feature logistic,Worms,44,44,1.0
+Previous confidence rule,Analysis,677,650,0.9601181683899557
+Previous confidence rule,Backdoor,583,581,0.9965694682675815
+Previous confidence rule,DoS,4089,4075,0.9965761799951088
+Previous confidence rule,Exploits,11132,11020,0.9899389148401007
+Previous confidence rule,Fuzzers,6062,4629,0.7636093698449357
+Previous confidence rule,Generic,18871,18866,0.9997350431879604
+Previous confidence rule,Reconnaissance,3496,3486,0.9971395881006865
+Previous confidence rule,Shellcode,378,371,0.9814814814814815
+Previous confidence rule,Worms,44,44,1.0
+Current binary,Analysis,677,650,0.9601181683899557
+Current binary,Backdoor,583,581,0.9965694682675815
+Current binary,DoS,4089,4076,0.9968207385668868
+Current binary,Exploits,11132,11028,0.9906575637800934
+Current binary,Fuzzers,6062,4660,0.7687231936654569
+Current binary,Generic,18871,18866,0.9997350431879604
+Current binary,Reconnaissance,3496,3486,0.9971395881006865
+Current binary,Shellcode,378,371,0.9814814814814815
+Current binary,Worms,44,44,1.0

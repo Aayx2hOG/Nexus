@@ -1,0 +1,17 @@
+{
+  "train_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "test_sha256": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+  "same_test_labels_verified": true,
+  "thresholds_frozen_before_test": true,
+  "no_retraining": true,
+  "no_test_selection": true,
+  "rows": 82332,
+  "source_hashes": {
+    "experiments/four_mode_ae_20261007/binary.joblib": "ac0e6d33bfba56eb610adbd5dcf58a750a10c22758ba26f851d633386205d2e2",
+    "experiments/four_mode_ae_20261007/autoencoder.joblib": "5315d021f9f17e7d4baf6a73b6276187cbe819bbb467e2107148f668f89ad8b5",
+    "experiments/seed_42/seed_42/models.joblib": "6b3c7d38bed36223667849447607d764a6a7c748d667d3ee8b17658190d78d1d",
+    "experiments/uncertainty_residuals_20261007/validation_features.npz": "97fb7e7a7a7e0e96300d5f01414a80755361f2f8bbd6f3e2ccef91b157b033f1",
+    "experiments/uncertainty_residuals_20261007/test_predictions.npz": "cb7ca641feac80096ffc5387a056d4440137e01a7a5e4bd32abd989237a02c9e",
+    "experiments/seed42_official_test_20261007/test_predictions.npz": "46185e8e99df46821d1fca3bdcb30096808b1aae678c3a9c889316b29262274c"
+  }
+}

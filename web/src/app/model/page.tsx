@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 export default function ModelPage() {
-  const { data: model, isLoading: modelLoading } = useQuery({
+  const { data: model, isLoading: modelLoading, error: modelError } = useQuery({
     queryKey: ["modelSummary"],
     queryFn: fetchModelSummary,
   });
@@ -45,12 +45,18 @@ export default function ModelPage() {
         </p>
       </div>
 
+      {modelError && (
+        <div role="alert" className="border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-300">
+          Model unavailable: {modelError.message}. Start the configured Nexus backend and retry.
+        </div>
+      )}
+
       {/* Overview Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
           <div className="text-[11px] font-medium text-[#939AA6]">Model Architecture</div>
           <div className="text-sm font-semibold text-[#F1F3F6]">
-            {modelLoading ? "—" : model?.algorithm || "LightGBM Classifier"}
+            {modelLoading ? "—" : model?.algorithm || "Unavailable"}
           </div>
           <div className="text-[10px] text-[#939AA6]">UNSW-NB15 Validated Model</div>
         </div>

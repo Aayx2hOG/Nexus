@@ -1,0 +1,270 @@
+{
+  "selection_raw": {
+    "brier": 0.028848992183504937,
+    "log_loss": 0.08993894323207688,
+    "ece": 0.011571591093577454,
+    "bins": [
+      {
+        "bin": "0\u201310%",
+        "rows": 6883,
+        "mean_score": 0.0027588594506507066,
+        "observed_attack_rate": 0.005230277495278221
+      },
+      {
+        "bin": "10\u201320%",
+        "rows": 412,
+        "mean_score": 0.14896806178894278,
+        "observed_attack_rate": 0.23058252427184467
+      },
+      {
+        "bin": "20\u201330%",
+        "rows": 391,
+        "mean_score": 0.24912581438560819,
+        "observed_attack_rate": 0.34271099744245526
+      },
+      {
+        "bin": "30\u201340%",
+        "rows": 387,
+        "mean_score": 0.3511314964483097,
+        "observed_attack_rate": 0.45219638242894056
+      },
+      {
+        "bin": "40\u201350%",
+        "rows": 338,
+        "mean_score": 0.4488640684738813,
+        "observed_attack_rate": 0.5976331360946746
+      },
+      {
+        "bin": "50\u201360%",
+        "rows": 341,
+        "mean_score": 0.5525730425010517,
+        "observed_attack_rate": 0.6334310850439883
+      },
+      {
+        "bin": "60\u201370%",
+        "rows": 366,
+        "mean_score": 0.6487771694000043,
+        "observed_attack_rate": 0.7295081967213115
+      },
+      {
+        "bin": "70\u201380%",
+        "rows": 438,
+        "mean_score": 0.7523811027535875,
+        "observed_attack_rate": 0.8424657534246576
+      },
+      {
+        "bin": "80\u201390%",
+        "rows": 537,
+        "mean_score": 0.8536601422158936,
+        "observed_attack_rate": 0.8715083798882681
+      },
+      {
+        "bin": "90\u2013100%",
+        "rows": 14938,
+        "mean_score": 0.9953900805808731,
+        "observed_attack_rate": 0.9958495113134288
+      }
+    ]
+  },
+  "selection_calibrated": {
+    "brier": 0.028052203121614005,
+    "log_loss": 0.08887662081457426,
+    "ece": 0.0031721546575614436,
+    "bins": [
+      {
+        "bin": "0\u201310%",
+        "rows": 6698,
+        "mean_score": 0.00046866711789496796,
+        "observed_attack_rate": 0.0008957897879964168
+      },
+      {
+        "bin": "10\u201320%",
+        "rows": 295,
+        "mean_score": 0.15637523577502588,
+        "observed_attack_rate": 0.15254237288135594
+      },
+      {
+        "bin": "20\u201330%",
+        "rows": 436,
+        "mean_score": 0.2714295495002054,
+        "observed_attack_rate": 0.2775229357798165
+      },
+      {
+        "bin": "30\u201340%",
+        "rows": 127,
+        "mean_score": 0.3423098990896142,
+        "observed_attack_rate": 0.33858267716535434
+      },
+      {
+        "bin": "40\u201350%",
+        "rows": 310,
+        "mean_score": 0.40822784810126594,
+        "observed_attack_rate": 0.43870967741935485
+      },
+      {
+        "bin": "50\u201360%",
+        "rows": 620,
+        "mean_score": 0.5468321819709305,
+        "observed_attack_rate": 0.5387096774193548
+      },
+      {
+        "bin": "60\u201370%",
+        "rows": 421,
+        "mean_score": 0.6823914540514867,
+        "observed_attack_rate": 0.6579572446555819
+      },
+      {
+        "bin": "70\u201380%",
+        "rows": 488,
+        "mean_score": 0.7256931206266316,
+        "observed_attack_rate": 0.8032786885245902
+      },
+      {
+        "bin": "80\u201390%",
+        "rows": 600,
+        "mean_score": 0.8737058782781937,
+        "observed_attack_rate": 0.8633333333333333
+      },
+      {
+        "bin": "90\u2013100%",
+        "rows": 15036,
+        "mean_score": 0.995116842161095,
+        "observed_attack_rate": 0.9953445065176909
+      }
+    ]
+  },
+  "test_raw": {
+    "brier": 0.07247161179095545,
+    "log_loss": 0.21910327272369726,
+    "ece": 0.07396997257833496,
+    "bins": [
+      {
+        "bin": "0\u201310%",
+        "rows": 22184,
+        "mean_score": 0.002933398631800946,
+        "observed_attack_rate": 0.0037865128020194735
+      },
+      {
+        "bin": "10\u201320%",
+        "rows": 2070,
+        "mean_score": 0.1526921217768221,
+        "observed_attack_rate": 0.08454106280193237
+      },
+      {
+        "bin": "20\u201330%",
+        "rows": 2302,
+        "mean_score": 0.2503528649644939,
+        "observed_attack_rate": 0.1159860990443093
+      },
+      {
+        "bin": "30\u201340%",
+        "rows": 2140,
+        "mean_score": 0.34953599228631055,
+        "observed_attack_rate": 0.16869158878504673
+      },
+      {
+        "bin": "40\u201350%",
+        "rows": 1951,
+        "mean_score": 0.449125879746564,
+        "observed_attack_rate": 0.1804202972834444
+      },
+      {
+        "bin": "50\u201360%",
+        "rows": 2033,
+        "mean_score": 0.5494103658881153,
+        "observed_attack_rate": 0.21446138711264143
+      },
+      {
+        "bin": "60\u201370%",
+        "rows": 2086,
+        "mean_score": 0.6490372381935849,
+        "observed_attack_rate": 0.2766059443911793
+      },
+      {
+        "bin": "70\u201380%",
+        "rows": 2278,
+        "mean_score": 0.7506831261199638,
+        "observed_attack_rate": 0.35030728709394204
+      },
+      {
+        "bin": "80\u201390%",
+        "rows": 2796,
+        "mean_score": 0.8524592631539025,
+        "observed_attack_rate": 0.46602288984263235
+      },
+      {
+        "bin": "90\u2013100%",
+        "rows": 42492,
+        "mean_score": 0.9940261338995778,
+        "observed_attack_rate": 0.964393297561894
+      }
+    ]
+  },
+  "test_calibrated": {
+    "brier": 0.08213280689842499,
+    "log_loss": 0.24767603437789856,
+    "ece": 0.0910443198988168,
+    "bins": [
+      {
+        "bin": "0\u201310%",
+        "rows": 21530,
+        "mean_score": 0.000308213460085041,
+        "observed_attack_rate": 0.0011611704598235022
+      },
+      {
+        "bin": "10\u201320%",
+        "rows": 1142,
+        "mean_score": 0.15837997607006335,
+        "observed_attack_rate": 0.08231173380035026
+      },
+      {
+        "bin": "20\u201330%",
+        "rows": 2237,
+        "mean_score": 0.2716321032278009,
+        "observed_attack_rate": 0.0925346446133214
+      },
+      {
+        "bin": "30\u201340%",
+        "rows": 933,
+        "mean_score": 0.3437141678996272,
+        "observed_attack_rate": 0.11789924973204716
+      },
+      {
+        "bin": "40\u201350%",
+        "rows": 1802,
+        "mean_score": 0.4082278318200968,
+        "observed_attack_rate": 0.14483906770255273
+      },
+      {
+        "bin": "50\u201360%",
+        "rows": 3525,
+        "mean_score": 0.5483907934309686,
+        "observed_attack_rate": 0.18638297872340426
+      },
+      {
+        "bin": "60\u201370%",
+        "rows": 2352,
+        "mean_score": 0.6840045878711539,
+        "observed_attack_rate": 0.23001700680272108
+      },
+      {
+        "bin": "70\u201380%",
+        "rows": 2741,
+        "mean_score": 0.7255089634156517,
+        "observed_attack_rate": 0.30901130974097046
+      },
+      {
+        "bin": "80\u201390%",
+        "rows": 3010,
+        "mean_score": 0.873492411580664,
+        "observed_attack_rate": 0.439202657807309
+      },
+      {
+        "bin": "90\u2013100%",
+        "rows": 43060,
+        "mean_score": 0.9934971063034145,
+        "observed_attack_rate": 0.9583836507199257
+      }
+    ]
+  }
+}

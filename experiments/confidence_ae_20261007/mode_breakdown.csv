@@ -1,0 +1,33 @@
+name,mode,rows,normal,attacks,predicted_attack
+Binary threshold/f1,No anomaly,0,0,0,0
+Binary threshold/f1,Low,82145,36992,45153,53666
+Binary threshold/f1,Mid,41,6,35,39
+Binary threshold/f1,High,146,2,144,144
+Binary threshold/recall95,No anomaly,0,0,0,0
+Binary threshold/recall95,Low,82145,36992,45153,49646
+Binary threshold/recall95,Mid,41,6,35,37
+Binary threshold/recall95,High,146,2,144,144
+Mode confidence/f1,No anomaly,184,184,0,0
+Mode confidence/f1,Low,30903,26073,4830,9696
+Mode confidence/f1,Mid,24398,9557,14841,17947
+Mode confidence/f1,High,26847,1186,25661,25993
+Mode confidence/recall95,No anomaly,14083,13064,1019,1432
+Mode confidence/recall95,Low,17004,13193,3811,5819
+Mode confidence/recall95,Mid,24398,9557,14841,16710
+Mode confidence/recall95,High,26847,1186,25661,25865
+Original override/f1,No anomaly,184,184,0,0
+Original override/f1,Low,55301,35630,19671,24232
+Original override/f1,Mid,8757,658,8099,8757
+Original override/f1,High,18090,528,17562,18090
+Original override/recall95,No anomaly,6399,6274,125,0
+Original override/recall95,Low,49086,29540,19546,24015
+Original override/recall95,Mid,8757,658,8099,8757
+Original override/recall95,High,18090,528,17562,18090
+Prior selected four-mode,No anomaly,184,184,0,0
+Prior selected four-mode,Low,76644,36655,39989,44711
+Prior selected four-mode,Mid,3041,103,2938,3041
+Prior selected four-mode,High,2463,58,2405,2463
+Current binary,No anomaly,0,0,0,0
+Current binary,Low,82145,36992,45153,49916
+Current binary,Mid,41,6,35,37
+Current binary,High,146,2,144,144

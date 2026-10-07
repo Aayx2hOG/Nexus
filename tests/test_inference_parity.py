@@ -2,57 +2,39 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 from uuid import uuid4
 
 import joblib
 import numpy as np
+import pandas as pd
 import pytest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "training"))
 
 from train_validated_lightgbm import canonical_features  # noqa: E402
-from tune_lightgbm_fast import read_data  # noqa: E402
 
 from nexus.bundle import BundleLoader  # noqa: E402
 from nexus.inference import flows_to_dataframe, predict_batch  # noqa: E402
 from nexus.schemas import Flow, FlowFeatures  # noqa: E402
 
-BUNDLES_DIR = PROJECT_ROOT / "artifacts" / "bundles"
-CSV_PATH = (
-    PROJECT_ROOT
-    / "data"
-    / "raw"
-    / "CSV_Files"
-    / "Training and Testing Sets"
-    / "UNSW_NB15_training-set.csv"
-)
-
 
 @pytest.fixture(scope="module")
-def bundle():
-    loader = BundleLoader(BUNDLES_DIR, "v1.0.0")
-    return loader.load()
+def bundle(v2_bundle_dir):
+    return BundleLoader(v2_bundle_dir, "v2.0.0").load()
 
 
 def test_serving_offline_parity(bundle):
-    if not CSV_PATH.is_file():
-        pytest.skip(f"CSV dataset not available at {CSV_PATH}")
-
-    raw, y, _ = read_data(CSV_PATH)
-    raw = canonical_features(raw)
-
-    splits_path = PROJECT_ROOT / "models" / "lightgbm_validated_v1" / "split_indices.npz"
-    splits = np.load(splits_path)
-    sel = splits["selection"][:100]  # Take 100 selection rows
-
-    sample_df = raw.iloc[sel].copy()
+    # Committed representative inputs keep parity checks independent of raw datasets.
+    rows = json.loads((PROJECT_ROOT / "data/presets/mixed_100.json").read_text())
+    sample_df = canonical_features(pd.DataFrame(rows))
 
     # 1. Offline path
     offline_X = bundle.preprocessor.transform(sample_df)
-    frozen = joblib.load(PROJECT_ROOT / "models/lightgbm_validated_v1/binary/model.joblib")
+    frozen = joblib.load(PROJECT_ROOT / "experiments/lightgbm_validated_v2/binary/model.joblib")
     offline_scores = frozen.predict_proba(sample_df)[:, 1]
     np.testing.assert_array_equal(bundle.model.predict_proba(offline_X)[:, 1], offline_scores)
     assert bundle.decision_threshold == frozen.decision_threshold_

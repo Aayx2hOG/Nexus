@@ -1,0 +1,24 @@
+{
+  "source_hash_checks": {
+    "models.joblib": true,
+    "split_indices.npz": true,
+    "evaluation_scores.npz": true,
+    "evaluation_decisions.npz": true,
+    "calibration.json": true,
+    "metrics.json": true
+  },
+  "verified_archived_confusion_matrices": 60,
+  "verified_recent_best_matrix": true,
+  "seed": 42,
+  "held_family": "Exploits",
+  "old_best_model": "fusion_ae_plain_latent",
+  "old_best_budget": 0.05,
+  "old_best_selection": "Retrospective highest recorded holdout F1 among rows meeting their FPR budget",
+  "recent_best": {
+    "experiment": "confidence_ae_20261007",
+    "name": "Mode confidence/recall95"
+  },
+  "recent_ranking_scope": "Five recent experiments on the same official test, descriptive F1 ranking",
+  "same_evaluation_set": false,
+  "models_retrained": false
+}

@@ -1,0 +1,38 @@
+{
+  "seed": 42,
+  "splits": {
+    "fit": 99778,
+    "early": 25083,
+    "calibration": 25449,
+    "selection": 25031
+  },
+  "fixed_quantiles": [
+    0.9,
+    0.95,
+    0.99
+  ],
+  "low_boundary_grid": [
+    0.01,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9
+  ],
+  "mid_boundary_grid": [
+    0.9,
+    0.95,
+    0.97,
+    0.99,
+    0.995,
+    0.999
+  ],
+  "high_quantile": 0.9999,
+  "objective": "Minimum selection FPR with recall >= 95%; otherwise highest recall; ties higher F1",
+  "rule": "none -> normal; low -> binary; mid/high -> attack"
+}

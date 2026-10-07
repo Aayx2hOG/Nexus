@@ -30,6 +30,8 @@ htmlcov/
 runs/
 /artifacts/*
 !/artifacts/.gitkeep
+!/artifacts/README.md
+!/artifacts/config.md
 experiments/**/trials/
 experiments/**/all_trial_metrics.json
 *.joblib
@@ -54,6 +56,12 @@ data/raw/*
 #models
 models/*
 !models/.gitkeep
+!models/uncertainty_band_ae10/
+!models/mode_confidence_ae05/
+!models/uncertainty_band_ae10/*.json
+!models/uncertainty_band_ae10/README.md
+!models/mode_confidence_ae05/*.json
+!models/mode_confidence_ae05/README.md
 
 # web
 web/node_modules/
@@ -72,3 +80,13 @@ experiments/leave_one_attack_family_out/
 experiments/selective_fusion_leakage_free/
 reports/autoencoder_complementarity/
 reports/model_complementarity/
+
+experiments/confidence_ae_20261007/
+experiments/four_mode_ae_20261007/
+experiments/lightgbm_validated_v2/
+experiments/seed42_comparison_20261007/
+experiments/seed42_official_test_20261007/
+experiments/seed_42/
+experiments/stacked_baseline_ae_20261005/
+experiments/uncertainty_residuals_20261007/
+experiments/working_v2_baseline_fusion_20261005/

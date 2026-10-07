@@ -1,0 +1,9 @@
+variant,mode,rows,normal,attack,predicted_attack,tn,fp,fn,tp
+Fixed four-mode,No anomaly,38173,30915,7258,0,30915,0,7258,0
+Fixed four-mode,Low,3967,2270,1697,2048,1670,600,249,1448
+Fixed four-mode,Mid,13345,2629,10716,13345,0,2629,0,10716
+Fixed four-mode,High,26847,1186,25661,26847,0,1186,0,25661
+Selected four-mode,No anomaly,184,184,0,0,184,0,0,0
+Selected four-mode,Low,76644,36655,39989,44711,30363,6292,1570,38419
+Selected four-mode,Mid,3041,103,2938,3041,0,103,0,2938
+Selected four-mode,High,2463,58,2405,2463,0,58,0,2405

@@ -1,0 +1,22 @@
+{
+  "methods": [
+    "logistic",
+    "logistic_interaction"
+  ],
+  "C": [
+    0.1,
+    1.0,
+    10.0
+  ],
+  "seed": 2026,
+  "objective": "Minimum selection FPR subject to recall >= 0.95; tie higher recall then F1",
+  "meta_fit": "Grouped half of existing calibration partition",
+  "threshold": "Other grouped half",
+  "base_detectors_retrained": false,
+  "source": "experiments/working_v2_baseline_fusion_20261005",
+  "limitations": [
+    "Previously used selection and official test; exploratory development comparison.",
+    "Reconstructed baseline-architecture AE, not missing historical AE.",
+    "Single seed; official test has known training predictor overlap."
+  ]
+}

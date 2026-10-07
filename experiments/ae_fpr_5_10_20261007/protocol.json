@@ -1,0 +1,25 @@
+{
+  "ae_fpr_targets": [
+    0.05,
+    0.1
+  ],
+  "cutoff_method": "Conservative empirical >= threshold on normal calibration scores; ties handled",
+  "four_modes": "No anomaly < T(b); low [T(b),T(b/2)); mid [T(b/2),T(b/10)); high >=T(b/10)",
+  "original_rule": "No anomaly normal; low follows binary; mid/high attack",
+  "confidence_cutoffs": [
+    0.65,
+    0.5776925765603604,
+    0.5776925765603604,
+    0.5776925765603604
+  ],
+  "binary_cutoff": 0.5776925765603604,
+  "uncertainty_band": [
+    0.1,
+    0.65
+  ],
+  "learned_adaptation": "Keep original continuous fusion as reference; AE-gated variant follows frozen fusion when error >=T(b), otherwise original binary",
+  "training": "All base models and learned models frozen; only AE thresholds recalibrated",
+  "selection": "No model selected on test; report every predeclared rule at both budgets",
+  "scope": "All previously compared rule families plus imported seed42 plain-AE+latent",
+  "target_interpretation": "AE-only calibration FPR; combined system FPR is measured, not constrained"
+}

@@ -1,0 +1,379 @@
+ae_target,model,family,rows,detected,recall
+0.05,AE alone,Analysis,677,677,1.0
+0.05,AE alone,Backdoor,583,546,0.9365351629502573
+0.05,AE alone,DoS,4089,3592,0.8784543898263634
+0.05,AE alone,Exploits,11132,9255,0.8313869924541861
+0.05,AE alone,Fuzzers,6062,2701,0.44556252062025736
+0.05,AE alone,Generic,18871,18613,0.9863282284987547
+0.05,AE alone,Reconnaissance,3496,933,0.26687643020594964
+0.05,AE alone,Shellcode,378,24,0.06349206349206349
+0.05,AE alone,Worms,44,36,0.8181818181818182
+0.05,OR,Analysis,677,677,1.0
+0.05,OR,Backdoor,583,581,0.9965694682675815
+0.05,OR,DoS,4089,4082,0.9982880899975544
+0.05,OR,Exploits,11132,11050,0.9926338483650736
+0.05,OR,Fuzzers,6062,5159,0.851039260969977
+0.05,OR,Generic,18871,18866,0.9997350431879604
+0.05,OR,Reconnaissance,3496,3489,0.9979977116704806
+0.05,OR,Shellcode,378,372,0.9841269841269841
+0.05,OR,Worms,44,44,1.0
+0.05,AND,Analysis,677,650,0.9601181683899557
+0.05,AND,Backdoor,583,546,0.9365351629502573
+0.05,AND,DoS,4089,3586,0.8769870383956958
+0.05,AND,Exploits,11132,9233,0.8294107078692059
+0.05,AND,Fuzzers,6062,2202,0.3632464533157374
+0.05,AND,Generic,18871,18613,0.9863282284987547
+0.05,AND,Reconnaissance,3496,930,0.2660183066361556
+0.05,AND,Shellcode,378,23,0.06084656084656084
+0.05,AND,Worms,44,36,0.8181818181818182
+0.05,Four-mode hard override,Analysis,677,652,0.9630723781388478
+0.05,Four-mode hard override,Backdoor,583,546,0.9365351629502573
+0.05,Four-mode hard override,DoS,4089,3587,0.8772315969674737
+0.05,Four-mode hard override,Exploits,11132,9240,0.8300395256916996
+0.05,Four-mode hard override,Fuzzers,6062,2504,0.41306499505113825
+0.05,Four-mode hard override,Generic,18871,18613,0.9863282284987547
+0.05,Four-mode hard override,Reconnaissance,3496,932,0.2665903890160183
+0.05,Four-mode hard override,Shellcode,378,23,0.06084656084656084
+0.05,Four-mode hard override,Worms,44,36,0.8181818181818182
+0.05,Mode confidence,Analysis,677,650,0.9601181683899557
+0.05,Mode confidence,Backdoor,583,580,0.9948542024013722
+0.05,Mode confidence,DoS,4089,4072,0.995842504279775
+0.05,Mode confidence,Exploits,11132,11009,0.9889507725476105
+0.05,Mode confidence,Fuzzers,6062,4427,0.7302870339821841
+0.05,Mode confidence,Generic,18871,18865,0.9996820518255525
+0.05,Mode confidence,Reconnaissance,3496,3484,0.9965675057208238
+0.05,Mode confidence,Shellcode,378,367,0.9708994708994709
+0.05,Mode confidence,Worms,44,44,1.0
+0.05,Uncertainty-band four-mode,Analysis,677,652,0.9630723781388478
+0.05,Uncertainty-band four-mode,Backdoor,583,580,0.9948542024013722
+0.05,Uncertainty-band four-mode,DoS,4089,4073,0.9960870628515529
+0.05,Uncertainty-band four-mode,Exploits,11132,11015,0.9894897592526051
+0.05,Uncertainty-band four-mode,Fuzzers,6062,4709,0.7768063345430551
+0.05,Uncertainty-band four-mode,Generic,18871,18865,0.9996820518255525
+0.05,Uncertainty-band four-mode,Reconnaissance,3496,3486,0.9971395881006865
+0.05,Uncertainty-band four-mode,Shellcode,378,367,0.9708994708994709
+0.05,Uncertainty-band four-mode,Worms,44,44,1.0
+0.05,Selective recovery (p>=40%),Analysis,677,661,0.9763663220088626
+0.05,Selective recovery (p>=40%),Backdoor,583,581,0.9965694682675815
+0.05,Selective recovery (p>=40%),DoS,4089,4078,0.9973098557104426
+0.05,Selective recovery (p>=40%),Exploits,11132,11039,0.9916457060725835
+0.05,Selective recovery (p>=40%),Fuzzers,6062,4848,0.7997360607060376
+0.05,Selective recovery (p>=40%),Generic,18871,18866,0.9997350431879604
+0.05,Selective recovery (p>=40%),Reconnaissance,3496,3488,0.9977116704805492
+0.05,Selective recovery (p>=40%),Shellcode,378,371,0.9814814814814815
+0.05,Selective recovery (p>=40%),Worms,44,44,1.0
+0.05,Binary only,Analysis,677,650,0.9601181683899557
+0.05,Binary only,Backdoor,583,581,0.9965694682675815
+0.05,Binary only,DoS,4089,4076,0.9968207385668868
+0.05,Binary only,Exploits,11132,11028,0.9906575637800934
+0.05,Binary only,Fuzzers,6062,4660,0.7687231936654569
+0.05,Binary only,Generic,18871,18866,0.9997350431879604
+0.05,Binary only,Reconnaissance,3496,3486,0.9971395881006865
+0.05,Binary only,Shellcode,378,371,0.9814814814814815
+0.05,Binary only,Worms,44,44,1.0
+0.05,Tuned binary (59%),Analysis,677,649,0.9586410635155096
+0.05,Tuned binary (59%),Backdoor,583,581,0.9965694682675815
+0.05,Tuned binary (59%),DoS,4089,4076,0.9968207385668868
+0.05,Tuned binary (59%),Exploits,11132,11025,0.9903880704275961
+0.05,Tuned binary (59%),Fuzzers,6062,4599,0.7586605080831409
+0.05,Tuned binary (59%),Generic,18871,18866,0.9997350431879604
+0.05,Tuned binary (59%),Reconnaissance,3496,3486,0.9971395881006865
+0.05,Tuned binary (59%),Shellcode,378,370,0.9788359788359788
+0.05,Tuned binary (59%),Worms,44,44,1.0
+0.05,Score-only logistic (continuous reference),Analysis,677,652,0.9630723781388478
+0.05,Score-only logistic (continuous reference),Backdoor,583,582,0.9982847341337907
+0.05,Score-only logistic (continuous reference),DoS,4089,4080,0.9977989728539985
+0.05,Score-only logistic (continuous reference),Exploits,11132,11042,0.9919151994250809
+0.05,Score-only logistic (continuous reference),Fuzzers,6062,4806,0.7928076542395249
+0.05,Score-only logistic (continuous reference),Generic,18871,18868,0.9998410259127762
+0.05,Score-only logistic (continuous reference),Reconnaissance,3496,3488,0.9977116704805492
+0.05,Score-only logistic (continuous reference),Shellcode,378,371,0.9814814814814815
+0.05,Score-only logistic (continuous reference),Worms,44,44,1.0
+0.05,Total-error logistic (continuous reference),Analysis,677,650,0.9601181683899557
+0.05,Total-error logistic (continuous reference),Backdoor,583,581,0.9965694682675815
+0.05,Total-error logistic (continuous reference),DoS,4089,4076,0.9968207385668868
+0.05,Total-error logistic (continuous reference),Exploits,11132,11026,0.9904779015450952
+0.05,Total-error logistic (continuous reference),Fuzzers,6062,4596,0.7581656219069614
+0.05,Total-error logistic (continuous reference),Generic,18871,18866,0.9997350431879604
+0.05,Total-error logistic (continuous reference),Reconnaissance,3496,3486,0.9971395881006865
+0.05,Total-error logistic (continuous reference),Shellcode,378,370,0.9788359788359788
+0.05,Total-error logistic (continuous reference),Worms,44,44,1.0
+0.05,Total-error logistic (AE-gated),Analysis,677,650,0.9601181683899557
+0.05,Total-error logistic (AE-gated),Backdoor,583,581,0.9965694682675815
+0.05,Total-error logistic (AE-gated),DoS,4089,4076,0.9968207385668868
+0.05,Total-error logistic (AE-gated),Exploits,11132,11027,0.9905677326625943
+0.05,Total-error logistic (AE-gated),Fuzzers,6062,4650,0.767073573078192
+0.05,Total-error logistic (AE-gated),Generic,18871,18866,0.9997350431879604
+0.05,Total-error logistic (AE-gated),Reconnaissance,3496,3486,0.9971395881006865
+0.05,Total-error logistic (AE-gated),Shellcode,378,371,0.9814814814814815
+0.05,Total-error logistic (AE-gated),Worms,44,44,1.0
+0.05,Per-feature logistic (continuous reference),Analysis,677,650,0.9601181683899557
+0.05,Per-feature logistic (continuous reference),Backdoor,583,581,0.9965694682675815
+0.05,Per-feature logistic (continuous reference),DoS,4089,4075,0.9965761799951088
+0.05,Per-feature logistic (continuous reference),Exploits,11132,11031,0.9909270571325908
+0.05,Per-feature logistic (continuous reference),Fuzzers,6062,5008,0.8261299901022765
+0.05,Per-feature logistic (continuous reference),Generic,18871,18865,0.9996820518255525
+0.05,Per-feature logistic (continuous reference),Reconnaissance,3496,3487,0.9974256292906178
+0.05,Per-feature logistic (continuous reference),Shellcode,378,371,0.9814814814814815
+0.05,Per-feature logistic (continuous reference),Worms,44,44,1.0
+0.05,Per-feature logistic (AE-gated),Analysis,677,650,0.9601181683899557
+0.05,Per-feature logistic (AE-gated),Backdoor,583,581,0.9965694682675815
+0.05,Per-feature logistic (AE-gated),DoS,4089,4073,0.9960870628515529
+0.05,Per-feature logistic (AE-gated),Exploits,11132,11021,0.9900287459575997
+0.05,Per-feature logistic (AE-gated),Fuzzers,6062,4870,0.8033652259980204
+0.05,Per-feature logistic (AE-gated),Generic,18871,18863,0.9995760691007366
+0.05,Per-feature logistic (AE-gated),Reconnaissance,3496,3486,0.9971395881006865
+0.05,Per-feature logistic (AE-gated),Shellcode,378,371,0.9814814814814815
+0.05,Per-feature logistic (AE-gated),Worms,44,44,1.0
+0.05,Prior confidence (reference),Analysis,677,650,0.9601181683899557
+0.05,Prior confidence (reference),Backdoor,583,581,0.9965694682675815
+0.05,Prior confidence (reference),DoS,4089,4075,0.9965761799951088
+0.05,Prior confidence (reference),Exploits,11132,11020,0.9899389148401007
+0.05,Prior confidence (reference),Fuzzers,6062,4629,0.7636093698449357
+0.05,Prior confidence (reference),Generic,18871,18866,0.9997350431879604
+0.05,Prior confidence (reference),Reconnaissance,3496,3486,0.9971395881006865
+0.05,Prior confidence (reference),Shellcode,378,371,0.9814814814814815
+0.05,Prior confidence (reference),Worms,44,44,1.0
+0.05,Imported binary (reference),Analysis,677,628,0.9276218611521418
+0.05,Imported binary (reference),Backdoor,583,573,0.9828473413379074
+0.05,Imported binary (reference),DoS,4089,3962,0.9689410613842016
+0.05,Imported binary (reference),Exploits,11132,10648,0.9565217391304348
+0.05,Imported binary (reference),Fuzzers,6062,4374,0.7215440448696799
+0.05,Imported binary (reference),Generic,18871,18836,0.9981453023157225
+0.05,Imported binary (reference),Reconnaissance,3496,3474,0.9937070938215103
+0.05,Imported binary (reference),Shellcode,378,367,0.9708994708994709
+0.05,Imported binary (reference),Worms,44,44,1.0
+0.05,Imported plain AE alone,Analysis,677,653,0.9645494830132939
+0.05,Imported plain AE alone,Backdoor,583,543,0.9313893653516295
+0.05,Imported plain AE alone,DoS,4089,3557,0.8698948398141355
+0.05,Imported plain AE alone,Exploits,11132,8923,0.8015630614444844
+0.05,Imported plain AE alone,Fuzzers,6062,2406,0.39689871329594195
+0.05,Imported plain AE alone,Generic,18871,18591,0.9851624185257803
+0.05,Imported plain AE alone,Reconnaissance,3496,716,0.2048054919908467
+0.05,Imported plain AE alone,Shellcode,378,10,0.026455026455026454
+0.05,Imported plain AE alone,Worms,44,23,0.5227272727272727
+0.05,Imported OR,Analysis,677,655,0.9675036927621861
+0.05,Imported OR,Backdoor,583,582,0.9982847341337907
+0.05,Imported OR,DoS,4089,4060,0.9929078014184397
+0.05,Imported OR,Exploits,11132,10898,0.9789795185052103
+0.05,Imported OR,Fuzzers,6062,4853,0.8005608709996701
+0.05,Imported OR,Generic,18871,18859,0.9993641036511048
+0.05,Imported OR,Reconnaissance,3496,3486,0.9971395881006865
+0.05,Imported OR,Shellcode,378,368,0.9735449735449735
+0.05,Imported OR,Worms,44,44,1.0
+0.05,Imported AND,Analysis,677,626,0.9246676514032496
+0.05,Imported AND,Backdoor,583,534,0.9159519725557461
+0.05,Imported AND,DoS,4089,3459,0.8459280997798972
+0.05,Imported AND,Exploits,11132,8673,0.779105282069709
+0.05,Imported AND,Fuzzers,6062,1927,0.31788188716595184
+0.05,Imported AND,Generic,18871,18568,0.9839436171903979
+0.05,Imported AND,Reconnaissance,3496,704,0.20137299771167047
+0.05,Imported AND,Shellcode,378,9,0.023809523809523808
+0.05,Imported AND,Worms,44,23,0.5227272727272727
+0.05,Imported plain+latent (continuous reference),Analysis,677,630,0.930576070901034
+0.05,Imported plain+latent (continuous reference),Backdoor,583,572,0.9811320754716981
+0.05,Imported plain+latent (continuous reference),DoS,4089,3967,0.9701638542430913
+0.05,Imported plain+latent (continuous reference),Exploits,11132,10747,0.9654150197628458
+0.05,Imported plain+latent (continuous reference),Fuzzers,6062,4363,0.7197294622236885
+0.05,Imported plain+latent (continuous reference),Generic,18871,18838,0.9982512850405384
+0.05,Imported plain+latent (continuous reference),Reconnaissance,3496,3476,0.994279176201373
+0.05,Imported plain+latent (continuous reference),Shellcode,378,367,0.9708994708994709
+0.05,Imported plain+latent (continuous reference),Worms,44,44,1.0
+0.05,Imported plain+latent (AE-gated),Analysis,677,629,0.9290989660265879
+0.05,Imported plain+latent (AE-gated),Backdoor,583,573,0.9828473413379074
+0.05,Imported plain+latent (AE-gated),DoS,4089,3973,0.9716312056737588
+0.05,Imported plain+latent (AE-gated),Exploits,11132,10746,0.9653251886453468
+0.05,Imported plain+latent (AE-gated),Fuzzers,6062,4428,0.7304519960409106
+0.05,Imported plain+latent (AE-gated),Generic,18871,18839,0.9983042764029463
+0.05,Imported plain+latent (AE-gated),Reconnaissance,3496,3476,0.994279176201373
+0.05,Imported plain+latent (AE-gated),Shellcode,378,367,0.9708994708994709
+0.05,Imported plain+latent (AE-gated),Worms,44,44,1.0
+0.1,AE alone,Analysis,677,677,1.0
+0.1,AE alone,Backdoor,583,550,0.9433962264150944
+0.1,AE alone,DoS,4089,3755,0.9183174370261677
+0.1,AE alone,Exploits,11132,9847,0.8845670140136543
+0.1,AE alone,Fuzzers,6062,3368,0.5555922137908281
+0.1,AE alone,Generic,18871,18668,0.9892427534311907
+0.1,AE alone,Reconnaissance,3496,1123,0.3212242562929062
+0.1,AE alone,Shellcode,378,48,0.12698412698412698
+0.1,AE alone,Worms,44,38,0.8636363636363636
+0.1,OR,Analysis,677,677,1.0
+0.1,OR,Backdoor,583,581,0.9965694682675815
+0.1,OR,DoS,4089,4087,0.9995108828564441
+0.1,OR,Exploits,11132,11060,0.9935321595400647
+0.1,OR,Fuzzers,6062,5390,0.8891454965357968
+0.1,OR,Generic,18871,18868,0.9998410259127762
+0.1,OR,Reconnaissance,3496,3490,0.9982837528604119
+0.1,OR,Shellcode,378,372,0.9841269841269841
+0.1,OR,Worms,44,44,1.0
+0.1,AND,Analysis,677,650,0.9601181683899557
+0.1,AND,Backdoor,583,550,0.9433962264150944
+0.1,AND,DoS,4089,3744,0.9156272927366104
+0.1,AND,Exploits,11132,9815,0.881692418253683
+0.1,AND,Fuzzers,6062,2638,0.4351699109204883
+0.1,AND,Generic,18871,18666,0.9891367707063748
+0.1,AND,Reconnaissance,3496,1119,0.3200800915331808
+0.1,AND,Shellcode,378,47,0.12433862433862433
+0.1,AND,Worms,44,38,0.8636363636363636
+0.1,Four-mode hard override,Analysis,677,677,1.0
+0.1,Four-mode hard override,Backdoor,583,550,0.9433962264150944
+0.1,Four-mode hard override,DoS,4089,3750,0.917094644167278
+0.1,Four-mode hard override,Exploits,11132,9837,0.8836687028386633
+0.1,Four-mode hard override,Fuzzers,6062,3137,0.5174859782250083
+0.1,Four-mode hard override,Generic,18871,18666,0.9891367707063748
+0.1,Four-mode hard override,Reconnaissance,3496,1122,0.3209382151029748
+0.1,Four-mode hard override,Shellcode,378,48,0.12698412698412698
+0.1,Four-mode hard override,Worms,44,38,0.8636363636363636
+0.1,Mode confidence,Analysis,677,650,0.9601181683899557
+0.1,Mode confidence,Backdoor,583,580,0.9948542024013722
+0.1,Mode confidence,DoS,4089,4074,0.9963316214233309
+0.1,Mode confidence,Exploits,11132,11010,0.9890406036651096
+0.1,Mode confidence,Fuzzers,6062,4470,0.7373804025074233
+0.1,Mode confidence,Generic,18871,18865,0.9996820518255525
+0.1,Mode confidence,Reconnaissance,3496,3484,0.9965675057208238
+0.1,Mode confidence,Shellcode,378,367,0.9708994708994709
+0.1,Mode confidence,Worms,44,44,1.0
+0.1,Uncertainty-band four-mode,Analysis,677,675,0.9970457902511078
+0.1,Uncertainty-band four-mode,Backdoor,583,580,0.9948542024013722
+0.1,Uncertainty-band four-mode,DoS,4089,4080,0.9977989728539985
+0.1,Uncertainty-band four-mode,Exploits,11132,11030,0.9908372260150916
+0.1,Uncertainty-band four-mode,Fuzzers,6062,4935,0.8140877598152425
+0.1,Uncertainty-band four-mode,Generic,18871,18865,0.9996820518255525
+0.1,Uncertainty-band four-mode,Reconnaissance,3496,3487,0.9974256292906178
+0.1,Uncertainty-band four-mode,Shellcode,378,368,0.9735449735449735
+0.1,Uncertainty-band four-mode,Worms,44,44,1.0
+0.1,Selective recovery (p>=40%),Analysis,677,661,0.9763663220088626
+0.1,Selective recovery (p>=40%),Backdoor,583,581,0.9965694682675815
+0.1,Selective recovery (p>=40%),DoS,4089,4082,0.9982880899975544
+0.1,Selective recovery (p>=40%),Exploits,11132,11045,0.9921846927775781
+0.1,Selective recovery (p>=40%),Fuzzers,6062,4954,0.8172220389310458
+0.1,Selective recovery (p>=40%),Generic,18871,18867,0.9997880345503682
+0.1,Selective recovery (p>=40%),Reconnaissance,3496,3489,0.9979977116704806
+0.1,Selective recovery (p>=40%),Shellcode,378,371,0.9814814814814815
+0.1,Selective recovery (p>=40%),Worms,44,44,1.0
+0.1,Binary only,Analysis,677,650,0.9601181683899557
+0.1,Binary only,Backdoor,583,581,0.9965694682675815
+0.1,Binary only,DoS,4089,4076,0.9968207385668868
+0.1,Binary only,Exploits,11132,11028,0.9906575637800934
+0.1,Binary only,Fuzzers,6062,4660,0.7687231936654569
+0.1,Binary only,Generic,18871,18866,0.9997350431879604
+0.1,Binary only,Reconnaissance,3496,3486,0.9971395881006865
+0.1,Binary only,Shellcode,378,371,0.9814814814814815
+0.1,Binary only,Worms,44,44,1.0
+0.1,Tuned binary (59%),Analysis,677,649,0.9586410635155096
+0.1,Tuned binary (59%),Backdoor,583,581,0.9965694682675815
+0.1,Tuned binary (59%),DoS,4089,4076,0.9968207385668868
+0.1,Tuned binary (59%),Exploits,11132,11025,0.9903880704275961
+0.1,Tuned binary (59%),Fuzzers,6062,4599,0.7586605080831409
+0.1,Tuned binary (59%),Generic,18871,18866,0.9997350431879604
+0.1,Tuned binary (59%),Reconnaissance,3496,3486,0.9971395881006865
+0.1,Tuned binary (59%),Shellcode,378,370,0.9788359788359788
+0.1,Tuned binary (59%),Worms,44,44,1.0
+0.1,Score-only logistic (continuous reference),Analysis,677,652,0.9630723781388478
+0.1,Score-only logistic (continuous reference),Backdoor,583,582,0.9982847341337907
+0.1,Score-only logistic (continuous reference),DoS,4089,4080,0.9977989728539985
+0.1,Score-only logistic (continuous reference),Exploits,11132,11042,0.9919151994250809
+0.1,Score-only logistic (continuous reference),Fuzzers,6062,4806,0.7928076542395249
+0.1,Score-only logistic (continuous reference),Generic,18871,18868,0.9998410259127762
+0.1,Score-only logistic (continuous reference),Reconnaissance,3496,3488,0.9977116704805492
+0.1,Score-only logistic (continuous reference),Shellcode,378,371,0.9814814814814815
+0.1,Score-only logistic (continuous reference),Worms,44,44,1.0
+0.1,Total-error logistic (continuous reference),Analysis,677,650,0.9601181683899557
+0.1,Total-error logistic (continuous reference),Backdoor,583,581,0.9965694682675815
+0.1,Total-error logistic (continuous reference),DoS,4089,4076,0.9968207385668868
+0.1,Total-error logistic (continuous reference),Exploits,11132,11026,0.9904779015450952
+0.1,Total-error logistic (continuous reference),Fuzzers,6062,4596,0.7581656219069614
+0.1,Total-error logistic (continuous reference),Generic,18871,18866,0.9997350431879604
+0.1,Total-error logistic (continuous reference),Reconnaissance,3496,3486,0.9971395881006865
+0.1,Total-error logistic (continuous reference),Shellcode,378,370,0.9788359788359788
+0.1,Total-error logistic (continuous reference),Worms,44,44,1.0
+0.1,Total-error logistic (AE-gated),Analysis,677,650,0.9601181683899557
+0.1,Total-error logistic (AE-gated),Backdoor,583,581,0.9965694682675815
+0.1,Total-error logistic (AE-gated),DoS,4089,4076,0.9968207385668868
+0.1,Total-error logistic (AE-gated),Exploits,11132,11027,0.9905677326625943
+0.1,Total-error logistic (AE-gated),Fuzzers,6062,4641,0.7655889145496536
+0.1,Total-error logistic (AE-gated),Generic,18871,18866,0.9997350431879604
+0.1,Total-error logistic (AE-gated),Reconnaissance,3496,3486,0.9971395881006865
+0.1,Total-error logistic (AE-gated),Shellcode,378,371,0.9814814814814815
+0.1,Total-error logistic (AE-gated),Worms,44,44,1.0
+0.1,Per-feature logistic (continuous reference),Analysis,677,650,0.9601181683899557
+0.1,Per-feature logistic (continuous reference),Backdoor,583,581,0.9965694682675815
+0.1,Per-feature logistic (continuous reference),DoS,4089,4075,0.9965761799951088
+0.1,Per-feature logistic (continuous reference),Exploits,11132,11031,0.9909270571325908
+0.1,Per-feature logistic (continuous reference),Fuzzers,6062,5008,0.8261299901022765
+0.1,Per-feature logistic (continuous reference),Generic,18871,18865,0.9996820518255525
+0.1,Per-feature logistic (continuous reference),Reconnaissance,3496,3487,0.9974256292906178
+0.1,Per-feature logistic (continuous reference),Shellcode,378,371,0.9814814814814815
+0.1,Per-feature logistic (continuous reference),Worms,44,44,1.0
+0.1,Per-feature logistic (AE-gated),Analysis,677,650,0.9601181683899557
+0.1,Per-feature logistic (AE-gated),Backdoor,583,581,0.9965694682675815
+0.1,Per-feature logistic (AE-gated),DoS,4089,4075,0.9965761799951088
+0.1,Per-feature logistic (AE-gated),Exploits,11132,11021,0.9900287459575997
+0.1,Per-feature logistic (AE-gated),Fuzzers,6062,4917,0.8111184427581656
+0.1,Per-feature logistic (AE-gated),Generic,18871,18863,0.9995760691007366
+0.1,Per-feature logistic (AE-gated),Reconnaissance,3496,3486,0.9971395881006865
+0.1,Per-feature logistic (AE-gated),Shellcode,378,371,0.9814814814814815
+0.1,Per-feature logistic (AE-gated),Worms,44,44,1.0
+0.1,Prior confidence (reference),Analysis,677,650,0.9601181683899557
+0.1,Prior confidence (reference),Backdoor,583,581,0.9965694682675815
+0.1,Prior confidence (reference),DoS,4089,4075,0.9965761799951088
+0.1,Prior confidence (reference),Exploits,11132,11020,0.9899389148401007
+0.1,Prior confidence (reference),Fuzzers,6062,4629,0.7636093698449357
+0.1,Prior confidence (reference),Generic,18871,18866,0.9997350431879604
+0.1,Prior confidence (reference),Reconnaissance,3496,3486,0.9971395881006865
+0.1,Prior confidence (reference),Shellcode,378,371,0.9814814814814815
+0.1,Prior confidence (reference),Worms,44,44,1.0
+0.1,Imported binary (reference),Analysis,677,628,0.9276218611521418
+0.1,Imported binary (reference),Backdoor,583,573,0.9828473413379074
+0.1,Imported binary (reference),DoS,4089,3962,0.9689410613842016
+0.1,Imported binary (reference),Exploits,11132,10648,0.9565217391304348
+0.1,Imported binary (reference),Fuzzers,6062,4374,0.7215440448696799
+0.1,Imported binary (reference),Generic,18871,18836,0.9981453023157225
+0.1,Imported binary (reference),Reconnaissance,3496,3474,0.9937070938215103
+0.1,Imported binary (reference),Shellcode,378,367,0.9708994708994709
+0.1,Imported binary (reference),Worms,44,44,1.0
+0.1,Imported plain AE alone,Analysis,677,677,1.0
+0.1,Imported plain AE alone,Backdoor,583,549,0.9416809605488851
+0.1,Imported plain AE alone,DoS,4089,3750,0.917094644167278
+0.1,Imported plain AE alone,Exploits,11132,9848,0.8846568451311534
+0.1,Imported plain AE alone,Fuzzers,6062,2985,0.49241174529858134
+0.1,Imported plain AE alone,Generic,18871,18656,0.9886068570822956
+0.1,Imported plain AE alone,Reconnaissance,3496,1004,0.28718535469107553
+0.1,Imported plain AE alone,Shellcode,378,22,0.0582010582010582
+0.1,Imported plain AE alone,Worms,44,36,0.8181818181818182
+0.1,Imported OR,Analysis,677,677,1.0
+0.1,Imported OR,Backdoor,583,582,0.9982847341337907
+0.1,Imported OR,DoS,4089,4071,0.9955979457079971
+0.1,Imported OR,Exploits,11132,10941,0.9828422565576715
+0.1,Imported OR,Fuzzers,6062,5119,0.8444407786209172
+0.1,Imported OR,Generic,18871,18859,0.9993641036511048
+0.1,Imported OR,Reconnaissance,3496,3488,0.9977116704805492
+0.1,Imported OR,Shellcode,378,368,0.9735449735449735
+0.1,Imported OR,Worms,44,44,1.0
+0.1,Imported AND,Analysis,677,628,0.9276218611521418
+0.1,Imported AND,Backdoor,583,540,0.9262435677530018
+0.1,Imported AND,DoS,4089,3641,0.8904377598434825
+0.1,Imported AND,Exploits,11132,9555,0.8583363277039167
+0.1,Imported AND,Fuzzers,6062,2240,0.3695150115473441
+0.1,Imported AND,Generic,18871,18633,0.9873880557469132
+0.1,Imported AND,Reconnaissance,3496,990,0.2831807780320366
+0.1,Imported AND,Shellcode,378,21,0.05555555555555555
+0.1,Imported AND,Worms,44,36,0.8181818181818182
+0.1,Imported plain+latent (continuous reference),Analysis,677,630,0.930576070901034
+0.1,Imported plain+latent (continuous reference),Backdoor,583,572,0.9811320754716981
+0.1,Imported plain+latent (continuous reference),DoS,4089,3967,0.9701638542430913
+0.1,Imported plain+latent (continuous reference),Exploits,11132,10747,0.9654150197628458
+0.1,Imported plain+latent (continuous reference),Fuzzers,6062,4363,0.7197294622236885
+0.1,Imported plain+latent (continuous reference),Generic,18871,18838,0.9982512850405384
+0.1,Imported plain+latent (continuous reference),Reconnaissance,3496,3476,0.994279176201373
+0.1,Imported plain+latent (continuous reference),Shellcode,378,367,0.9708994708994709
+0.1,Imported plain+latent (continuous reference),Worms,44,44,1.0
+0.1,Imported plain+latent (AE-gated),Analysis,677,630,0.930576070901034
+0.1,Imported plain+latent (AE-gated),Backdoor,583,573,0.9828473413379074
+0.1,Imported plain+latent (AE-gated),DoS,4089,3973,0.9716312056737588
+0.1,Imported plain+latent (AE-gated),Exploits,11132,10747,0.9654150197628458
+0.1,Imported plain+latent (AE-gated),Fuzzers,6062,4439,0.732266578686902
+0.1,Imported plain+latent (AE-gated),Generic,18871,18839,0.9983042764029463
+0.1,Imported plain+latent (AE-gated),Reconnaissance,3496,3476,0.994279176201373
+0.1,Imported plain+latent (AE-gated),Shellcode,378,367,0.9708994708994709
+0.1,Imported plain+latent (AE-gated),Worms,44,44,1.0

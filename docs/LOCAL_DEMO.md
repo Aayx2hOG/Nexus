@@ -1,6 +1,33 @@
 # Local LightGBM demo
 
-This demo serves the existing LightGBM release. Selective fusion can run alongside it in opt-in [shadow mode](SHADOW_FUSION.md); live alerts remain LightGBM-only.
+This demo serves the frozen **LightGBM v2** checkpoint. Research fusion models
+are not used for live alerts, but selective fusion can run alongside it in
+opt-in [shadow mode](SHADOW_FUSION.md).
+
+## Start both services with one command
+
+After installing Python and frontend dependencies, run from the repository root:
+
+```sh
+.venv/bin/python scripts/dev.py
+```
+
+This exports `experiments/lightgbm_validated_v2` to `artifacts/bundles/v2.0.0`
+when needed, verifies its hashes, and launches FastAPI plus Next.js with the same
+server-side authentication token. The default database is `artifacts/nexus-v2.sqlite3`.
+Open <http://localhost:3000/traffic>, load the mixed preset, and run detection.
+The model page shows bundle `v2.0.0`; alerts include real TreeSHAP contributions.
+Ctrl+C stops both services. Existing bundles are verified, never silently rebuilt.
+
+If the default ports are occupied (each launcher uses an isolated Next.js build directory):
+
+```sh
+.venv/bin/python scripts/dev.py --backend-port 8001 --frontend-port 3001
+```
+
+The launcher passes the matching backend URL to the frontend automatically.
+The frozen checkpoint must be available locally; it is not distributed in Git.
+The manual setup below is also supported.
 Run commands from the repository root unless a command changes directories.
 
 Nexus consists of three operational components:
@@ -30,11 +57,11 @@ python -m pip install -e '.[dev,training]'
 
 ### Step 2: Ensure the release bundle is present
 
-The backend requires the hash-checked release bundle (`artifacts/bundles/v1.0.0/`). Because bundles and model binaries are ignored by Git:
-- **On a new machine / fresh clone**: Copy the `artifacts/bundles/v1.0.0/` directory into your project root, OR export it if local training outputs and datasets are present:
+The backend requires the hash-checked release bundle (`artifacts/bundles/v2.0.0/`). Because bundles and model binaries are ignored by Git:
+- **On a new machine / fresh clone**: Copy the `artifacts/bundles/v2.0.0/` directory into your project root, OR export it if local training outputs and datasets are present:
 
 ```sh
-python -m training.export_release_bundle
+python -m training.export_release_bundle --experiment-dir experiments/lightgbm_validated_v2 --version v2.0.0
 ```
 
 The exporter verifies the experiment checkpoint, selection record, and split hashes, then packages the saved winning estimator and its fitted preprocessing without retraining. Serving scores are tested against that frozen checkpoint.
@@ -46,7 +73,7 @@ The exporter verifies the experiment checkpoint, selection record, and split has
 Set your environment variables and start Uvicorn on port `8000`:
 
 ```sh
-export NEXUS_BUNDLE_VERSION=v1.0.0
+export NEXUS_BUNDLE_VERSION=v2.0.0
 export NEXUS_DATABASE_PATH=data/nexus.sqlite3
 export NEXUS_API_TOKEN="test-token-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 export NEXUS_REVIEWER_ID=local-analyst
@@ -213,6 +240,20 @@ with `NEXUS_BUNDLE_VERSION=v1.0.0` and the same API token as the frontend, follo
 Step 3. For the presentation, use `/traffic` → mixed preset → Run Detection, then
 open a resulting alert. The website probe includes estimated/fixed inputs and is
 not a validated website security assessment.
+
+## LightGBM v2 connection verification
+
+The current launcher serves `experiments/lightgbm_validated_v2/binary/model.joblib`
+through release `v2.0.0`, with its fitted preprocessing and saved threshold.
+Verification through Next.js → FastAPI → LightGBM on the committed mixed preset
+returned 100 predictions (59 alerts, 41 normal), with maximum score difference
+**0.0** from the frozen checkpoint. Alert retrieval and `/traffic`, `/model`,
+`/alerts` returned successfully. This checks integration, not model accuracy.
+
+The six inference parity and Tier 1 API tests pass; frontend TypeScript and
+changed Python lint checks pass. These tests export v2 into a temporary directory
+and use committed preset inputs, so they do not require the old v1 release or
+raw training CSV. Browser interactions were not automated.
 
 The product uses the frozen release threshold and frozen Shadow Fusion recovery
 policy; users do not tune thresholds in the dashboard. The former Policy Lab was

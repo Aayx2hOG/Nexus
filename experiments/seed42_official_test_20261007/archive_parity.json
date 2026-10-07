@@ -1,0 +1,16 @@
+{
+  "lightgbm": {
+    "max_absolute_error": 0.0,
+    "exact_decision_parity_all_three_budgets": true
+  },
+  "ae_plain": {
+    "max_absolute_error": 0.0009765625
+  },
+  "ae_latent": {
+    "max_absolute_error": 0.0015779037960328424
+  },
+  "fusion_ae_plain_latent": {
+    "max_absolute_error": 1.2801568872733426e-06,
+    "exact_decision_parity_all_three_budgets": true
+  }
+}

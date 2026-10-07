@@ -1,0 +1,48 @@
+{
+  "imported_model": "fusion_ae_plain_latent",
+  "seed": 42,
+  "imported_calibration_budget": 0.05,
+  "imported_threshold": 0.6757786664467935,
+  "imported_binary_threshold": 0.6469192827342729,
+  "recent_rule": {
+    "family": "Mode confidence",
+    "boundaries": [
+      0.0008959400583989918,
+      0.002263414021581411,
+      0.027578630857169606
+    ],
+    "cutoffs": [
+      0.65,
+      0.5776925765603604,
+      0.5776925765603604,
+      0.5776925765603604
+    ],
+    "quantiles": [
+      0.5,
+      0.8,
+      0.99
+    ],
+    "selection": {
+      "tn": 7887,
+      "fp": 306,
+      "fn": 839,
+      "tp": 15999,
+      "recall": 0.9501722294809359,
+      "fpr": 0.0373489564262175,
+      "precision": 0.9812327506899724,
+      "f1": 0.965452735117521,
+      "accuracy": 0.9542567216651352
+    }
+  },
+  "retrained": false,
+  "retuned": false,
+  "latent_source": "Denoising AE latent Mahalanobis distance",
+  "source_hashes": {
+    "models.joblib": "6b3c7d38bed36223667849447607d764a6a7c748d667d3ee8b17658190d78d1d",
+    "split_indices.npz": "238120f31131b65fc75592084aa1ac660c212c2dbb896aeb00a32eb18ac69e89",
+    "evaluation_scores.npz": "d64cfd18a658bc192faeacf1da12f1448646893266d710bbeda404d75c72d3bd",
+    "evaluation_decisions.npz": "3899dfbd6347695a7e628f43dfbd9214e6f9bf824b2ed800c2cd372704c01035",
+    "calibration.json": "e7b98d818621ba3a81abe551a6751211189e406c8f2d1fb345f1794ae0cc5e34",
+    "metrics.json": "7e8b59ea40d90c65aacd8a61dd6c4c9c027798a408dab645d03afeeb9dc5cd7d"
+  }
+}

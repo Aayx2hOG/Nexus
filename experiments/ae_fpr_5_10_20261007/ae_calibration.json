@@ -1,0 +1,34 @@
+[
+  {
+    "model": "Recent AE",
+    "target": 0.05,
+    "threshold": 0.008725384250283243,
+    "normal_rows": 8002,
+    "false_positives": 400,
+    "observed_fpr": 0.04998750312421894
+  },
+  {
+    "model": "Imported plain AE",
+    "target": 0.05,
+    "threshold": 0.02851921878755093,
+    "normal_rows": 5618,
+    "false_positives": 280,
+    "observed_fpr": 0.04983980064079744
+  },
+  {
+    "model": "Recent AE",
+    "target": 0.1,
+    "threshold": 0.004530309699475766,
+    "normal_rows": 8002,
+    "false_positives": 800,
+    "observed_fpr": 0.09997500624843789
+  },
+  {
+    "model": "Imported plain AE",
+    "target": 0.1,
+    "threshold": 0.01599344797432423,
+    "normal_rows": 5618,
+    "false_positives": 561,
+    "observed_fpr": 0.09985760056959772
+  }
+]

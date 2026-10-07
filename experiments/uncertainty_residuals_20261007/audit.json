@@ -1,0 +1,16 @@
+{
+  "train_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "test_sha256": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+  "grouped_splits_verified": true,
+  "grouped_meta_folds_verified": true,
+  "previous_ae_score_parity": true,
+  "overlap_rows": 8541,
+  "calibration_rows": 25449,
+  "selection_rows": 25031,
+  "test_rows": 82332,
+  "candidates": 679,
+  "source_hashes": {
+    "binary.joblib": "ac0e6d33bfba56eb610adbd5dcf58a750a10c22758ba26f851d633386205d2e2",
+    "autoencoder.joblib": "5315d021f9f17e7d4baf6a73b6276187cbe819bbb467e2107148f668f89ad8b5"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "dataset": "Official UNSW-NB15 testing set",
+  "test_sha256": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+  "rows": 82332,
+  "result": {
+    "ae_target": 0.05,
+    "name": "Mode confidence",
+    "tn": 31657,
+    "fp": 5343,
+    "fn": 1834,
+    "tp": 43498,
+    "recall": 0.9595429277331686,
+    "fpr": 0.14440540540540542,
+    "precision": 0.8906042054830983,
+    "f1": 0.9237891964788209,
+    "accuracy": 0.9128285478307341,
+    "confusion_matrix": [
+      [
+        31657,
+        5343
+      ],
+      [
+        1834,
+        43498
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 264,
+    "removed_false_alarms": 992,
+    "added_false_alarms": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "full_test_rows": 82332,
+  "prediction_mismatches": 0,
+  "ae_score_parity": true,
+  "confusion_matrix": [
+    [
+      31657,
+      5343
+    ],
+    [
+      1834,
+      43498
+    ]
+  ],
+  "verified_from_raw_features": true,
+  "training_module_imports_required": false
+}

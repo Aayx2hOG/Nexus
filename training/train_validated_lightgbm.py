@@ -64,6 +64,32 @@ def canonical_features(frame):
     return frame
 
 
+def load_split_indices(path, y, groups):
+    """Load saved row partitions, including an extracted NPZ directory."""
+    parts = ("fit", "early", "calibration", "selection")
+    if path.is_dir():
+        split = {part: np.load(path / f"{part}.npy", allow_pickle=False) for part in parts}
+    else:
+        with np.load(path, allow_pickle=False) as archive:
+            split = {part: archive[part] for part in parts}
+    seen_groups = set()
+    for part, indices in split.items():
+        if indices.ndim != 1 or not np.issubdtype(indices.dtype, np.integer):
+            raise ValueError(f"{part}: indices must be a one-dimensional integer array")
+        if not len(indices) or np.any(indices < 0) or np.any(indices >= len(y)):
+            raise ValueError(f"{part}: empty partition or out-of-range indices")
+        partition_groups = set(groups[indices])
+        if seen_groups.intersection(partition_groups):
+            raise ValueError(f"{part}: identical predictors cross partition boundaries")
+        seen_groups.update(partition_groups)
+        if set(np.unique(y[indices])) != set(np.unique(y)):
+            raise ValueError(f"{part}: saved partition is missing a class")
+    combined = np.concatenate(list(split.values()))
+    if not np.array_equal(np.sort(combined), np.arange(len(y))):
+        raise ValueError("Saved partitions must cover every training row exactly once")
+    return split
+
+
 def search_plan(task, count, seed):
     base = candidates(task, 1)[0]
     if task == "multiclass":
@@ -183,6 +209,10 @@ def parse_args():
     )
     parser.add_argument("--task", choices=["binary", "multiclass", "both"], default="both")
     parser.add_argument("--experiment-dir", type=Path)
+    parser.add_argument(
+        "--split-indices", type=Path,
+        help="Saved split NPZ file or directory containing fit/early/calibration/selection.npy",
+    )
     parser.add_argument("--trials", type=int, default=16)
     parser.add_argument("--max-rounds", type=int, default=2500)
     parser.add_argument("--patience", type=int, default=100)
@@ -207,7 +237,10 @@ def main():
     raw, y, names = read_data(args.train_csv)
     raw = canonical_features(raw)
     groups, audit = audit_training(raw, y)
-    split = grouped_splits(y, groups, args.seed)
+    split = (
+        load_split_indices(args.split_indices, y, groups)
+        if args.split_indices is not None else grouped_splits(y, groups, args.seed)
+    )
     output = args.experiment_dir or PROJECT_ROOT / "experiments" / (
         "validated_lightgbm_" + datetime.now(UTC).strftime("%Y%m%dT%H%M%S_%fZ")
     )

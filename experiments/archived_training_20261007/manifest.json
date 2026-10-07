@@ -1,0 +1,275 @@
+{
+  "kept_training_scripts": [
+    "anomaly_detection_models",
+    "compare_lightgbm",
+    "compare_working_v2_fusion",
+    "evaluate_frozen_lightgbm",
+    "evaluate_imported_seed42_test",
+    "experiment_ae_fpr_sweep",
+    "experiment_confidence_ae",
+    "experiment_four_mode_ae",
+    "experiment_uncertainty_residuals",
+    "export_release_bundle",
+    "export_selected_fusion_models",
+    "fast_lightgbm_models",
+    "multiclass_training_utils",
+    "train_autoencoder",
+    "train_isolation_forest",
+    "train_validated_lightgbm",
+    "training_utils",
+    "tune_lightgbm",
+    "tune_lightgbm_fast"
+  ],
+  "removed_training_scripts": [
+    "analyze_autoencoder_complementarity",
+    "analyze_optimized_ae_loafo",
+    "analyze_serving_errors",
+    "calibration_evidence",
+    "compare_anomaly_detectors",
+    "compare_hard_normal_candidate",
+    "compare_normal_traffic",
+    "complementary_fusion",
+    "evaluate_autoencoder",
+    "evaluate_models",
+    "evaluate_multiclass_models",
+    "evaluate_official_testing_v2",
+    "evaluate_optimized_autoencoder",
+    "evaluation_isolation_forest",
+    "experiment_stacked_ae_fusion",
+    "fusion_ablation",
+    "improve_binary_detector",
+    "leave_one_attack_family_out",
+    "optimize_autoencoder",
+    "run_novelty_experiment",
+    "selective_fusion",
+    "summarize_anomaly_results",
+    "train_lightgbm",
+    "train_multiclass_lightgbm",
+    "train_multiclass_random_forest",
+    "train_random_forest"
+  ],
+  "files": [
+    {
+      "original": "training/analyze_autoencoder_complementarity.py",
+      "archive": "experiments/archived_training_20261007/training/analyze_autoencoder_complementarity.py",
+      "sha256": "346907b46aeb681dd9b7a3cac962a95ce55206a55c05c972edbd1a2dfaec6795",
+      "action": "moved"
+    },
+    {
+      "original": "training/analyze_optimized_ae_loafo.py",
+      "archive": "experiments/archived_training_20261007/training/analyze_optimized_ae_loafo.py",
+      "sha256": "16cc9f189f5cbff3a8929c4537012acaaec8813b21038caf0c43317ee64ffff1",
+      "action": "moved"
+    },
+    {
+      "original": "training/analyze_serving_errors.py",
+      "archive": "experiments/archived_training_20261007/training/analyze_serving_errors.py",
+      "sha256": "8681a90a79c75ffec181843aee01479af06653e466bcfe34dfced3bec76e6945",
+      "action": "moved"
+    },
+    {
+      "original": "training/calibration_evidence.py",
+      "archive": "experiments/archived_training_20261007/training/calibration_evidence.py",
+      "sha256": "566d5ba9d02fcfbc92d590b531426bf5029bd96c7500cc9a6fe088f7b3834bbd",
+      "action": "moved"
+    },
+    {
+      "original": "training/compare_anomaly_detectors.py",
+      "archive": "experiments/archived_training_20261007/training/compare_anomaly_detectors.py",
+      "sha256": "fbd02012037087c11e49614b94ae987997ac48de86c277c327bde7ddfd0c11a8",
+      "action": "moved"
+    },
+    {
+      "original": "training/compare_hard_normal_candidate.py",
+      "archive": "experiments/archived_training_20261007/training/compare_hard_normal_candidate.py",
+      "sha256": "2439638ff80460a9fab98da1dfe4c4f6a90ebb08dc19f2d2f31e2aa255f4a4ca",
+      "action": "moved"
+    },
+    {
+      "original": "training/compare_normal_traffic.py",
+      "archive": "experiments/archived_training_20261007/training/compare_normal_traffic.py",
+      "sha256": "d88a2473fe6707131fc6d60355553506ae3854dca0d36be611449a3b38c3977f",
+      "action": "moved"
+    },
+    {
+      "original": "training/complementary_fusion.py",
+      "archive": "experiments/archived_training_20261007/training/complementary_fusion.py",
+      "sha256": "066be279d418a64818afd3783198fc73d3a781d2dd670a2facc4b91f8da342d4",
+      "action": "moved"
+    },
+    {
+      "original": "training/evaluate_autoencoder.py",
+      "archive": "experiments/archived_training_20261007/training/evaluate_autoencoder.py",
+      "sha256": "d72620875ebba0c8d59e1eb4c0c8a895a23fff6439aa5d79c8411362bed5bc2b",
+      "action": "moved"
+    },
+    {
+      "original": "training/evaluate_models.py",
+      "archive": "experiments/archived_training_20261007/training/evaluate_models.py",
+      "sha256": "deed0936ee21be0bce5b1231c2ea062dba0165cfdb5f51b0a8ab965ea7f75073",
+      "action": "moved"
+    },
+    {
+      "original": "training/evaluate_multiclass_models.py",
+      "archive": "experiments/archived_training_20261007/training/evaluate_multiclass_models.py",
+      "sha256": "a6519afda0ec809aa0d6cd1f17336326ea4a6cdc168ba80f969bba9722aaa6be",
+      "action": "moved"
+    },
+    {
+      "original": "training/evaluate_official_testing_v2.py",
+      "archive": "experiments/archived_training_20261007/training/evaluate_official_testing_v2.py",
+      "sha256": "6a03d061aa983157009bf58abc74a9b12a16eb1ea7ee361c0f3c2629b6cd4e75",
+      "action": "moved"
+    },
+    {
+      "original": "training/evaluate_optimized_autoencoder.py",
+      "archive": "experiments/archived_training_20261007/training/evaluate_optimized_autoencoder.py",
+      "sha256": "53d0f4bda7767d1e5cb1baf3e20c84a6d6994db06ee1e74e4f110ff4a5c97958",
+      "action": "moved"
+    },
+    {
+      "original": "training/evaluation_isolation_forest.py",
+      "archive": "experiments/archived_training_20261007/training/evaluation_isolation_forest.py",
+      "sha256": "82fe1d29a67ddd0d99a946595944399af700060cc43b8665fee233e6aff92b76",
+      "action": "moved"
+    },
+    {
+      "original": "training/experiment_stacked_ae_fusion.py",
+      "archive": "experiments/archived_training_20261007/training/experiment_stacked_ae_fusion.py",
+      "sha256": "1666b5aff07fc689fd883af9af7ce9688d43999daaf24fd1ebbeae1fde0bc8f5",
+      "action": "moved"
+    },
+    {
+      "original": "training/fusion_ablation.py",
+      "archive": "experiments/archived_training_20261007/training/fusion_ablation.py",
+      "sha256": "3cf9fac16b758fd055ba33f01c0aaaa70082acbd9cbb81773387be94619700bb",
+      "action": "moved"
+    },
+    {
+      "original": "training/improve_binary_detector.py",
+      "archive": "experiments/archived_training_20261007/training/improve_binary_detector.py",
+      "sha256": "56225458e4bf3b444b5558b1a251654dec25bccd55e41da4ecaf72d1a5d4dfd0",
+      "action": "moved"
+    },
+    {
+      "original": "training/leave_one_attack_family_out.py",
+      "archive": "experiments/archived_training_20261007/training/leave_one_attack_family_out.py",
+      "sha256": "39f91f8646275cb77e7a94c49635c1de35c37db67b4a16854b21ad96b1a9c885",
+      "action": "moved"
+    },
+    {
+      "original": "training/optimize_autoencoder.py",
+      "archive": "experiments/archived_training_20261007/training/optimize_autoencoder.py",
+      "sha256": "9004e5c621dd84052dd0680033d3d7a94d5d839ee184b7eccbd06585754da3da",
+      "action": "moved"
+    },
+    {
+      "original": "training/run_novelty_experiment.py",
+      "archive": "experiments/archived_training_20261007/training/run_novelty_experiment.py",
+      "sha256": "1c7bea39182c57ace4309b0639ad34e62497f7b8801a55aa93bab4d44d3c81fc",
+      "action": "moved"
+    },
+    {
+      "original": "training/selective_fusion.py",
+      "archive": "experiments/archived_training_20261007/training/selective_fusion.py",
+      "sha256": "563fdc15824c31605c60dc9b517398de0e99660612ce4e706ac8fbbf53780dc9",
+      "action": "moved"
+    },
+    {
+      "original": "training/summarize_anomaly_results.py",
+      "archive": "experiments/archived_training_20261007/training/summarize_anomaly_results.py",
+      "sha256": "bd1b985dc33182cbad589f9210c029f4e6e88a6c3129171a7bd794238f481219",
+      "action": "moved"
+    },
+    {
+      "original": "training/train_lightgbm.py",
+      "archive": "experiments/archived_training_20261007/training/train_lightgbm.py",
+      "sha256": "911d70436e713d24ad0bd542099bb9a129cb6b7c8db869b4be8ff146a6ffab4e",
+      "action": "moved"
+    },
+    {
+      "original": "training/train_multiclass_lightgbm.py",
+      "archive": "experiments/archived_training_20261007/training/train_multiclass_lightgbm.py",
+      "sha256": "bf3a8e3143381e6cb00b19acd5b8bbf75893514c82fa75876138896d88e04772",
+      "action": "moved"
+    },
+    {
+      "original": "training/train_multiclass_random_forest.py",
+      "archive": "experiments/archived_training_20261007/training/train_multiclass_random_forest.py",
+      "sha256": "72bb04b7112917205d5d3c35566010c7ee0236e12303e31417a4dfae589f4922",
+      "action": "moved"
+    },
+    {
+      "original": "training/train_random_forest.py",
+      "archive": "experiments/archived_training_20261007/training/train_random_forest.py",
+      "sha256": "bb7d7bb3ab49f0705ac6329f08214fc7d65583bff4cb2caa79068e96e059c3da",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_anomaly_detection_models.py",
+      "archive": "experiments/archived_training_20261007/tests/test_anomaly_detection_models.py",
+      "sha256": "61a5bbefae08eee17687cf7bd50504e7837c555c8158397551e63909da4c52fd",
+      "action": "snapshot before edit"
+    },
+    {
+      "original": "tests/test_autoencoder.py",
+      "archive": "experiments/archived_training_20261007/tests/test_autoencoder.py",
+      "sha256": "720bf5d3b4fd030a34f3a128ab1583b060daf2fd5a05deaeb49473075a870a50",
+      "action": "snapshot before edit"
+    },
+    {
+      "original": "tests/test_autoencoder_complementarity.py",
+      "archive": "experiments/archived_training_20261007/tests/test_autoencoder_complementarity.py",
+      "sha256": "d5b94f3b79ee9e2f261c340008291af524d99565a35e030f9ee6c7d202ea4b42",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_binary_improvement.py",
+      "archive": "experiments/archived_training_20261007/tests/test_binary_improvement.py",
+      "sha256": "57a0d2abd0ca3ff35696e0bdf1f8a8e55e3cfd108cf238c4cc65c8906849dd69",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_calibration_evidence.py",
+      "archive": "experiments/archived_training_20261007/tests/test_calibration_evidence.py",
+      "sha256": "afd95aa3c3c9e616ad5f5447d7a7d4478bc5054475386018ae4b9cf8de772de2",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_fusion_ablation.py",
+      "archive": "experiments/archived_training_20261007/tests/test_fusion_ablation.py",
+      "sha256": "bf5f4b9c564f26df90f51ae45a4c4f89862ac716c3fd59c0b6e17c06d8dc63ad",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_hard_normal_comparison.py",
+      "archive": "experiments/archived_training_20261007/tests/test_hard_normal_comparison.py",
+      "sha256": "1f55944fba8207fe000427c08bc827c02ceb4785b2820ae3c335e4e727f38975",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_leave_one_attack_family_out.py",
+      "archive": "experiments/archived_training_20261007/tests/test_leave_one_attack_family_out.py",
+      "sha256": "b48c818428410bb1453fcb07dc5030cc35aa028e6fc60865cc20ca20c6f58168",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_normal_shift.py",
+      "archive": "experiments/archived_training_20261007/tests/test_normal_shift.py",
+      "sha256": "8d6f83e72b2f6c5483391cda641a6ef5ba6aa1baddc54194ccc7e45c4186ad76",
+      "action": "moved"
+    },
+    {
+      "original": "tests/test_selective_fusion.py",
+      "archive": "experiments/archived_training_20261007/tests/test_selective_fusion.py",
+      "sha256": "a04e9e024f7ccf05da0b759d24b85ef9a0a59667ed8aa0a3395b9019c015963a",
+      "action": "moved"
+    },
+    {
+      "original": "training/README.md",
+      "archive": "experiments/archived_training_20261007/training/README.md",
+      "sha256": "ef6bc139f994baa50c641614bf307d84e512681ab50b81ac88db4033c6675f7a",
+      "action": "snapshot before edit"
+    }
+  ]
+}

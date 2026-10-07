@@ -1,0 +1,37 @@
+family,model,rows,detected,recall
+Analysis,Imported seed42 binary,677,628,0.9276218611521418
+Analysis,Imported seed42 plain-AE + latent,677,630,0.930576070901034
+Analysis,Recent binary,677,650,0.9601181683899557
+Analysis,Recent confidence rule,677,650,0.9601181683899557
+Backdoor,Imported seed42 binary,583,573,0.9828473413379074
+Backdoor,Imported seed42 plain-AE + latent,583,572,0.9811320754716981
+Backdoor,Recent binary,583,581,0.9965694682675815
+Backdoor,Recent confidence rule,583,581,0.9965694682675815
+DoS,Imported seed42 binary,4089,3962,0.9689410613842016
+DoS,Imported seed42 plain-AE + latent,4089,3967,0.9701638542430913
+DoS,Recent binary,4089,4076,0.9968207385668868
+DoS,Recent confidence rule,4089,4075,0.9965761799951088
+Exploits,Imported seed42 binary,11132,10648,0.9565217391304348
+Exploits,Imported seed42 plain-AE + latent,11132,10747,0.9654150197628458
+Exploits,Recent binary,11132,11028,0.9906575637800934
+Exploits,Recent confidence rule,11132,11020,0.9899389148401007
+Fuzzers,Imported seed42 binary,6062,4374,0.7215440448696799
+Fuzzers,Imported seed42 plain-AE + latent,6062,4363,0.7197294622236885
+Fuzzers,Recent binary,6062,4660,0.7687231936654569
+Fuzzers,Recent confidence rule,6062,4629,0.7636093698449357
+Generic,Imported seed42 binary,18871,18836,0.9981453023157225
+Generic,Imported seed42 plain-AE + latent,18871,18838,0.9982512850405384
+Generic,Recent binary,18871,18866,0.9997350431879604
+Generic,Recent confidence rule,18871,18866,0.9997350431879604
+Reconnaissance,Imported seed42 binary,3496,3474,0.9937070938215103
+Reconnaissance,Imported seed42 plain-AE + latent,3496,3476,0.994279176201373
+Reconnaissance,Recent binary,3496,3486,0.9971395881006865
+Reconnaissance,Recent confidence rule,3496,3486,0.9971395881006865
+Shellcode,Imported seed42 binary,378,367,0.9708994708994709
+Shellcode,Imported seed42 plain-AE + latent,378,367,0.9708994708994709
+Shellcode,Recent binary,378,371,0.9814814814814815
+Shellcode,Recent confidence rule,378,371,0.9814814814814815
+Worms,Imported seed42 binary,44,44,1.0
+Worms,Imported seed42 plain-AE + latent,44,44,1.0
+Worms,Recent binary,44,44,1.0
+Worms,Recent confidence rule,44,44,1.0

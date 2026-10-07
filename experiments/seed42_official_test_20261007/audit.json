@@ -1,0 +1,13 @@
+{
+  "test_sha256": "734fe6642edf758f7c94d7d9149426b49d202fe8e7bf0bef47392489c3c0a559",
+  "train_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "test_rows": 82332,
+  "normal_rows": 37000,
+  "attack_rows": 45332,
+  "source_hashes_verified": true,
+  "archive_score_parity": true,
+  "recent_predictions_reproduced": true,
+  "no_retraining": true,
+  "no_threshold_retuning": true,
+  "different_training_protocols": true
+}

@@ -1,0 +1,1136 @@
+[
+  {
+    "ae_target": 0.05,
+    "name": "AE alone",
+    "tn": 33185,
+    "fp": 3815,
+    "fn": 8955,
+    "tp": 36377,
+    "recall": 0.8024574252183888,
+    "fpr": 0.10310810810810811,
+    "precision": 0.9050806130573248,
+    "f1": 0.8506851877835462,
+    "accuracy": 0.8448962736238643,
+    "confusion_matrix": [
+      [
+        33185,
+        3815
+      ],
+      [
+        8955,
+        36377
+      ]
+    ],
+    "recovered_attacks": 558,
+    "lost_attacks": 7943,
+    "removed_false_alarms": 4884,
+    "added_false_alarms": 2364
+  },
+  {
+    "ae_target": 0.05,
+    "name": "OR",
+    "tn": 28301,
+    "fp": 8699,
+    "fn": 1012,
+    "tp": 44320,
+    "recall": 0.9776758139945293,
+    "fpr": 0.23510810810810812,
+    "precision": 0.8359267432429883,
+    "f1": 0.9012618072007402,
+    "accuracy": 0.8820507214691736,
+    "confusion_matrix": [
+      [
+        28301,
+        8699
+      ],
+      [
+        1012,
+        44320
+      ]
+    ],
+    "recovered_attacks": 558,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 2364
+  },
+  {
+    "ae_target": 0.05,
+    "name": "AND",
+    "tn": 35549,
+    "fp": 1451,
+    "fn": 9513,
+    "tp": 35819,
+    "recall": 0.7901482396541075,
+    "fpr": 0.03921621621621622,
+    "precision": 0.9610678830158305,
+    "f1": 0.8672671363889494,
+    "accuracy": 0.8668318515279599,
+    "confusion_matrix": [
+      [
+        35549,
+        1451
+      ],
+      [
+        9513,
+        35819
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 7943,
+    "removed_false_alarms": 4884,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Four-mode hard override",
+    "tn": 34243,
+    "fp": 2757,
+    "fn": 9199,
+    "tp": 36133,
+    "recall": 0.7970749139680579,
+    "fpr": 0.07451351351351351,
+    "precision": 0.9291077397788634,
+    "f1": 0.8580418417990548,
+    "accuracy": 0.8547830734100957,
+    "confusion_matrix": [
+      [
+        34243,
+        2757
+      ],
+      [
+        9199,
+        36133
+      ]
+    ],
+    "recovered_attacks": 314,
+    "lost_attacks": 7943,
+    "removed_false_alarms": 4884,
+    "added_false_alarms": 1306
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Mode confidence",
+    "tn": 31657,
+    "fp": 5343,
+    "fn": 1834,
+    "tp": 43498,
+    "recall": 0.9595429277331686,
+    "fpr": 0.14440540540540542,
+    "precision": 0.8906042054830983,
+    "f1": 0.9237891964788209,
+    "accuracy": 0.9128285478307341,
+    "confusion_matrix": [
+      [
+        31657,
+        5343
+      ],
+      [
+        1834,
+        43498
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 264,
+    "removed_false_alarms": 992,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Uncertainty-band four-mode",
+    "tn": 31379,
+    "fp": 5621,
+    "fn": 1541,
+    "tp": 43791,
+    "recall": 0.9660063531280332,
+    "fpr": 0.15191891891891893,
+    "precision": 0.8862422083704363,
+    "f1": 0.9244068225956261,
+    "accuracy": 0.9130107370159841,
+    "confusion_matrix": [
+      [
+        31379,
+        5621
+      ],
+      [
+        1541,
+        43791
+      ]
+    ],
+    "recovered_attacks": 293,
+    "lost_attacks": 264,
+    "removed_false_alarms": 992,
+    "added_false_alarms": 278
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Selective recovery (p>=40%)",
+    "tn": 30360,
+    "fp": 6640,
+    "fn": 1356,
+    "tp": 43976,
+    "recall": 0.9700873555104562,
+    "fpr": 0.17945945945945946,
+    "precision": 0.8688161846056582,
+    "f1": 0.9166631925626381,
+    "accuracy": 0.9028810183160861,
+    "confusion_matrix": [
+      [
+        30360,
+        6640
+      ],
+      [
+        1356,
+        43976
+      ]
+    ],
+    "recovered_attacks": 214,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 305
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Binary only",
+    "tn": 30665,
+    "fp": 6335,
+    "fn": 1570,
+    "tp": 43762,
+    "recall": 0.9653666284302479,
+    "fpr": 0.17121621621621622,
+    "precision": 0.8735453220751742,
+    "f1": 0.9171635456726991,
+    "accuracy": 0.9039862993732692,
+    "confusion_matrix": [
+      [
+        30665,
+        6335
+      ],
+      [
+        1570,
+        43762
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Tuned binary (59%)",
+    "tn": 30869,
+    "fp": 6131,
+    "fn": 1636,
+    "tp": 43696,
+    "recall": 0.9639107032559782,
+    "fpr": 0.1657027027027027,
+    "precision": 0.87695426174564,
+    "f1": 0.9183787135215796,
+    "accuracy": 0.9056624398775689,
+    "confusion_matrix": [
+      [
+        30869,
+        6131
+      ],
+      [
+        1636,
+        43696
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 66,
+    "removed_false_alarms": 204,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Score-only logistic (continuous reference)",
+    "tn": 29956,
+    "fp": 7044,
+    "fn": 1399,
+    "tp": 43933,
+    "recall": 0.9691387981999471,
+    "fpr": 0.19037837837837837,
+    "precision": 0.8618200364870432,
+    "f1": 0.9123342574421913,
+    "accuracy": 0.8974517805956371,
+    "confusion_matrix": [
+      [
+        29956,
+        7044
+      ],
+      [
+        1399,
+        43933
+      ]
+    ],
+    "recovered_attacks": 171,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 709
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Total-error logistic (continuous reference)",
+    "tn": 30924,
+    "fp": 6076,
+    "fn": 1637,
+    "tp": 43695,
+    "recall": 0.9638886437836407,
+    "fpr": 0.1642162162162162,
+    "precision": 0.8779208776194973,
+    "f1": 0.9188984574619097,
+    "accuracy": 0.9063183209444687,
+    "confusion_matrix": [
+      [
+        30924,
+        6076
+      ],
+      [
+        1637,
+        43695
+      ]
+    ],
+    "recovered_attacks": 9,
+    "lost_attacks": 76,
+    "removed_false_alarms": 262,
+    "added_false_alarms": 3
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Total-error logistic (AE-gated)",
+    "tn": 30672,
+    "fp": 6328,
+    "fn": 1581,
+    "tp": 43751,
+    "recall": 0.9651239742345363,
+    "fpr": 0.17102702702702702,
+    "precision": 0.8736396493540206,
+    "f1": 0.9171059940677699,
+    "accuracy": 0.9039377155905359,
+    "confusion_matrix": [
+      [
+        30672,
+        6328
+      ],
+      [
+        1581,
+        43751
+      ]
+    ],
+    "recovered_attacks": 9,
+    "lost_attacks": 20,
+    "removed_false_alarms": 10,
+    "added_false_alarms": 3
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Per-feature logistic (continuous reference)",
+    "tn": 29688,
+    "fp": 7312,
+    "fn": 1220,
+    "tp": 44112,
+    "recall": 0.9730874437483455,
+    "fpr": 0.1976216216216216,
+    "precision": 0.857809583074051,
+    "f1": 0.9118194220513457,
+    "accuracy": 0.8963707914298207,
+    "confusion_matrix": [
+      [
+        29688,
+        7312
+      ],
+      [
+        1220,
+        44112
+      ]
+    ],
+    "recovered_attacks": 392,
+    "lost_attacks": 42,
+    "removed_false_alarms": 63,
+    "added_false_alarms": 1040
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Per-feature logistic (AE-gated)",
+    "tn": 30397,
+    "fp": 6603,
+    "fn": 1373,
+    "tp": 43959,
+    "recall": 0.96971234448072,
+    "fpr": 0.17845945945945946,
+    "precision": 0.8694078557019105,
+    "f1": 0.9168248274136025,
+    "accuracy": 0.9031239372297527,
+    "confusion_matrix": [
+      [
+        30397,
+        6603
+      ],
+      [
+        1373,
+        43959
+      ]
+    ],
+    "recovered_attacks": 239,
+    "lost_attacks": 42,
+    "removed_false_alarms": 59,
+    "added_false_alarms": 327
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Prior confidence (reference)",
+    "tn": 30896,
+    "fp": 6104,
+    "fn": 1610,
+    "tp": 43722,
+    "recall": 0.964484249536751,
+    "fpr": 0.16497297297297298,
+    "precision": 0.877493677999438,
+    "f1": 0.9189348241871413,
+    "accuracy": 0.9063061749987854,
+    "confusion_matrix": [
+      [
+        30896,
+        6104
+      ],
+      [
+        1610,
+        43722
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 40,
+    "removed_false_alarms": 231,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Imported binary (reference)",
+    "tn": 30841,
+    "fp": 6159,
+    "fn": 2426,
+    "tp": 42906,
+    "recall": 0.946483720109415,
+    "fpr": 0.16645945945945945,
+    "precision": 0.8744726383369,
+    "f1": 0.909054313166732,
+    "accuracy": 0.8957270563086042,
+    "confusion_matrix": [
+      [
+        30841,
+        6159
+      ],
+      [
+        2426,
+        42906
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Imported plain AE alone",
+    "tn": 33599,
+    "fp": 3401,
+    "fn": 9910,
+    "tp": 35422,
+    "recall": 0.7813906291361511,
+    "fpr": 0.09191891891891892,
+    "precision": 0.9123972902660794,
+    "f1": 0.8418275800606024,
+    "accuracy": 0.8383253170091823,
+    "confusion_matrix": [
+      [
+        33599,
+        3401
+      ],
+      [
+        9910,
+        35422
+      ]
+    ],
+    "recovered_attacks": 899,
+    "lost_attacks": 8383,
+    "removed_false_alarms": 4900,
+    "added_false_alarms": 2142
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Imported OR",
+    "tn": 28699,
+    "fp": 8301,
+    "fn": 1527,
+    "tp": 43805,
+    "recall": 0.966315185740757,
+    "fpr": 0.22435135135135134,
+    "precision": 0.8406901316547039,
+    "f1": 0.8991358607524785,
+    "accuracy": 0.8806296458242239,
+    "confusion_matrix": [
+      [
+        28699,
+        8301
+      ],
+      [
+        1527,
+        43805
+      ]
+    ],
+    "recovered_attacks": 899,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 2142
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Imported AND",
+    "tn": 35741,
+    "fp": 1259,
+    "fn": 10809,
+    "tp": 34523,
+    "recall": 0.761559163504809,
+    "fpr": 0.03402702702702703,
+    "precision": 0.9648147113073613,
+    "f1": 0.8512217373079863,
+    "accuracy": 0.8534227274935626,
+    "confusion_matrix": [
+      [
+        35741,
+        1259
+      ],
+      [
+        10809,
+        34523
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 8383,
+    "removed_false_alarms": 4900,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Imported plain+latent (continuous reference)",
+    "tn": 30926,
+    "fp": 6074,
+    "fn": 2328,
+    "tp": 43004,
+    "recall": 0.9486455483984824,
+    "fpr": 0.16416216216216217,
+    "precision": 0.8762378255022617,
+    "f1": 0.9110051901281644,
+    "accuracy": 0.8979497643686537,
+    "confusion_matrix": [
+      [
+        30926,
+        6074
+      ],
+      [
+        2328,
+        43004
+      ]
+    ],
+    "recovered_attacks": 217,
+    "lost_attacks": 119,
+    "removed_false_alarms": 302,
+    "added_false_alarms": 217
+  },
+  {
+    "ae_target": 0.05,
+    "name": "Imported plain+latent (AE-gated)",
+    "tn": 30761,
+    "fp": 6239,
+    "fn": 2257,
+    "tp": 43075,
+    "recall": 0.9502117709344392,
+    "fpr": 0.16862162162162161,
+    "precision": 0.8734842032688486,
+    "f1": 0.9102339243074192,
+    "accuracy": 0.8968080454744206,
+    "confusion_matrix": [
+      [
+        30761,
+        6239
+      ],
+      [
+        2257,
+        43075
+      ]
+    ],
+    "recovered_attacks": 172,
+    "lost_attacks": 3,
+    "removed_false_alarms": 8,
+    "added_false_alarms": 88
+  },
+  {
+    "ae_target": 0.1,
+    "name": "AE alone",
+    "tn": 30915,
+    "fp": 6085,
+    "fn": 7258,
+    "tp": 38074,
+    "recall": 0.8398923497749934,
+    "fpr": 0.16445945945945947,
+    "precision": 0.8622024955275255,
+    "f1": 0.8509012079426982,
+    "accuracy": 0.8379366467473157,
+    "confusion_matrix": [
+      [
+        30915,
+        6085
+      ],
+      [
+        7258,
+        38074
+      ]
+    ],
+    "recovered_attacks": 807,
+    "lost_attacks": 6495,
+    "removed_false_alarms": 4284,
+    "added_false_alarms": 4034
+  },
+  {
+    "ae_target": 0.1,
+    "name": "OR",
+    "tn": 26631,
+    "fp": 10369,
+    "fn": 763,
+    "tp": 44569,
+    "recall": 0.9831686226065472,
+    "fpr": 0.28024324324324323,
+    "precision": 0.8112599657796061,
+    "f1": 0.8889797546624115,
+    "accuracy": 0.8647913326531603,
+    "confusion_matrix": [
+      [
+        26631,
+        10369
+      ],
+      [
+        763,
+        44569
+      ]
+    ],
+    "recovered_attacks": 807,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 4034
+  },
+  {
+    "ae_target": 0.1,
+    "name": "AND",
+    "tn": 34949,
+    "fp": 2051,
+    "fn": 8065,
+    "tp": 37267,
+    "recall": 0.822090355598694,
+    "fpr": 0.055432432432432434,
+    "precision": 0.9478355969276159,
+    "f1": 0.8804961606615476,
+    "accuracy": 0.8771316134674245,
+    "confusion_matrix": [
+      [
+        34949,
+        2051
+      ],
+      [
+        8065,
+        37267
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 6495,
+    "removed_false_alarms": 4284,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Four-mode hard override",
+    "tn": 32585,
+    "fp": 4415,
+    "fn": 7507,
+    "tp": 37825,
+    "recall": 0.8343995411629754,
+    "fpr": 0.11932432432432433,
+    "precision": 0.8954782196969697,
+    "f1": 0.8638605947106381,
+    "accuracy": 0.855196035563329,
+    "confusion_matrix": [
+      [
+        32585,
+        4415
+      ],
+      [
+        7507,
+        37825
+      ]
+    ],
+    "recovered_attacks": 558,
+    "lost_attacks": 6495,
+    "removed_false_alarms": 4284,
+    "added_false_alarms": 2364
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Mode confidence",
+    "tn": 31561,
+    "fp": 5439,
+    "fn": 1788,
+    "tp": 43544,
+    "recall": 0.96055766346069,
+    "fpr": 0.147,
+    "precision": 0.8889614764305984,
+    "f1": 0.9233738005619466,
+    "accuracy": 0.9122212505465676,
+    "confusion_matrix": [
+      [
+        31561,
+        5439
+      ],
+      [
+        1788,
+        43544
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 218,
+    "removed_false_alarms": 896,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Uncertainty-band four-mode",
+    "tn": 30961,
+    "fp": 6039,
+    "fn": 1268,
+    "tp": 44064,
+    "recall": 0.9720285890761493,
+    "fpr": 0.1632162162162162,
+    "precision": 0.8794682953116579,
+    "f1": 0.9234347985539896,
+    "accuracy": 0.9112495748919011,
+    "confusion_matrix": [
+      [
+        30961,
+        6039
+      ],
+      [
+        1268,
+        44064
+      ]
+    ],
+    "recovered_attacks": 520,
+    "lost_attacks": 218,
+    "removed_false_alarms": 896,
+    "added_false_alarms": 600
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Selective recovery (p>=40%)",
+    "tn": 30170,
+    "fp": 6830,
+    "fn": 1238,
+    "tp": 44094,
+    "recall": 0.9726903732462719,
+    "fpr": 0.1845945945945946,
+    "precision": 0.8658785641347891,
+    "f1": 0.9161818484042553,
+    "accuracy": 0.9020065102268863,
+    "confusion_matrix": [
+      [
+        30170,
+        6830
+      ],
+      [
+        1238,
+        44094
+      ]
+    ],
+    "recovered_attacks": 332,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 495
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Binary only",
+    "tn": 30665,
+    "fp": 6335,
+    "fn": 1570,
+    "tp": 43762,
+    "recall": 0.9653666284302479,
+    "fpr": 0.17121621621621622,
+    "precision": 0.8735453220751742,
+    "f1": 0.9171635456726991,
+    "accuracy": 0.9039862993732692,
+    "confusion_matrix": [
+      [
+        30665,
+        6335
+      ],
+      [
+        1570,
+        43762
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Tuned binary (59%)",
+    "tn": 30869,
+    "fp": 6131,
+    "fn": 1636,
+    "tp": 43696,
+    "recall": 0.9639107032559782,
+    "fpr": 0.1657027027027027,
+    "precision": 0.87695426174564,
+    "f1": 0.9183787135215796,
+    "accuracy": 0.9056624398775689,
+    "confusion_matrix": [
+      [
+        30869,
+        6131
+      ],
+      [
+        1636,
+        43696
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 66,
+    "removed_false_alarms": 204,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Score-only logistic (continuous reference)",
+    "tn": 29956,
+    "fp": 7044,
+    "fn": 1399,
+    "tp": 43933,
+    "recall": 0.9691387981999471,
+    "fpr": 0.19037837837837837,
+    "precision": 0.8618200364870432,
+    "f1": 0.9123342574421913,
+    "accuracy": 0.8974517805956371,
+    "confusion_matrix": [
+      [
+        29956,
+        7044
+      ],
+      [
+        1399,
+        43933
+      ]
+    ],
+    "recovered_attacks": 171,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 709
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Total-error logistic (continuous reference)",
+    "tn": 30924,
+    "fp": 6076,
+    "fn": 1637,
+    "tp": 43695,
+    "recall": 0.9638886437836407,
+    "fpr": 0.1642162162162162,
+    "precision": 0.8779208776194973,
+    "f1": 0.9188984574619097,
+    "accuracy": 0.9063183209444687,
+    "confusion_matrix": [
+      [
+        30924,
+        6076
+      ],
+      [
+        1637,
+        43695
+      ]
+    ],
+    "recovered_attacks": 9,
+    "lost_attacks": 76,
+    "removed_false_alarms": 262,
+    "added_false_alarms": 3
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Total-error logistic (AE-gated)",
+    "tn": 30687,
+    "fp": 6313,
+    "fn": 1590,
+    "tp": 43742,
+    "recall": 0.9649254389834995,
+    "fpr": 0.17062162162162162,
+    "precision": 0.8738787333932674,
+    "f1": 0.9171480390409594,
+    "accuracy": 0.9040105912646359,
+    "confusion_matrix": [
+      [
+        30687,
+        6313
+      ],
+      [
+        1590,
+        43742
+      ]
+    ],
+    "recovered_attacks": 9,
+    "lost_attacks": 29,
+    "removed_false_alarms": 25,
+    "added_false_alarms": 3
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Per-feature logistic (continuous reference)",
+    "tn": 29688,
+    "fp": 7312,
+    "fn": 1220,
+    "tp": 44112,
+    "recall": 0.9730874437483455,
+    "fpr": 0.1976216216216216,
+    "precision": 0.857809583074051,
+    "f1": 0.9118194220513457,
+    "accuracy": 0.8963707914298207,
+    "confusion_matrix": [
+      [
+        29688,
+        7312
+      ],
+      [
+        1220,
+        44112
+      ]
+    ],
+    "recovered_attacks": 392,
+    "lost_attacks": 42,
+    "removed_false_alarms": 63,
+    "added_false_alarms": 1040
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Per-feature logistic (AE-gated)",
+    "tn": 30332,
+    "fp": 6668,
+    "fn": 1324,
+    "tp": 44008,
+    "recall": 0.9707932586252537,
+    "fpr": 0.18021621621621622,
+    "precision": 0.8684189754518904,
+    "f1": 0.9167569369219232,
+    "accuracy": 0.9029296020988195,
+    "confusion_matrix": [
+      [
+        30332,
+        6668
+      ],
+      [
+        1324,
+        44008
+      ]
+    ],
+    "recovered_attacks": 288,
+    "lost_attacks": 42,
+    "removed_false_alarms": 63,
+    "added_false_alarms": 396
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Prior confidence (reference)",
+    "tn": 30896,
+    "fp": 6104,
+    "fn": 1610,
+    "tp": 43722,
+    "recall": 0.964484249536751,
+    "fpr": 0.16497297297297298,
+    "precision": 0.877493677999438,
+    "f1": 0.9189348241871413,
+    "accuracy": 0.9063061749987854,
+    "confusion_matrix": [
+      [
+        30896,
+        6104
+      ],
+      [
+        1610,
+        43722
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 40,
+    "removed_false_alarms": 231,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Imported binary (reference)",
+    "tn": 30841,
+    "fp": 6159,
+    "fn": 2426,
+    "tp": 42906,
+    "recall": 0.946483720109415,
+    "fpr": 0.16645945945945945,
+    "precision": 0.8744726383369,
+    "f1": 0.909054313166732,
+    "accuracy": 0.8957270563086042,
+    "confusion_matrix": [
+      [
+        30841,
+        6159
+      ],
+      [
+        2426,
+        42906
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Imported plain AE alone",
+    "tn": 30962,
+    "fp": 6038,
+    "fn": 7805,
+    "tp": 37527,
+    "recall": 0.8278258184064237,
+    "fpr": 0.16318918918918918,
+    "precision": 0.8614025020084931,
+    "f1": 0.844280459408079,
+    "accuracy": 0.8318636739056503,
+    "confusion_matrix": [
+      [
+        30962,
+        6038
+      ],
+      [
+        7805,
+        37527
+      ]
+    ],
+    "recovered_attacks": 1243,
+    "lost_attacks": 6622,
+    "removed_false_alarms": 4415,
+    "added_false_alarms": 4294
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Imported OR",
+    "tn": 26547,
+    "fp": 10453,
+    "fn": 1183,
+    "tp": 44149,
+    "recall": 0.9739036442248301,
+    "fpr": 0.2825135135135135,
+    "precision": 0.8085601260027105,
+    "f1": 0.8835631516801089,
+    "accuracy": 0.8586697760287616,
+    "confusion_matrix": [
+      [
+        26547,
+        10453
+      ],
+      [
+        1183,
+        44149
+      ]
+    ],
+    "recovered_attacks": 1243,
+    "lost_attacks": 0,
+    "removed_false_alarms": 0,
+    "added_false_alarms": 4294
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Imported AND",
+    "tn": 35256,
+    "fp": 1744,
+    "fn": 9048,
+    "tp": 36284,
+    "recall": 0.8004058942910086,
+    "fpr": 0.047135135135135134,
+    "precision": 0.954139055432839,
+    "f1": 0.8705374280230326,
+    "accuracy": 0.8689209541854929,
+    "confusion_matrix": [
+      [
+        35256,
+        1744
+      ],
+      [
+        9048,
+        36284
+      ]
+    ],
+    "recovered_attacks": 0,
+    "lost_attacks": 6622,
+    "removed_false_alarms": 4415,
+    "added_false_alarms": 0
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Imported plain+latent (continuous reference)",
+    "tn": 30926,
+    "fp": 6074,
+    "fn": 2328,
+    "tp": 43004,
+    "recall": 0.9486455483984824,
+    "fpr": 0.16416216216216217,
+    "precision": 0.8762378255022617,
+    "f1": 0.9110051901281644,
+    "accuracy": 0.8979497643686537,
+    "confusion_matrix": [
+      [
+        30926,
+        6074
+      ],
+      [
+        2328,
+        43004
+      ]
+    ],
+    "recovered_attacks": 217,
+    "lost_attacks": 119,
+    "removed_false_alarms": 302,
+    "added_false_alarms": 217
+  },
+  {
+    "ae_target": 0.1,
+    "name": "Imported plain+latent (AE-gated)",
+    "tn": 30749,
+    "fp": 6251,
+    "fn": 2244,
+    "tp": 43088,
+    "recall": 0.9504985440748257,
+    "fpr": 0.16894594594594595,
+    "precision": 0.8733050933338738,
+    "f1": 0.9102681919489601,
+    "accuracy": 0.8968201914201039,
+    "confusion_matrix": [
+      [
+        30749,
+        6251
+      ],
+      [
+        2244,
+        43088
+      ]
+    ],
+    "recovered_attacks": 195,
+    "lost_attacks": 13,
+    "removed_false_alarms": 19,
+    "added_false_alarms": 111
+  }
+]

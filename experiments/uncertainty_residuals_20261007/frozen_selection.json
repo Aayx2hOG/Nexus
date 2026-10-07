@@ -1,0 +1,176 @@
+{
+  "Binary threshold": {
+    "family": "Binary threshold",
+    "threshold": 0.59,
+    "selection": {
+      "tn": 7881,
+      "fp": 312,
+      "fn": 839,
+      "tp": 15999,
+      "recall": 0.9501722294809359,
+      "fpr": 0.03808128890516294,
+      "precision": 0.980871804303844,
+      "f1": 0.9652779872696009,
+      "accuracy": 0.9540170188965682
+    },
+    "selection_constraint_met": true
+  },
+  "Uncertainty band": {
+    "family": "Uncertainty band",
+    "lower": 0.1,
+    "upper": 0.65,
+    "veto": 0.0008959400583989918,
+    "promote": 0.16687584674358308,
+    "veto_quantile": 0.5,
+    "promote_quantile": 0.999,
+    "selection": {
+      "tn": 7887,
+      "fp": 306,
+      "fn": 839,
+      "tp": 15999,
+      "recall": 0.9501722294809359,
+      "fpr": 0.0373489564262175,
+      "precision": 0.9812327506899724,
+      "f1": 0.965452735117521,
+      "accuracy": 0.9542567216651352
+    },
+    "selection_constraint_met": true
+  },
+  "Score-only logistic": {
+    "family": "Score-only logistic",
+    "model_key": "Score-only logistic_C0.01",
+    "C": 0.01,
+    "target": 0.96,
+    "threshold": 0.6457475505329878,
+    "oof": {
+      "tn": 7573,
+      "fp": 429,
+      "fn": 695,
+      "tp": 16752,
+      "recall": 0.9601650713589729,
+      "fpr": 0.05361159710072482,
+      "precision": 0.9750305570106513,
+      "f1": 0.9675407184937045,
+      "accuracy": 0.9558332350976463
+    },
+    "selection": {
+      "tn": 7815,
+      "fp": 378,
+      "fn": 693,
+      "tp": 16145,
+      "recall": 0.9588430930039197,
+      "fpr": 0.046136946173562794,
+      "precision": 0.9771227985232706,
+      "f1": 0.9678966457839993,
+      "accuracy": 0.9572130558107946
+    },
+    "selection_constraint_met": true
+  },
+  "Total-error logistic": {
+    "family": "Total-error logistic",
+    "model_key": "Total-error logistic_C10.0",
+    "C": 10.0,
+    "target": 0.95,
+    "threshold": 0.6712110205560066,
+    "oof": {
+      "tn": 7646,
+      "fp": 356,
+      "fn": 862,
+      "tp": 16585,
+      "recall": 0.9505932251963088,
+      "fpr": 0.04448887778055486,
+      "precision": 0.978985892214155,
+      "f1": 0.9645806676747702,
+      "accuracy": 0.9521395732641754
+    },
+    "selection": {
+      "tn": 7885,
+      "fp": 308,
+      "fn": 840,
+      "tp": 15998,
+      "recall": 0.9501128400047512,
+      "fpr": 0.03759306725253265,
+      "precision": 0.9811112473935975,
+      "f1": 0.9653632633357471,
+      "accuracy": 0.9541368702808517
+    },
+    "selection_constraint_met": true
+  },
+  "Per-feature logistic": {
+    "family": "Per-feature logistic",
+    "model_key": "Per-feature logistic_C10.0",
+    "C": 10.0,
+    "target": 0.96,
+    "threshold": 0.6136022135906952,
+    "oof": {
+      "tn": 7556,
+      "fp": 446,
+      "fn": 697,
+      "tp": 16750,
+      "recall": 0.9600504384707973,
+      "fpr": 0.05573606598350413,
+      "precision": 0.9740637357525006,
+      "f1": 0.9670063216234159,
+      "accuracy": 0.9550866438759873
+    },
+    "selection": {
+      "tn": 7787,
+      "fp": 406,
+      "fn": 697,
+      "tp": 16141,
+      "recall": 0.9586055350991805,
+      "fpr": 0.04955449774197486,
+      "precision": 0.9754638303015652,
+      "f1": 0.9669612101243074,
+      "accuracy": 0.9559346410451041
+    },
+    "selection_constraint_met": true
+  },
+  "Previous confidence rule": {
+    "family": "Previous confidence rule",
+    "boundaries": [
+      0.0008959400583989918,
+      0.002263414021581411,
+      0.027578630857169606
+    ],
+    "cutoffs": [
+      0.65,
+      0.5776925765603604,
+      0.5776925765603604,
+      0.5776925765603604
+    ],
+    "quantiles": [
+      0.5,
+      0.8,
+      0.99
+    ],
+    "selection": {
+      "tn": 7887,
+      "fp": 306,
+      "fn": 839,
+      "tp": 15999,
+      "recall": 0.9501722294809359,
+      "fpr": 0.0373489564262175,
+      "precision": 0.9812327506899724,
+      "f1": 0.965452735117521,
+      "accuracy": 0.9542567216651352
+    },
+    "selection_constraint_met": true
+  },
+  "Current binary": {
+    "family": "Current binary",
+    "threshold": 0.5776925765603604,
+    "selection": {
+      "tn": 7867,
+      "fp": 326,
+      "fn": 799,
+      "tp": 16039,
+      "recall": 0.9525478085283288,
+      "fpr": 0.03979006468936897,
+      "precision": 0.9800794378246257,
+      "f1": 0.9661175195012499,
+      "accuracy": 0.9550557308936918
+    },
+    "selection_constraint_met": true
+  }
+}

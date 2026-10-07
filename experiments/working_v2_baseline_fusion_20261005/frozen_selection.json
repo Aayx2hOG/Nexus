@@ -1,0 +1,229 @@
+{
+  "winner": {
+    "name": "LightGBM",
+    "kind": "lgb",
+    "tn": 7867,
+    "fp": 326,
+    "fn": 799,
+    "tp": 16039,
+    "recall": 0.9525478085283288,
+    "fpr": 0.03979006468936897,
+    "precision": 0.9800794378246257,
+    "f1": 0.9661175195012499,
+    "accuracy": 0.9550557308936918
+  },
+  "fusion_winner": {
+    "name": "Selective gate=0.4 q=0.99",
+    "kind": "selective",
+    "gate": 0.4,
+    "threshold": 0.027578630857169606,
+    "tn": 7866,
+    "fp": 327,
+    "fn": 795,
+    "tp": 16043,
+    "recall": 0.9527853664330681,
+    "fpr": 0.039912120102526545,
+    "precision": 0.980024434941967,
+    "f1": 0.9662129607323536,
+    "accuracy": 0.9551755822779753
+  },
+  "candidates": [
+    {
+      "name": "LightGBM",
+      "kind": "lgb"
+    },
+    {
+      "name": "Baseline AE",
+      "kind": "ae"
+    },
+    {
+      "name": "OR",
+      "kind": "or"
+    },
+    {
+      "name": "AND",
+      "kind": "and"
+    },
+    {
+      "name": "Weighted rank 0.1",
+      "kind": "weighted",
+      "weight": 0.1,
+      "threshold": 0.6084288974125371
+    },
+    {
+      "name": "Weighted rank 0.25",
+      "kind": "weighted",
+      "weight": 0.25,
+      "threshold": 0.6195521016792991
+    },
+    {
+      "name": "Weighted rank 0.5",
+      "kind": "weighted",
+      "weight": 0.5,
+      "threshold": 0.6280072462624983
+    },
+    {
+      "name": "Weighted rank 0.75",
+      "kind": "weighted",
+      "weight": 0.75,
+      "threshold": 0.5987766752988954
+    },
+    {
+      "name": "Weighted rank 0.9",
+      "kind": "weighted",
+      "weight": 0.9,
+      "threshold": 0.5624544949431958
+    },
+    {
+      "name": "Selective gate=0 q=0.9",
+      "kind": "selective",
+      "gate": 0,
+      "threshold": 0.004529757192358377
+    },
+    {
+      "name": "Selective gate=0 q=0.95",
+      "kind": "selective",
+      "gate": 0,
+      "threshold": 0.008725384250283241
+    },
+    {
+      "name": "Selective gate=0 q=0.97",
+      "kind": "selective",
+      "gate": 0,
+      "threshold": 0.01367839640006422
+    },
+    {
+      "name": "Selective gate=0 q=0.99",
+      "kind": "selective",
+      "gate": 0,
+      "threshold": 0.027578630857169606
+    },
+    {
+      "name": "Selective gate=0 q=0.995",
+      "kind": "selective",
+      "gate": 0,
+      "threshold": 0.04816219182685014
+    },
+    {
+      "name": "Selective gate=0.1 q=0.9",
+      "kind": "selective",
+      "gate": 0.1,
+      "threshold": 0.004529757192358377
+    },
+    {
+      "name": "Selective gate=0.1 q=0.95",
+      "kind": "selective",
+      "gate": 0.1,
+      "threshold": 0.008725384250283241
+    },
+    {
+      "name": "Selective gate=0.1 q=0.97",
+      "kind": "selective",
+      "gate": 0.1,
+      "threshold": 0.01367839640006422
+    },
+    {
+      "name": "Selective gate=0.1 q=0.99",
+      "kind": "selective",
+      "gate": 0.1,
+      "threshold": 0.027578630857169606
+    },
+    {
+      "name": "Selective gate=0.1 q=0.995",
+      "kind": "selective",
+      "gate": 0.1,
+      "threshold": 0.04816219182685014
+    },
+    {
+      "name": "Selective gate=0.25 q=0.9",
+      "kind": "selective",
+      "gate": 0.25,
+      "threshold": 0.004529757192358377
+    },
+    {
+      "name": "Selective gate=0.25 q=0.95",
+      "kind": "selective",
+      "gate": 0.25,
+      "threshold": 0.008725384250283241
+    },
+    {
+      "name": "Selective gate=0.25 q=0.97",
+      "kind": "selective",
+      "gate": 0.25,
+      "threshold": 0.01367839640006422
+    },
+    {
+      "name": "Selective gate=0.25 q=0.99",
+      "kind": "selective",
+      "gate": 0.25,
+      "threshold": 0.027578630857169606
+    },
+    {
+      "name": "Selective gate=0.25 q=0.995",
+      "kind": "selective",
+      "gate": 0.25,
+      "threshold": 0.04816219182685014
+    },
+    {
+      "name": "Selective gate=0.4 q=0.9",
+      "kind": "selective",
+      "gate": 0.4,
+      "threshold": 0.004529757192358377
+    },
+    {
+      "name": "Selective gate=0.4 q=0.95",
+      "kind": "selective",
+      "gate": 0.4,
+      "threshold": 0.008725384250283241
+    },
+    {
+      "name": "Selective gate=0.4 q=0.97",
+      "kind": "selective",
+      "gate": 0.4,
+      "threshold": 0.01367839640006422
+    },
+    {
+      "name": "Selective gate=0.4 q=0.99",
+      "kind": "selective",
+      "gate": 0.4,
+      "threshold": 0.027578630857169606
+    },
+    {
+      "name": "Selective gate=0.4 q=0.995",
+      "kind": "selective",
+      "gate": 0.4,
+      "threshold": 0.04816219182685014
+    },
+    {
+      "name": "Selective gate=0.5 q=0.9",
+      "kind": "selective",
+      "gate": 0.5,
+      "threshold": 0.004529757192358377
+    },
+    {
+      "name": "Selective gate=0.5 q=0.95",
+      "kind": "selective",
+      "gate": 0.5,
+      "threshold": 0.008725384250283241
+    },
+    {
+      "name": "Selective gate=0.5 q=0.97",
+      "kind": "selective",
+      "gate": 0.5,
+      "threshold": 0.01367839640006422
+    },
+    {
+      "name": "Selective gate=0.5 q=0.99",
+      "kind": "selective",
+      "gate": 0.5,
+      "threshold": 0.027578630857169606
+    },
+    {
+      "name": "Selective gate=0.5 q=0.995",
+      "kind": "selective",
+      "gate": 0.5,
+      "threshold": 0.04816219182685014
+    }
+  ],
+  "objective": "Minimum selection FPR subject to recall >= 0.95; ties higher recall then F1"
+}

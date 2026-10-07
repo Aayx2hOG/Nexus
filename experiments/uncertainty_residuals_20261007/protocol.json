@@ -1,0 +1,57 @@
+{
+  "source_models": "experiments/four_mode_ae_20261007",
+  "source_hashes": {
+    "binary.joblib": "ac0e6d33bfba56eb610adbd5dcf58a750a10c22758ba26f851d633386205d2e2",
+    "autoencoder.joblib": "5315d021f9f17e7d4baf6a73b6276187cbe819bbb467e2107148f668f89ad8b5"
+  },
+  "lower_band": [
+    0.1,
+    0.25,
+    0.4,
+    0.5
+  ],
+  "upper_band": [
+    0.65,
+    0.75,
+    0.85,
+    0.95
+  ],
+  "veto_quantiles": [
+    0.01,
+    0.1,
+    0.3,
+    0.5,
+    0.7,
+    0.9
+  ],
+  "promote_quantiles": [
+    0.8,
+    0.9,
+    0.95,
+    0.99,
+    0.995,
+    0.999
+  ],
+  "C": [
+    0.01,
+    0.1,
+    1.0,
+    10.0
+  ],
+  "calibration_recall_targets": [
+    0.95,
+    0.96,
+    0.97
+  ],
+  "meta_folds": 5,
+  "seed": 2026,
+  "objective": "Minimum selection FPR with recall >=95%; ties higher recall then F1",
+  "fallback": "If no candidate qualifies, highest recall, then lowest FPR; marked infeasible",
+  "learned_families": [
+    "Score-only logistic",
+    "Total-error logistic",
+    "Per-feature logistic"
+  ],
+  "base_models_retrained": false,
+  "cross_validation": "StratifiedGroupKFold on calibration, which neither base model fitted; out-of-fold scores calibrate thresholds, then refit meta-model on calibration; selection chooses C and recall target; official test scored after freezing."
+}

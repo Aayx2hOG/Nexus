@@ -15,16 +15,16 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 @pytest.fixture
-def loaded_app(tmp_path):
-    """Create FastAPI application with release bundle v1.0.0 loaded and ready."""
-    bundle_dir = PROJECT_ROOT / "artifacts" / "bundles"
+def loaded_app(tmp_path, v2_bundle_dir):
+    """Create FastAPI application with release bundle v2.0.0 loaded and ready."""
+    bundle_dir = v2_bundle_dir
     db_path = tmp_path / "nexus_tier1.sqlite3"
     settings = Settings(
         database_path=db_path,
         api_token=TEST_TOKEN,
         reviewer_id="tier1-analyst",
         bundles_dir=bundle_dir,
-        bundle_version="v1.0.0",
+        bundle_version="v2.0.0",
     )
     app = create_app(settings)
     # Trigger startup lifespan
@@ -42,7 +42,7 @@ def test_model_summary_endpoint(auth_client):
     response = auth_client.get("/api/v1/model")
     assert response.status_code == 200
     data = response.json()
-    assert data["bundle_version"] == "v1.0.0"
+    assert data["bundle_version"] == "v2.0.0"
     assert data["algorithm"] == "LightGBM"
     assert data["decision_threshold"] == pytest.approx(0.5776925765603604, abs=1e-5)
     assert data["metrics_note"] == "selection estimate, not independent confirmation"
@@ -59,7 +59,7 @@ def test_batch_prediction_and_alert_generation(auth_client):
     response = auth_client.post("/api/v1/predictions", json=batch_json)
     assert response.status_code == 200
     result = response.json()
-    assert result["bundle_version"] == "v1.0.0"
+    assert result["bundle_version"] == "v2.0.0"
     assert result["total_count"] == 1
     pred = result["predictions"][0]
     assert "flow_id" in pred
@@ -206,7 +206,7 @@ def test_api_scores_match_frozen_winner_for_submitted_values(auth_client):
     import numpy as np
     import pandas as pd
 
-    frozen = joblib.load(PROJECT_ROOT / "models/lightgbm_validated_v1/binary/model.joblib")
+    frozen = joblib.load(PROJECT_ROOT / "experiments/lightgbm_validated_v2/binary/model.joblib")
     rows = json.loads((PROJECT_ROOT / "data/presets/mixed_100.json").read_text())
     columns = frozen.features.native.columns
     frame = pd.DataFrame(rows).loc[:, columns]

@@ -1,3 +1,7 @@
+> Historical workflow: unrelated scripts were moved to
+> [the source archive](../experiments/archived_training_20261007/README.md).
+> For the active final models, use [configs.md](configs.md).
+
 # Complementary fusion: execution guide
 
 Run from `/home/aayush/projects/Nexus`. Every command is foreground. Nothing is
