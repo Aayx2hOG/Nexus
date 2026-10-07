@@ -10,7 +10,6 @@ export function Navbar() {
     { href: "/alerts", label: "Alerts" },
     { href: "/traffic", label: "Traffic & Ingestion" },
     { href: "/review-sample", label: "Missed Attack Review" },
-    { href: "/shadow", label: "Shadow Fusion" },
     { href: "/model", label: "Model & Manifest" },
   ];
 

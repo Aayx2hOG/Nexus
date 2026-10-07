@@ -1,502 +1,277 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchAlert, fetchAlertFeedback, submitAlertFeedback } from "@/lib/api";
-import { Verdict } from "@/lib/types";
+import { use, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AlertOctagon, ChevronRight, RefreshCw } from "lucide-react";
 import {
-  ArrowLeft,
-  AlertTriangle,
-  History,
-  Copy,
-  Check,
-} from "lucide-react";
+  Button,
+  EmptyState,
+  ErrorState,
+  InfoHelp,
+  LoadingState,
+  ScoreScale,
+  Status,
+  TechnicalValue,
+} from "@/components/components";
+import { api, isPreviewData } from "@/lib/api";
+import type { AlertDetail, ReviewStatus } from "@/lib/types";
 
-const ATTACK_CATEGORIES = [
-  "Generic",
-  "Exploits",
-  "Fuzzers",
-  "Reconnaissance",
-  "DoS",
-  "Backdoor",
-  "Analysis",
-  "Worms",
-  "Shellcode",
-];
+const statusTone = (status: ReviewStatus) => {
+  if (status === "Confirmed Attack") return "danger";
+  if (status === "False Positive") return "success";
+  if (status === "Investigating") return "warning";
+  return "neutral";
+};
 
-export default function AlertDetailPage() {
-  const params = useParams();
-  const alertId = params.id as string;
+function ShapSection({ alert }: { alert: AlertDetail }) {
+  const max = Math.max(...alert.shap.map((item) => Math.abs(item.contribution)), 0.01);
+  return (
+    <section className="content-section">
+      <div className="section-heading">
+        <div>
+          <span className="section-index">TREESHAP EVIDENCE</span>
+          <div className="heading-with-help">
+            <h2>Why this flow was flagged</h2>
+            <InfoHelp
+              label="TreeSHAP evidence"
+              text="TreeSHAP shows which network features influenced the model's decision and how strongly each feature contributed."
+            />
+          </div>
+          <p>Features that pushed the prediction toward an alert or toward normal activity.</p>
+        </div>
+        <div className="legend">
+          <span><i className="legend-up" /> Increased attack probability</span>
+          <span><i className="legend-down" /> Reduced attack probability</span>
+        </div>
+      </div>
+      <div className="shap-table">
+        <div className="shap-head">
+          <span>Feature</span><span>Value</span><span>Contribution</span>
+        </div>
+        {alert.shap.length === 0 ? (
+          <div className="shap-empty">No TreeSHAP evidence was returned for this alert.</div>
+        ) : (
+          alert.shap.map((feature) => (
+            <div className="shap-row" key={feature.name}>
+              <strong className="mono">{feature.name}</strong>
+              <span className="mono">{feature.value}</span>
+              <div className="contribution">
+                <div className="contribution-axis" />
+                <div
+                  className={`contribution-bar ${feature.contribution >= 0 ? "positive" : "negative"}`}
+                  style={{ width: `${(Math.abs(feature.contribution) / max) * 48}%` }}
+                />
+                <span className="mono">{feature.contribution > 0 ? "+" : ""}{feature.contribution.toFixed(3)}</span>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </section>
+  );
+}
+
+export default function AlertDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const router = useRouter();
   const queryClient = useQueryClient();
+  const query = useQuery({ queryKey: ["alert", id], queryFn: () => api.alert(id) });
+  const [selectedVerdict, setSelectedVerdict] = useState<Exclude<ReviewStatus, "Pending Review"> | "">("");
+  const [analystNotes, setAnalystNotes] = useState("");
+  const [savedSuccess, setSavedSuccess] = useState(false);
 
-  const [verdict, setVerdict] = useState<Verdict>("confirmed_attack");
-  const [attackCategory, setAttackCategory] = useState<string>("Generic");
-  const [notes, setNotes] = useState<string>("");
-  const [conflictError, setConflictError] = useState<string | null>(null);
-  const [copiedField, setCopiedField] = useState<string | null>(null);
-
-  // Fetch alert detail
-  const {
-    data: alert,
-    isLoading: alertLoading,
-    error: alertError,
-    refetch: refetchAlert,
-  } = useQuery({
-    queryKey: ["alert", alertId],
-    queryFn: () => fetchAlert(alertId),
-  });
-
-  // Fetch feedback history
-  const { data: feedbackPage, refetch: refetchFeedback } = useQuery({
-    queryKey: ["feedback", alertId],
-    queryFn: () => fetchAlertFeedback(alertId),
-  });
-
-  const feedbackList = feedbackPage?.items || [];
-
-  // Mutation for submitting review verdict
-  const submitMutation = useMutation({
+  const reviewMutation = useMutation({
     mutationFn: async () => {
-      setConflictError(null);
-      return submitAlertFeedback(alertId, {
-        feedback_id: crypto.randomUUID(),
-        expected_version: alert?.feedback_version || 0,
-        verdict,
-        attack_category: verdict === "confirmed_attack" ? attackCategory : null,
-        notes: notes.trim() ? notes.trim() : null,
+      if (!selectedVerdict || !alert) return;
+      await api.submitAlertFeedback(alert.id, {
+        verdict: selectedVerdict,
+        notes: analystNotes,
+        expectedVersion: alert.reviewVersion,
+        category: alert.category,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["alert", alertId] });
-      queryClient.invalidateQueries({ queryKey: ["feedback", alertId] });
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
-      queryClient.invalidateQueries({ queryKey: ["alerts"] });
-      setNotes("");
-    },
-    onError: (err: unknown) => {
-      const errorObj = err as { status?: number; code?: string; message?: string };
-      if (
-        errorObj.status === 409 ||
-        errorObj.code === "feedback_conflict" ||
-        errorObj.code === "stale_feedback"
-      ) {
-        setConflictError(
-          "Concurrent update detected: Another review was recorded. Please refresh to load the latest state before submitting."
-        );
-      } else {
-        setConflictError(errorObj.message || "Failed to submit verdict.");
-      }
+      setSavedSuccess(true);
+      void queryClient.invalidateQueries({ queryKey: ["alert", id] });
+      void queryClient.invalidateQueries({ queryKey: ["alerts"] });
+      void queryClient.invalidateQueries({ queryKey: ["stats"] });
+      router.push("/alerts");
     },
   });
 
-  // Keyboard shortcut listener for quick verdict selection (1, 2, 3)
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (
-        document.activeElement?.tagName === "INPUT" ||
-        document.activeElement?.tagName === "TEXTAREA"
-      ) {
-        return;
-      }
-      if (e.key === "1") {
-        e.preventDefault();
-        setVerdict("confirmed_attack");
-      } else if (e.key === "2") {
-        e.preventDefault();
-        setVerdict("false_positive");
-      } else if (e.key === "3") {
-        e.preventDefault();
-        setVerdict("needs_investigation");
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  function copyToClipboard(text: string, field: string) {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000);
-  }
-
-  if (alertLoading) {
-    return (
-      <div className="py-24 text-center text-xs text-[#939AA6]">
-        Loading alert details...
-      </div>
-    );
-  }
-
-  if (alertError || !alert) {
-    return (
-      <div className="bg-[#13151A] border border-[#282C35] p-6 rounded-sm text-center">
-        <h2 className="text-sm font-semibold text-[#F87171]">Alert Not Found</h2>
-        <p className="text-xs text-[#939AA6] mt-1">
-          The requested alert ID does not exist in the database.
-        </p>
-        <Link
-          href="/alerts"
-          className="inline-flex items-center space-x-1 text-xs text-[#F1F3F6] underline mt-4"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Alerts Queue</span>
-        </Link>
-      </div>
-    );
-  }
-
-  const score = alert.score ?? alert.probability ?? 0.0;
-  const threshold = alert.threshold;
-  const isAboveThreshold = threshold != null && score >= threshold;
+  const alert = query.data;
+  if (query.isLoading) return <div className="page"><LoadingState label="Loading incident evidence" /></div>;
+  if (query.isError || !alert) return <div className="page"><ErrorState retry={() => void query.refetch()} /></div>;
 
   return (
-    <div className="space-y-6">
-      {/* Top Breadcrumb & Actions */}
-      <div className="flex items-center justify-between">
-        <Link
-          href="/alerts"
-          className="inline-flex items-center space-x-1 text-xs text-[#939AA6] hover:text-[#F1F3F6]"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Queue</span>
-        </Link>
-
-        <div className="flex items-center space-x-2">
-          {alert.source === "mock" && (
-            <span className="px-2 py-0.5 text-[11px] font-semibold uppercase bg-[#2B1F0B] text-[#FBBF24] border border-[#5E4012] rounded-sm">
-              MOCK ALERT
-            </span>
-          )}
-          <span className="px-2 py-0.5 text-[11px] font-semibold uppercase bg-[#2A1316] text-[#F87171] border border-[#5C1D24] rounded-sm">
-            {alert.severity}
-          </span>
+    <div className="incident-page">
+      <div className="incident-banner">
+        <div className="incident-banner-top">
+          <button className="back-link" onClick={() => router.push("/alerts")}>
+            <ChevronRight size={15} /> Back to alert queue
+          </button>
+          <span className="incident-live"><i /> ACTIVE INCIDENT</span>
+        </div>
+        <div className="incident-title-row">
+          <div>
+            <span className="incident-label"><AlertOctagon size={16} /> INCIDENT</span>
+            <h1 className="mono">{alert.id}</h1>
+            <div className="incident-source mono">{alert.source}</div>
+          </div>
+          <div className="incident-statuses">
+            <strong className={`incident-severity severity-${alert.severity.toLowerCase()}`}>{alert.severity.toUpperCase()}</strong>
+            <span>{alert.reviewStatus}</span>
+          </div>
+        </div>
+        <div className="incident-snapshot">
+          <div>
+            <span>MODEL SCORE <InfoHelp label="model score" text="A number showing how strongly the model considers this network flow suspicious. Higher scores indicate stronger suspicion." /></span>
+            <strong className="mono">{alert.score.toFixed(4)}</strong>
+          </div>
+          <div>
+            <span>THRESHOLD <InfoHelp label="decision threshold" text="The minimum score required for NEXUS to classify a network flow as an alert." /></span>
+            <strong className="mono">{alert.threshold.toFixed(4)}</strong>
+          </div>
+          <div><span>PREDICTED TYPE</span><strong>{alert.category}</strong></div>
+          <div>
+            <span>FLOW ID <InfoHelp label="Network flow" text="A summarized record of communication between network endpoints, including timing, protocol, and transferred data." /></span>
+            <strong className="mono">{alert.flowId}</strong>
+          </div>
+          <div><span>DETECTED</span><strong className="mono">{new Date(alert.createdAt).toLocaleString()}</strong></div>
         </div>
       </div>
 
-      {/* Main Alert Info Card */}
-      <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-[#282C35] pb-4">
-          <div>
-            <div className="text-[11px] uppercase tracking-wider text-[#939AA6] font-mono">
-              Alert Identification
-            </div>
-            <div className="flex items-center space-x-2 mt-1">
-              <span className="text-sm font-mono font-semibold text-[#F1F3F6]">
-                {alert.alert_id}
-              </span>
-              <button
-                onClick={() => copyToClipboard(alert.alert_id, "alert_id")}
-                className="text-[#939AA6] hover:text-[#F1F3F6]"
-                title="Copy Alert ID"
-              >
-                {copiedField === "alert_id" ? (
-                  <Check className="w-3.5 h-3.5 text-[#34D399]" />
-                ) : (
-                  <Copy className="w-3.5 h-3.5" />
-                )}
-              </button>
-            </div>
+      <div className="incident-content">
+        <section className="content-section evidence-section">
+          <span className="section-index">CONNECTION</span>
+          <p className="section-explanation">The systems and network service involved in this flow.</p>
+          <div className="evidence-grid">
+            <div><span>SOURCE</span><strong className="mono">{alert.source}</strong></div>
+            <div><span>DESTINATION</span><strong className="mono">{alert.destination ?? "Not provided"}</strong></div>
+            <div><span>PROTOCOL</span><strong className="mono">{alert.protocol}</strong></div>
+            <div><span>SERVICE / STATE</span><strong className="mono">{alert.service} / {alert.state}</strong></div>
           </div>
-
-          <div className="flex items-center space-x-6 text-xs">
+          <div className="score-comparison">
             <div>
-              <div className="text-[11px] text-[#939AA6]">Created Timestamp</div>
-              <div className="font-mono text-[#F1F3F6] tabular-nums mt-0.5">
-                {alert.created_at}
+              <div className="heading-with-help">
+                <h2>Score against threshold</h2>
+                <InfoHelp label="score comparison" text="The flow becomes an alert when its model score crosses the configured decision threshold." />
               </div>
+              <p className="mono">+{(alert.score - alert.threshold).toFixed(4)}</p>
             </div>
+            <ScoreScale score={alert.score} threshold={alert.threshold} />
+          </div>
+        </section>
+
+        <ShapSection alert={alert} />
+
+        <section className="content-section">
+          <div className="feature-heading">
             <div>
-              <div className="text-[11px] text-[#939AA6]">Bundle Version</div>
-              <div className="font-mono text-[#F1F3F6] mt-0.5">
-                {alert.bundle_version}
-              </div>
+              <span className="section-index">MODEL INPUT</span>
+              <h2>42 features</h2>
+              <p>The complete set of network measurements the model used to score this flow.</p>
             </div>
-            <div>
-              <div className="text-[11px] text-[#939AA6]">Review Version</div>
-              <div className="font-mono text-[#F1F3F6] mt-0.5">
-                v{alert.feedback_version}
-              </div>
-            </div>
+            <span className="feature-count mono">{Object.keys(alert.features).length} / 42</span>
           </div>
-        </div>
-
-        {/* Score vs Threshold Visual Bar */}
-        <div className="bg-[#181B21] border border-[#282C35] p-4 rounded-sm space-y-2">
-          <div className="flex items-center justify-between text-xs">
-            <div>
-              <span className="font-medium text-[#F1F3F6]">
-                Model Score Output
-              </span>
-              <span className="text-[11px] text-[#939AA6] ml-2">
-                (Raw model score & fixed decision threshold; not calibrated probability)
-              </span>
-            </div>
-            <div className="font-mono text-xs tabular-nums">
-              <span className="font-semibold text-[#F87171]">
-                Score: {score.toFixed(6)}
-              </span>
-              <span className="text-[#616875] mx-2">|</span>
-              <span className="text-[#939AA6]">
-                Threshold: {threshold?.toFixed(6) ?? "Unavailable"}
-              </span>
-            </div>
+          <div className="feature-grid">
+            {Object.entries(alert.features).map(([name, value]) => (
+              <div key={name}><span className="mono">{name}</span><strong className="mono">{String(value)}</strong></div>
+            ))}
           </div>
+        </section>
 
-          {/* Bar track */}
-          <div className="relative h-4 bg-[#282C35] rounded-xs overflow-hidden">
-            {/* Fill for score */}
-            <div
-              className={`h-full ${
-                isAboveThreshold ? "bg-[#F87171]" : "bg-[#34D399]"
-              }`}
-              style={{ width: `${Math.min(Math.max(score * 100, 0), 100)}%` }}
-            />
-            {/* Threshold marker line */}
-            {threshold != null && <div
-              className="absolute top-0 bottom-0 w-0.5 bg-[#F1F3F6] z-10"
-              style={{ left: `${threshold * 100}%` }}
-              title={`Threshold: ${threshold.toFixed(4)}`}
-            />}
-          </div>
-
-          <div className="flex justify-between text-[10px] text-[#939AA6] font-mono">
-            <span>0.0 (Normal)</span>
-            <span>Threshold ({threshold?.toFixed(4) ?? "Unavailable"})</span>
-            <span>1.0 (Alert)</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Grid: TreeSHAP Explanations + Analyst Verdict Form */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Column: TreeSHAP Feature Contributions */}
-        <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-              TreeSHAP Feature Contributions
-            </h2>
-            <p className="text-[11px] text-[#939AA6] mt-0.5">
-              Top signed contributions driving score toward or away from alert
-            </p>
-          </div>
-
-          {alert.top_features && alert.top_features.length > 0 ? (
-            <div className="space-y-2 pt-2">
-              {alert.top_features.map((feat, idx) => {
-                const isPositive = feat.contribution > 0;
-                // Maximum contribution scaling for bar width
-                const maxContrib = Math.max(
-                  ...alert.top_features.map((f) => Math.abs(f.contribution)),
-                  0.1
-                );
-                const barWidth = Math.min(
-                  (Math.abs(feat.contribution) / maxContrib) * 100,
-                  100
-                );
-
-                return (
-                  <div key={idx} className="space-y-1 text-xs">
-                    <div className="flex items-center justify-between font-mono text-[11px]">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-medium text-[#F1F3F6]">
-                          {feat.feature}
-                        </span>
-                        {feat.value !== null && feat.value !== undefined && (
-                          <span className="text-[#939AA6] text-[10px]">
-                            = {String(feat.value)}
-                          </span>
-                        )}
-                      </div>
-                      <span
-                        className={`tabular-nums font-semibold ${
-                          isPositive ? "text-[#F87171]" : "text-[#34D399]"
-                        }`}
-                      >
-                        {isPositive ? "+" : ""}
-                        {feat.contribution.toFixed(4)}
-                      </span>
-                    </div>
-
-                    <div className="h-2 bg-[#181B21] border border-[#282C35] rounded-xs flex overflow-hidden">
-                      <div
-                        className={`h-full ${
-                          isPositive ? "bg-[#F87171]" : "bg-[#34D399]"
-                        }`}
-                        style={{ width: `${barWidth}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="py-8 text-center text-xs text-[#939AA6]">
-              No TreeSHAP explanation attributes available for this alert.
-            </div>
-          )}
-        </div>
-
-        {/* Right Column: Analyst Review Form */}
-        <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-                Record Analyst Verdict
-              </h2>
-              <p className="text-[11px] text-[#939AA6] mt-0.5">
-                Current version: v{alert.feedback_version} | Use keys 1, 2, 3 to select
-              </p>
-            </div>
-          </div>
-
-          {conflictError && (
-            <div className="bg-[#2A1316] border border-[#5C1D24] p-3 rounded-sm text-xs text-[#F87171] flex items-start space-x-2">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+        <div className="review-layout">
+          <section className="content-section">
+            <span className="section-index">RESPONSE</span>
+            <h2>Recorded decision</h2>
+            <p className="section-explanation">The current review state recorded by the analyst team.</p>
+            <div className="recorded-decision">
+              <Status tone={statusTone(alert.reviewStatus)}>{alert.reviewStatus}</Status>
               <div>
-                <div>{conflictError}</div>
-                <button
-                  onClick={() => {
-                    refetchAlert();
-                    refetchFeedback();
-                    setConflictError(null);
-                  }}
-                  className="underline font-semibold mt-1"
-                >
-                  Reload Latest Version
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="space-y-3 pt-1">
-            {/* Verdict Selection Buttons */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-medium text-[#939AA6]">
-                Verdict Decision:
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setVerdict("confirmed_attack")}
-                  className={`px-3 py-2 text-xs font-medium rounded-sm border transition-colors flex flex-col items-center justify-center space-y-1 ${
-                    verdict === "confirmed_attack"
-                      ? "bg-[#2A1316] border-[#F87171] text-[#F87171] font-semibold"
-                      : "bg-[#181B21] border-[#282C35] text-[#939AA6] hover:bg-[#1D2027]"
-                  }`}
-                >
-                  <span>Confirmed Attack</span>
-                  <kbd className="text-[10px] opacity-75 font-mono">(1)</kbd>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setVerdict("false_positive")}
-                  className={`px-3 py-2 text-xs font-medium rounded-sm border transition-colors flex flex-col items-center justify-center space-y-1 ${
-                    verdict === "false_positive"
-                      ? "bg-[#0C241B] border-[#34D399] text-[#34D399] font-semibold"
-                      : "bg-[#181B21] border-[#282C35] text-[#939AA6] hover:bg-[#1D2027]"
-                  }`}
-                >
-                  <span>False Positive</span>
-                  <kbd className="text-[10px] opacity-75 font-mono">(2)</kbd>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setVerdict("needs_investigation")}
-                  className={`px-3 py-2 text-xs font-medium rounded-sm border transition-colors flex flex-col items-center justify-center space-y-1 ${
-                    verdict === "needs_investigation"
-                      ? "bg-[#2B1F0B] border-[#FBBF24] text-[#FBBF24] font-semibold"
-                      : "bg-[#181B21] border-[#282C35] text-[#939AA6] hover:bg-[#1D2027]"
-                  }`}
-                >
-                  <span>Investigating</span>
-                  <kbd className="text-[10px] opacity-75 font-mono">(3)</kbd>
-                </button>
+                <strong>
+                  {alert.reviewStatus === "Confirmed Attack"
+                    ? "An analyst determined that this activity represents an attack."
+                    : alert.reviewStatus === "False Positive"
+                      ? "An analyst determined that this is normal activity flagged incorrectly."
+                      : alert.reviewStatus === "Investigating"
+                        ? "The alert is still under active investigation."
+                        : "No analyst decision has been recorded yet."}
+                </strong>
+                <span>Review version <TechnicalValue>{alert.reviewVersion}</TechnicalValue></span>
               </div>
             </div>
 
-            {/* Attack Category dropdown (required when confirmed_attack) */}
-            {verdict === "confirmed_attack" && (
-              <div className="space-y-1">
-                <label className="text-[11px] font-medium text-[#939AA6]">
-                  Attack Category:
-                </label>
-                <select
-                  value={attackCategory}
-                  onChange={(e) => setAttackCategory(e.target.value)}
-                  className="w-full bg-[#1D2027] border border-[#282C35] rounded-sm px-2.5 py-1.5 text-xs text-[#F1F3F6] focus:outline-hidden"
-                >
-                  {ATTACK_CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
+            <div className="demo-review">
+              <div className="demo-review-heading">
+                <span>SUBMIT ANALYST VERDICT</span>
+                <small>Records decision in backend storage.</small>
               </div>
-            )}
-
-            {/* Notes textarea */}
-            <div className="space-y-1">
-              <label className="text-[11px] font-medium text-[#939AA6]">
-                Analyst Triage Notes:
-              </label>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Observed anomalous port scan patterns, high packet rate, verified benign scanner, etc."
-                rows={3}
-                className="w-full bg-[#1D2027] border border-[#282C35] rounded-sm p-2 text-xs text-[#F1F3F6] focus:outline-hidden resize-none placeholder:text-[#616875]"
-              />
-            </div>
-
-            <button
-              onClick={() => submitMutation.mutate()}
-              disabled={submitMutation.isPending}
-              className="w-full py-2 bg-[#F1F3F6] text-[#0A0B0D] text-xs font-medium rounded-sm hover:bg-white transition-colors disabled:opacity-50"
-            >
-              {submitMutation.isPending ? "Submitting Verdict..." : "Save Review Verdict"}
-            </button>
-          </div>
-
-          {/* Feedback History Timeline */}
-          {feedbackList.length > 0 && (
-            <div className="pt-4 border-t border-[#282C35] space-y-3">
-              <div className="flex items-center space-x-1.5 text-xs font-semibold text-[#F1F3F6]">
-                <History className="w-3.5 h-3.5 text-[#939AA6]" />
-                <span>Review History ({feedbackList.length})</span>
-              </div>
-
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {feedbackList.map((fb) => (
-                  <div
-                    key={fb.feedback_id}
-                    className="p-2.5 bg-[#181B21] border border-[#282C35] rounded-sm text-xs space-y-1"
+              <div className="segmented">
+                {(["Confirmed Attack", "False Positive", "Investigating"] as const).map((option) => (
+                  <button
+                    key={option}
+                    className={selectedVerdict === option ? "selected" : ""}
+                    onClick={() => { setSelectedVerdict(option); setSavedSuccess(false); }}
                   >
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="font-semibold text-[#F1F3F6]">
-                        v{fb.version}: {fb.verdict.replace("_", " ").toUpperCase()}
-                        {fb.attack_category ? ` (${fb.attack_category})` : ""}
-                      </span>
-                      <span className="text-[#939AA6] tabular-nums font-mono">
-                        {fb.created_at}
-                      </span>
-                    </div>
-                    {fb.notes && (
-                      <p className="text-[11px] text-[#939AA6] italic">
-                        &ldquo;{fb.notes}&rdquo;
-                      </p>
-                    )}
-                    <div className="text-[10px] text-[#616875]">
-                      Reviewer: {fb.reviewer_id}
+                    {option}
+                  </button>
+                ))}
+              </div>
+              <label className="field">
+                <span>ANALYST FINDINGS & NOTES (OPTIONAL)</span>
+                <textarea
+                  value={analystNotes}
+                  onChange={(event) => { setAnalystNotes(event.target.value); setSavedSuccess(false); }}
+                  rows={3}
+                  placeholder="Optional: Record justification, mitigation, or forensic observations."
+                />
+              </label>
+              <div className="demo-review-submit">
+                {savedSuccess && <span className="status-success font-mono">Verdict recorded successfully.</span>}
+                <Button
+                  variant="primary"
+                  disabled={!selectedVerdict || reviewMutation.isPending}
+                  onClick={() => reviewMutation.mutate()}
+                >
+                  {reviewMutation.isPending ? <RefreshCw className="spin" size={15} /> : "Submit verdict"}
+                </Button>
+              </div>
+            </div>
+          </section>
+
+          <section className="content-section">
+            <span className="section-index">HISTORY</span>
+            <h2>Review history</h2>
+            <p className="section-explanation">Previous analyst decisions, notes, and review versions for this alert.</p>
+            {alert.reviews.length === 0 ? (
+              <EmptyState title="No prior decisions." detail="This incident has not been reviewed." />
+            ) : (
+              <div className="timeline">
+                {alert.reviews.map((review: AlertDetail["reviews"][number]) => (
+                  <div className="timeline-item" key={review.version}>
+                    <i />
+                    <div>
+                      <div className="timeline-top">
+                        <Status tone={statusTone(review.verdict)}>{review.verdict}</Status>
+                        <TechnicalValue>v{review.version}</TechnicalValue>
+                      </div>
+                      <p>{review.notes}</p>
+                      <small>
+                        <TechnicalValue>{new Date(review.timestamp).toLocaleString()}</TechnicalValue>
+                        {review.reviewer && <> · {review.reviewer}</>}
+                      </small>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </section>
         </div>
       </div>
     </div>

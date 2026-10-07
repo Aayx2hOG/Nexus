@@ -2,14 +2,11 @@
 
 The strongest pitch is: **Nexus measures what an extra detector catches, what it
 loses, and how much analyst workload it creates.** The working product serves
-LightGBM with explanations, durable alerts, analyst feedback and non-alert review.
-Selective anomaly-assisted recovery now has opt-in [shadow serving](SHADOW_FUSION.md);
+LightGBM with explanations, durable alerts, analyst feedback and non-alert review;
 independent confirmation and production promotion remain pending.
 
-The product uses a frozen release threshold and a frozen Shadow Fusion recovery
-policy; operators do not tune thresholds in the dashboard. Operational alerts
-remain driven by the serving model, while Shadow Fusion reports observational
-recovery evidence. Prediction retries do not create duplicate alerts and changed
+The product uses a frozen release threshold; operators do not tune thresholds in the dashboard. Operational alerts
+remain driven by the serving model. Prediction retries do not create duplicate alerts and changed
 inputs are rejected under an existing flow/bundle identity. Research artifact
 reuse copies the original split archive so file-hash provenance remains stable.
 No benchmark detector was retrained or promoted.
@@ -57,7 +54,6 @@ eight-seed table. Saved score validation is not raw-input inference parity.
 | Priority | Area | Improvement | Completion evidence |
 | --- | --- | --- | --- |
 | P0 | Working build | Package frozen model, preprocessing and manifests with a reproducible launch/preflight script | A second machine starts API/UI, readiness passes, mixed traffic produces persisted alerts |
-| Implemented | Model → product | Selective fusion shadow serving with a complete frozen bundle | Full archived raw-input parity, separate persisted decisions/provenance, and live non-interference tests; see [shadow guide](SHADOW_FUSION.md) |
 | P0 | Model | Independently confirm the frozen recovery policy on a newly reserved split or compatible external corpus | Paired baseline/fusion counts, family recall, gross FP cost, confidence intervals; no threshold tuning on confirmation data |
 | P1 | Model | Calibrate the total recovery-only union on development calibration data, rather than reusing a full-detector cutoff | Combined calibration budget checked; held evaluation violations and zero baseline losses reported separately |
 | P1 | Model | Investigate recovered/lost cohorts and seed instability before more architectures | Explain Exploits gains and family regressions; rerun only predefined comparisons; retain negative results |
@@ -99,13 +95,12 @@ aggregate evidence at the moment of export.
 | 0:00–0:45 | Readiness, bundle version, problem: recover misses without flooding analysts | Problem fit & coverage (15) |
 | 0:45–2:15 | Submit actual CSV flows, open a persisted alert, explain signed TreeSHAP contributions | Working demonstration (25) |
 | 2:15–3:00 | Submit analyst feedback and inspect a non-alert flow | Demonstration depth (15) |
-| 3:00–4:30 | Shadow Fusion: fixed policy, recovered attacks vs extra FPs, family coverage, parity evidence | Working demonstration and depth (40 combined) |
+| 3:00–4:30 | Model evaluation: fixed policy, recovered attacks vs extra FPs, family coverage | Working demonstration and depth (40 combined) |
 | 4:30–5:30 | Offline selective-fusion evidence, preserved detections, one mixed/negative outcome | Technical implementation (20) |
 | 5:30–6:30 | Walk code: inference, transaction retry handling, policy aggregation and regression tests | Technical implementation (20) |
-| 6:30–7:15 | Shadow integration and measured scaling plan; name current limits | Product potential & scalability (15) |
+| 6:30–7:15 | Integration and measured scaling plan; name current limits | Product potential & scalability (15) |
 | 7:15–8:00 | Each teammate explains their actual contribution and answers one question in their area | Team effort & clarity (10) |
 
 Use real contribution history for team ownership; do not invent assignments.
-Rehearse backend failure and missing-data states. Shadow Fusion should show
-“unavailable” for undefined rates rather than a misleading zero. Live website
+Rehearse backend failure and missing-data states. Live website
 probes estimate/fix some flow inputs; use dataset flows as the reliable model demo.

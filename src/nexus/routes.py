@@ -17,14 +17,18 @@ from nexus.alerts import (
     FeedbackRecord,
     PageQuery,
 )
+from pathlib import Path
+import pandas as pd
 from nexus.config import Settings
 from nexus.errors import APIError
-from nexus.inference import predict_batch
+from nexus.fusion_model import load_fusion_model
+from nexus.inference import FlowPrediction, predict_batch
 from nexus.schemas import (
     BatchPredictionResponse,
     FlowBatch,
     Health,
     Identifier,
+    ModelOptionItem,
     ModelSummaryResponse,
     NonAlertSampleItem,
     NonAlertSamplePage,
@@ -35,6 +39,46 @@ from nexus.schemas import (
     ValidationResult,
 )
 from nexus.storage import AlertStore
+
+FUSION_MODELS: dict[str, Any] = {}
+
+
+def get_fusion_model(model_id: str):
+    if model_id not in FUSION_MODELS:
+        model_path = Path("models") / model_id
+        if not model_path.exists():
+            root_path = Path(__file__).resolve().parents[2] / "models" / model_id
+            if root_path.exists():
+                model_path = root_path
+        if model_path.exists() and (model_path / "weights.joblib").exists():
+            FUSION_MODELS[model_id] = load_fusion_model(model_path)
+        else:
+            return None
+    return FUSION_MODELS[model_id]
+
+
+AVAILABLE_MODELS = [
+    ModelOptionItem(
+        id="uncertainty_band_ae10",
+        name="Uncertainty-band four-mode, AE 10% attack oriented",
+        description="LightGBM + Baseline Autoencoder with 10% FPR anomaly boundaries. Focuses on attack recovery in the uncertainty band [0.10, 0.65].",
+        architecture="LightGBM + Baseline AE (4-Mode)",
+        decision_threshold=0.5776925765603604,
+        focus="Attack Oriented (Higher Recall)",
+        ae_budget="10% FPR",
+        is_fusion=True,
+    ),
+    ModelOptionItem(
+        id="mode_confidence_ae05",
+        name="Mode confidence, AE 5%, soc oriented",
+        description="LightGBM + Baseline Autoencoder with 5% FPR anomaly boundaries. Focuses on SOC triage and reducing false alarms by 992 cases.",
+        architecture="LightGBM + Baseline AE (Confidence Mode)",
+        decision_threshold=0.5776925765603604,
+        focus="SOC Oriented (Lower False Positives)",
+        ae_budget="5% FPR",
+        is_fusion=True,
+    ),
+]
 
 
 async def no_query(request: Request) -> None:
@@ -136,8 +180,94 @@ async def get_model_summary(request: Request) -> ModelSummaryResponse:
     )
 
 
+@flows.get("/models")
+async def get_models() -> list[ModelOptionItem]:
+    return AVAILABLE_MODELS
+
+
 @predictions.post("", dependencies=[Depends(no_query)])
 def predict(batch: FlowBatch, request: Request, store: Store) -> BatchPredictionResponse:
+    if batch.model_id in ("uncertainty_band_ae10", "mode_confidence_ae05"):
+        fusion = get_fusion_model(batch.model_id)
+        if fusion is not None:
+            rows = [f.features.model_dump() for f in batch.flows]
+            frame = pd.DataFrame(rows)
+            details = fusion.predict_details(frame)
+
+            threshold = float(fusion.config["binary"]["decision_threshold"])
+            bundle_ver = str(fusion.config.get("model_id", batch.model_id))
+            flow_preds = []
+            alerts_to_create = []
+
+            for idx, flow in enumerate(batch.flows):
+                row = details.iloc[idx]
+                pred_label = int(row["prediction"])
+                score = float(row["lightgbm_attack_score"])
+                decision = "alert" if pred_label == 1 else "normal"
+                alert_id = str(uuid4()) if decision == "alert" else None
+
+                fp = FlowPrediction(
+                    flow_id=flow.flow_id,
+                    event_time=flow.event_time,
+                    score=score,
+                    threshold=threshold,
+                    decision=decision,
+                    top_features=[],
+                    raw_features=rows[idx],
+                )
+                flow_preds.append(fp)
+
+                if decision == "alert":
+                    alerts_to_create.append(
+                        AlertData(
+                            alert_id=alert_id,
+                            flow_id=flow.flow_id,
+                            event_time=flow.event_time,
+                            source="model",
+                            bundle_version=bundle_ver,
+                            predicted_class="Attack",
+                            score=score,
+                            threshold=threshold,
+                            severity="alert",
+                            top_features=[],
+                        )
+                    )
+
+            try:
+                recorded = store.record_predictions_and_alerts(
+                    flow_preds, bundle_ver, alerts_to_create
+                )
+                rec_map = {p.flow_id: rec for p, rec in recorded}
+            except Exception:
+                rec_map = {}
+
+            items = []
+            for idx, flow in enumerate(batch.flows):
+                row = details.iloc[idx]
+                pred_label = int(row["prediction"])
+                score = float(row["lightgbm_attack_score"])
+                decision = "alert" if pred_label == 1 else "normal"
+                rec = rec_map.get(flow.flow_id)
+                items.append(
+                    PredictionSummaryItem(
+                        flow_id=flow.flow_id,
+                        score=score,
+                        threshold=threshold,
+                        decision=decision,
+                        alert_id=rec.alert_id if rec else (str(uuid4()) if decision == "alert" else None),
+                        ae_mode=str(row["ae_mode"]),
+                        ae_error=float(row["ae_error"]),
+                    )
+                )
+
+            return BatchPredictionResponse(
+                bundle_version=bundle_ver,
+                predictions=items,
+                alert_count=len(alerts_to_create),
+                total_count=len(items),
+                model_id=batch.model_id,
+            )
+
     loader = getattr(request.app.state, "bundle_loader", None)
     if loader is None or not loader.is_ready or loader.loaded_bundle is None:
         raise APIError(503, "model_unavailable", "No evaluated model bundle is configured.")
@@ -176,37 +306,12 @@ def predict(batch: FlowBatch, request: Request, store: Store) -> BatchPrediction
         )
         for p, rec in recorded
     ]
-    shadow_service = getattr(request.app.state, "shadow_service", None)
-    shadow_report = None
-    if shadow_service is not None:
-        shadow_report = shadow_service.evaluate(batch.flows)
-        if shadow_report["results"]:
-            try:
-                shadow_report["results"] = store.record_shadow(
-                    bundle.manifest.bundle_version, shadow_report
-                )
-                shadow_report["status"] = (
-                    "scored"
-                    if all(r["status"] == "scored" for r in shadow_report["results"])
-                    else "error"
-                )
-                shadow_report["persisted"] = True
-            except Exception:
-                import logging
-
-                logging.getLogger(__name__).exception("Shadow persistence failed")
-                shadow_report.update(
-                    status="error",
-                    error_code="shadow_persistence_failed",
-                    persisted=False,
-                    results=[],
-                )
     return BatchPredictionResponse(
-        shadow=shadow_report,
         bundle_version=bundle.manifest.bundle_version,
         predictions=items,
         alert_count=len(alerts_to_create),
         total_count=len(flow_predictions),
+        model_id="lightgbm",
     )
 
 

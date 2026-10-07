@@ -1,37 +1,30 @@
-/**
- * Robust CSV parser and UNSW-NB15 flow batch generator for client-side ingestion.
- */
-
-export interface ParsedFlow {
-  flow_id: string;
-  event_time: string;
-  features: Record<string, string | number>;
-  ground_truth?: {
-    label?: number;
-    attack_cat?: string;
-  };
-}
-
-export interface ParseResult {
-  flows: ParsedFlow[];
-  errors: string[];
-  totalRows: number;
-  hasGroundTruth: boolean;
-}
-
-const INT_FIELDS = new Set([
+export const predictorFields = [
+  "dur",
+  "proto",
+  "service",
+  "state",
   "spkts",
   "dpkts",
   "sbytes",
   "dbytes",
+  "rate",
   "sttl",
   "dttl",
+  "sload",
+  "dload",
   "sloss",
   "dloss",
+  "sinpkt",
+  "dinpkt",
+  "sjit",
+  "djit",
   "swin",
   "stcpb",
   "dtcpb",
   "dwin",
+  "tcprtt",
+  "synack",
+  "ackdat",
   "smean",
   "dmean",
   "trans_depth",
@@ -48,184 +41,143 @@ const INT_FIELDS = new Set([
   "ct_src_ltm",
   "ct_srv_dst",
   "is_sm_ips_ports",
-]);
+] as const;
 
-const FLOAT_FIELDS = new Set([
-  "dur",
-  "rate",
-  "sload",
-  "dload",
-  "sinpkt",
-  "dinpkt",
-  "sjit",
-  "djit",
-  "tcprtt",
-  "synack",
-  "ackdat",
-]);
+const categoricalFields = new Set(["proto", "service", "state"]);
+const optionalLabels = ["label", "ground_truth", "attack_cat"];
 
-const CATEGORY_FIELDS = new Set(["proto", "service", "state"]);
-
-const ALL_REQUIRED_FEATURES = new Set([
-  ...INT_FIELDS,
-  ...FLOAT_FIELDS,
-  ...CATEGORY_FIELDS,
-]);
-
-/**
- * Standard CSV line parser handling quotes and commas.
- */
-function parseCSVLine(line: string): string[] {
-  const result: string[] = [];
+function splitCsvLine(line: string) {
+  const values: string[] = [];
   let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
+  let quoted = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (character === '"') {
+      if (quoted && line[index + 1] === '"') {
         current += '"';
-        i++;
+        index += 1;
       } else {
-        inQuotes = !inQuotes;
+        quoted = !quoted;
       }
-    } else if (char === "," && !inQuotes) {
-      result.push(current.trim());
+    } else if (character === "," && !quoted) {
+      values.push(current.trim());
       current = "";
     } else {
-      current += char;
+      current += character;
     }
   }
-  result.push(current.trim());
-  return result;
+  values.push(current.trim());
+  return values;
 }
 
-/**
- * Parses raw CSV text into validated flows adhering to UNSW-NB15 schema.
- */
-export function parseCSVText(csvText: string): ParseResult {
-  const lines = csvText
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter((l) => l.length > 0);
+export interface ParsedCsv {
+  rows: Record<string, string | number>[];
+  labels: Array<"Attack" | "Normal" | undefined>;
+  errors: string[];
+}
 
-  if (lines.length < 2) {
+export function parseNexusCsv(source: string): ParsedCsv {
+  const lines = source.replace(/\r/g, "").split("\n").filter((line) => line.trim());
+  if (lines.length < 2) return { rows: [], labels: [], errors: ["The CSV must include a header and at least one data row."] };
+
+  const headers = splitCsvLine(lines[0]);
+  const missing = predictorFields.filter((field) => !headers.includes(field));
+  if (missing.length) {
     return {
-      flows: [],
-      errors: ["CSV must contain a header row and at least one data row."],
-      totalRows: 0,
-      hasGroundTruth: false,
+      rows: [],
+      labels: [],
+      errors: missing.map((field) => `Missing required feature: ${field}`),
     };
   }
 
-  const rawHeaders = parseCSVLine(lines[0]);
-  const headers = rawHeaders.map((h) => h.toLowerCase().replace(/['"]/g, ""));
-
-  // Check missing required columns
-  const headerSet = new Set(headers);
-  const missing = Array.from(ALL_REQUIRED_FEATURES).filter((f) => !headerSet.has(f));
-  if (missing.length > 0) {
-    return {
-      flows: [],
-      errors: [`Missing required feature columns: ${missing.slice(0, 8).join(", ")}${missing.length > 8 ? ` (+${missing.length - 8} more)` : ""}`],
-      totalRows: lines.length - 1,
-      hasGroundTruth: false,
-    };
-  }
-
-  const hasLabel = headerSet.has("label");
-  const hasCat = headerSet.has("attack_cat");
-  const labelIdx = headers.indexOf("label");
-  const catIdx = headers.indexOf("attack_cat");
-
-  const flows: ParsedFlow[] = [];
+  const rows: Record<string, string | number>[] = [];
+  const labels: Array<"Attack" | "Normal" | undefined> = [];
   const errors: string[] = [];
+  const labelField = optionalLabels.find((field) => headers.includes(field));
 
-  const nowIso = new Date().toISOString();
-
-  for (let r = 1; r < lines.length; r++) {
-    const values = parseCSVLine(lines[r]);
+  lines.slice(1).forEach((line, rowIndex) => {
+    const values = splitCsvLine(line);
     if (values.length !== headers.length) {
-      if (errors.length < 5) {
-        errors.push(`Row ${r}: Column count mismatch (expected ${headers.length}, got ${values.length}).`);
-      }
-      continue;
+      errors.push(`Row ${rowIndex + 2}: expected ${headers.length} columns, received ${values.length}.`);
+      return;
     }
-
-    const rowDict: Record<string, string> = {};
-    for (let c = 0; c < headers.length; c++) {
-      rowDict[headers[c]] = values[c];
-    }
-
-    const featDict: Record<string, string | number> = {};
-    let rowValid = true;
-
-    for (const feat of ALL_REQUIRED_FEATURES) {
-      const rawVal = rowDict[feat];
-      if (rawVal === undefined || rawVal === "") {
-        if (errors.length < 5) {
-          errors.push(`Row ${r}: Missing value for '${feat}'.`);
-        }
-        rowValid = false;
-        break;
-      }
-
-      if (INT_FIELDS.has(feat)) {
-        const parsed = Number(rawVal);
-        if (!Number.isSafeInteger(parsed)) {
-          if (errors.length < 5) errors.push(`Row ${r}: Invalid integer for '${feat}': ${rawVal}`);
-          rowValid = false;
-          break;
-        }
-        featDict[feat] = parsed;
-      } else if (FLOAT_FIELDS.has(feat)) {
-        const parsed = Number(rawVal);
-        if (!Number.isFinite(parsed)) {
-          if (errors.length < 5) errors.push(`Row ${r}: Invalid number for '${feat}': ${rawVal}`);
-          rowValid = false;
-          break;
-        }
-        featDict[feat] = parsed;
+    const record: Record<string, string | number> = {};
+    predictorFields.forEach((field) => {
+      const raw = values[headers.indexOf(field)];
+      if (raw === "") {
+        errors.push(`Row ${rowIndex + 2}: missing value for ${field}.`);
+      } else if (categoricalFields.has(field)) {
+        record[field] = raw;
       } else {
-        // Category string
-        featDict[feat] = rawVal.replace(/[^A-Za-z0-9_-]/g, "_") || "-";
+        const numeric = Number(raw);
+        if (!Number.isFinite(numeric)) errors.push(`Row ${rowIndex + 2}: ${field} must be numeric.`);
+        else record[field] = numeric;
+      }
+    });
+    if (Object.keys(record).length === predictorFields.length) {
+      rows.push(record);
+      if (!labelField) labels.push(undefined);
+      else {
+        const rawLabel = values[headers.indexOf(labelField)].toLowerCase();
+        if (labelField === "attack_cat" && rawLabel) labels.push(rawLabel === "normal" ? "Normal" : "Attack");
+        else if (["1", "1.0", "attack", "malicious"].includes(rawLabel)) labels.push("Attack");
+        else if (["0", "normal", "benign"].includes(rawLabel)) labels.push("Normal");
+        else errors.push(`Row ${rowIndex + 2}: ${labelField} must identify an attack or normal flow.`);
       }
     }
+  });
 
-    if (!rowValid) continue;
-
-    const groundTruth: { label?: number; attack_cat?: string } = {};
-    if (hasLabel && labelIdx !== -1) {
-      const lbl = parseInt(values[labelIdx], 10);
-      if (!isNaN(lbl)) groundTruth.label = lbl;
-    }
-    if (hasCat && catIdx !== -1) {
-      groundTruth.attack_cat = values[catIdx];
-    }
-
-    flows.push({
-      flow_id: crypto.randomUUID(),
-      event_time: nowIso,
-      features: featDict,
-      ground_truth: groundTruth,
-    });
-  }
-
-  return {
-    flows,
-    errors,
-    totalRows: lines.length - 1,
-    hasGroundTruth: hasLabel,
-  };
+  return { rows: errors.length ? [] : rows, labels: errors.length ? [] : labels, errors };
 }
 
-/**
- * Splits array of parsed flows into batches of size <= maxBatchSize.
- */
-export function chunkFlows<T>(items: T[], maxBatchSize = 100): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < items.length; i += maxBatchSize) {
-    chunks.push(items.slice(i, i + maxBatchSize));
-  }
-  return chunks;
+export function createPreset(kind: "normal" | "attack" | "mixed") {
+  const count = kind === "mixed" ? 100 : 50;
+  return Array.from({ length: count }, (_, index) => {
+    const attack = kind === "attack" || (kind === "mixed" && index % 2 === 1);
+    return {
+      dur: attack ? 0.000011 + index / 1_000_000 : 0.42 + index / 100,
+      proto: attack ? "udp" : "tcp",
+      service: attack ? "dns" : "http",
+      state: attack ? "INT" : "FIN",
+      spkts: attack ? 2 : 12,
+      dpkts: attack ? 0 : 10,
+      sbytes: attack ? 114 + index : 1098 + index * 3,
+      dbytes: attack ? 0 : 8224 + index * 7,
+      rate: attack ? 90909.09 : 34.2,
+      sttl: attack ? 254 : 62,
+      dttl: attack ? 0 : 252,
+      sload: attack ? 82909088 : 42118.4,
+      dload: attack ? 0 : 312442.1,
+      sloss: 0,
+      dloss: attack ? 0 : 2,
+      sinpkt: attack ? 0.011 : 31.2,
+      dinpkt: attack ? 0 : 30.8,
+      sjit: attack ? 0 : 128.4,
+      djit: attack ? 0 : 92.1,
+      swin: 255,
+      stcpb: attack ? 0 : 1934821,
+      dtcpb: attack ? 0 : 3291044,
+      dwin: attack ? 0 : 255,
+      tcprtt: attack ? 0 : 0.132,
+      synack: attack ? 0 : 0.061,
+      ackdat: attack ? 0 : 0.071,
+      smean: attack ? 57 : 91,
+      dmean: attack ? 0 : 822,
+      trans_depth: attack ? 0 : 1,
+      response_body_len: attack ? 0 : 4096,
+      ct_srv_src: attack ? 17 : 3,
+      ct_state_ttl: attack ? 2 : 1,
+      ct_dst_ltm: attack ? 17 : 4,
+      ct_src_dport_ltm: attack ? 17 : 2,
+      ct_dst_sport_ltm: attack ? 17 : 1,
+      ct_dst_src_ltm: attack ? 17 : 3,
+      is_ftp_login: 0,
+      ct_ftp_cmd: 0,
+      ct_flw_http_mthd: attack ? 0 : 1,
+      ct_src_ltm: attack ? 17 : 4,
+      ct_srv_dst: attack ? 17 : 3,
+      is_sm_ips_ports: 0,
+      ground_truth: attack ? "Attack" : "Normal",
+    } satisfies Record<string, string | number>;
+  });
 }

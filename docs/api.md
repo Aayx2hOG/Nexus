@@ -72,9 +72,3 @@ Prediction retry semantics: an identical flow/bundle retry returns the original
 alert without adding alerts or predictions. Changed features, event timestamp,
 threshold, decision or materially changed score produce 409. Existing duplicates
 from earlier releases are not deleted by this change.
-
-## Selective-fusion shadow evidence
-
-See [the shadow contract](SHADOW_FUSION.md#api-and-persistence) for the additive
-`shadow` prediction response and authenticated `/api/v1/shadow` summary and
-`/api/v1/shadow/predictions` history endpoints. Operational alerts remain unchanged.

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
-import { Navbar } from "@/components/Navbar";
-import { KeyboardHelpModal } from "@/components/KeyboardHelpModal";
+import { Shell } from "@/components/Shell";
 
 export const metadata: Metadata = {
-  title: "Nexus IDS Console",
-  description: "Network intrusion detection SOC analyst review console",
+  title: "NEXUS · Network Intrusion Detection",
+  description: "Security workspace for suspicious network activity, model triage, and analyst review",
 };
 
 export default function RootLayout({
@@ -15,14 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full bg-[#0A0B0D] text-[#F1F3F6] dark">
-      <body className="min-h-full flex flex-col font-sans bg-[#0A0B0D] text-[#F1F3F6]">
+    <html lang="en">
+      <body>
         <Providers>
-          <Navbar />
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5">
-            {children}
-          </main>
-          <KeyboardHelpModal />
+          <Shell>{children}</Shell>
         </Providers>
       </body>
     </html>

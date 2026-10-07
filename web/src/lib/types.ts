@@ -1,5 +1,125 @@
-export type Severity = "alert" | "low" | "medium" | "high" | "critical";
-export type Verdict = "confirmed_attack" | "false_positive" | "needs_investigation" | "pending";
+export type Severity = "Critical" | "High" | "Medium" | "Low";
+export type ReviewStatus =
+  | "Confirmed Attack"
+  | "False Positive"
+  | "Investigating"
+  | "Pending Review";
+
+export interface ShapFeature {
+  name: string;
+  value: string | number;
+  contribution: number;
+}
+
+export interface Alert {
+  id: string;
+  flowId: string;
+  createdAt: string;
+  severity: Severity;
+  source: string;
+  destination?: string;
+  score: number;
+  threshold: number;
+  category: string;
+  reviewStatus: ReviewStatus;
+}
+
+export interface Review {
+  timestamp: string;
+  verdict: Exclude<ReviewStatus, "Pending Review">;
+  notes: string;
+  version: number;
+  reviewer?: string;
+}
+
+export interface AlertDetail extends Alert {
+  protocol: string;
+  service: string;
+  state: string;
+  shap: ShapFeature[];
+  features: Record<string, string | number>;
+  reviewVersion: number;
+  reviews: Review[];
+}
+
+export interface AlertStats {
+  last24Hours: number;
+  awaitingReview: number;
+  confirmedAttacks: number;
+  falsePositives: number;
+  investigating: number;
+  totalPredictions: number;
+}
+
+export interface Health {
+  system: "Operational" | "Unavailable" | "Degraded";
+  api: "Operational" | "Unavailable" | "Degraded";
+  model: "Operational" | "Unavailable" | "Degraded";
+}
+
+export interface ReviewSample {
+  id: string;
+  ingestTime: string;
+  protocol: string;
+  service: string;
+  state: string;
+  score: number;
+  threshold: number;
+  auditStatus: "Unreviewed" | "Needs Triage" | "Missed Attack" | "Malicious Intent";
+  features: Record<string, string | number>;
+  decision?: "normal";
+  reviewVersion?: number;
+}
+
+export interface ProbeResult {
+  id: string;
+  target: string;
+  timestamp: string;
+  verdict: string;
+  score: number;
+  threshold: number;
+  status: number;
+  threatLevel: Severity | "Normal";
+  measurements: Record<string, string>;
+  shap: ShapFeature[];
+}
+
+export interface ModelManifest {
+  architecture: string;
+  bundleVersion: string;
+  threshold: number;
+  selection: Record<string, string>;
+  artifactHashes: Record<string, string>;
+  sourceHashes: Record<string, string>;
+}
+
+export interface ModelOption {
+  id: string;
+  name: string;
+  description: string;
+  architecture: string;
+  decision_threshold: number;
+  focus: string;
+  ae_budget?: string | null;
+  is_fusion: boolean;
+}
+
+export interface FlowPrediction {
+  flowId: string;
+  alertId?: string;
+  score: number;
+  threshold: number;
+  decision: "Alert" | "Normal";
+  category?: string;
+  groundTruth?: "Attack" | "Normal";
+  features: Record<string, string | number>;
+  aeMode?: string;
+  aeError?: number;
+  modelId?: string;
+}
+
+/* Backend specific types */
+export type BackendVerdict = "confirmed_attack" | "false_positive" | "needs_investigation" | "pending";
 
 export interface FeatureContribution {
   feature: string;
@@ -18,7 +138,7 @@ export interface AlertRecord {
   score?: number | null;
   threshold?: number | null;
   probability?: number | null;
-  severity: Severity;
+  severity: string;
   top_features: FeatureContribution[];
   created_at: string;
   feedback_version: number;
@@ -34,7 +154,7 @@ export interface FeedbackRecord {
   feedback_id: string;
   alert_id: string;
   version: number;
-  verdict: Verdict;
+  verdict: BackendVerdict;
   attack_category: string | null;
   notes: string | null;
   reviewer_id: string;
@@ -67,7 +187,7 @@ export interface ModelSummary {
 }
 
 export interface SampleReview {
-  verdict: Verdict;
+  verdict: BackendVerdict;
   attack_category?: string | null;
   notes?: string | null;
   reviewer_id: string;
@@ -98,7 +218,49 @@ export interface SimulationProfile {
   category: string;
   description: string;
   service: string;
-  expected_verdict: string;
+  sttl: number;
+  dttl: number;
+  swin: number;
+  dwin: number;
+  state: string;
+  proto: string;
+  attack_category: string | null;
+  risk_level: string;
+}
+
+export interface PresetData {
+  preset_id: string;
+  name: string;
+  description: string;
+  flow_count: number;
+  schema_version: string;
+  flows: Array<{
+    flow_id: string;
+    event_time: string;
+    features: Record<string, string | number>;
+    expected_class?: string;
+  }>;
+}
+
+export interface BatchPredictionItem {
+  flow_id: string;
+  decision: "alert" | "normal";
+  score: number;
+  threshold: number;
+  predicted_class?: string;
+  alert_id?: string | null;
+  top_features?: FeatureContribution[];
+  ae_mode?: string | null;
+  ae_error?: number | null;
+}
+
+export interface BatchPredictionResponse {
+  schema_version?: string;
+  evaluated_count?: number;
+  alert_count: number;
+  bundle_version: string;
+  predictions: BatchPredictionItem[];
+  model_id?: string | null;
 }
 
 export interface ConnectionMetrics {
@@ -121,77 +283,50 @@ export interface ConnectionMetrics {
 
 export interface LiveProbeResult {
   target_url: string;
-  method: string;
+  method?: string;
   flow_id: string;
-  connection: ConnectionMetrics;
-  target_hit: boolean;
+  connection?: ConnectionMetrics;
+  target_hit?: boolean;
   score: number;
   threshold: number;
   decision: "alert" | "normal";
-  threat_level: "CRITICAL" | "HIGH" | "MEDIUM" | "CLEAN";
+  threat_level?: "CRITICAL" | "HIGH" | "MEDIUM" | "CLEAN";
   alert_id?: string | null;
   top_features: FeatureContribution[];
-  recommended_action: string;
-  event_time: string;
-  extracted_features: Record<string, unknown>;
+  recommended_action?: string;
+  event_time?: string;
+  extracted_features?: Record<string, any>;
+  resolved_ip?: string | null;
+  elapsed_ms?: number;
+  predicted_class?: string;
+  tls_version?: string | null;
+  http_version?: string | null;
+  status_code?: number | null;
+  measurements?: Record<string, string | number>;
+  features?: Record<string, string | number>;
 }
-
-// Keep old ProbeResult for backward compat
-export interface ProbeResult {
-  target_url: string;
-  profile_id: string;
-  profile_name: string;
-  category: string;
-  flow_id: string;
-  target_hit: boolean;
-  score: number;
-  threshold: number;
-  decision: "alert" | "normal";
-  threat_level: "CRITICAL" | "HIGH" | "MEDIUM" | "CLEAN";
-  alert_id?: string | null;
-  top_features: FeatureContribution[];
-  recommended_action: string;
-  event_time: string;
-}
-
-export interface PresetData {
-  preset_id: string;
-  flow_count: number;
-  csv_text: string;
-  flows: Record<string, unknown>[];
-}
-
-export interface BatchPredictionItem {
-  flow_id: string;
-  score: number;
-  threshold: number;
-  decision: "alert" | "normal";
-  alert_id?: string | null;
-}
-
-export interface BatchPredictionResponse {
-  bundle_version: string;
-  predictions: BatchPredictionItem[];
-  alert_count: number;
-  total_count: number;
-}
-
 
 export interface ReplaySummary {
-  total_replayed: number;
-  confusion_matrix: number[][];
+  evaluated_flows: number;
+  evaluation_alerts: number;
   true_positives: number;
   false_positives: number;
   true_negatives: number;
   false_negatives: number;
-  accuracy: number;
-  recall: number;
-  false_positive_rate: number;
-  false_alerts_per_1000_normal: number;
+  recall: number | null;
+  precision: number | null;
+  false_positive_rate: number | null;
+  false_alerts_per_1000_normal: number | null;
   summary_note: string;
 }
 
-export interface Health {
-  status: "alive" | "not_ready" | "ready";
-  bundle_version?: string;
-}
+type PolicyMetrics = {
+  true_negatives: number;
+  false_positives: number;
+  false_negatives: number;
+  true_positives: number;
+  recall: number | null;
+  precision: number | null;
+  false_positive_rate: number | null;
+  alert_count: number;
+};

@@ -1,285 +1,140 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchModelSummary, fetchReplaySummary } from "@/lib/api";
 import {
-  Hash,
-  Database,
-  BarChart2,
+  Check,
+  ChevronRight,
+  CircleDot,
+  Copy,
+  Gauge,
+  RefreshCw,
+  Server,
 } from "lucide-react";
+import {
+  Button,
+  ErrorState,
+  InfoHelp,
+  LoadingState,
+  PageHeader,
+  Status,
+} from "@/components/components";
+import { api } from "@/lib/api";
+
+function CopyHash({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      className="hash-row"
+      onClick={() => {
+        void navigator.clipboard.writeText(value);
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1200);
+      }}
+    >
+      <span className="mono">{value}</span>
+      {copied ? <Check size={15} /> : <Copy size={15} />}
+    </button>
+  );
+}
+
+const modelMetricExplanations: Record<string, string> = {
+  Precision: "Of the flows classified as attacks, the proportion that were actually attacks in the selection evaluation.",
+  Recall: "Of the attacks in the evaluation data, the proportion the model correctly detected.",
+  F1: "A combined measure that balances precision and recall.",
+  "False positive rate": "The proportion of normal flows incorrectly classified as attacks.",
+};
 
 export default function ModelPage() {
-  const { data: model, isLoading: modelLoading, error: modelError } = useQuery({
-    queryKey: ["modelSummary"],
-    queryFn: fetchModelSummary,
-  });
-
-  const { data: replay, isLoading: replayLoading } = useQuery({
-    queryKey: ["replaySummary"],
-    queryFn: fetchReplaySummary,
-  });
-
-  const metrics = model?.selection_metrics || {};
-  const cm = Array.isArray(metrics.confusion_matrix) ? metrics.confusion_matrix : null;
-  const tn = cm && Array.isArray(cm[0]) ? cm[0][0] : null;
-  const fp = cm && Array.isArray(cm[0]) ? cm[0][1] : null;
-  const fn = cm && Array.isArray(cm[1]) ? cm[1][0] : null;
-  const tp = cm && Array.isArray(cm[1]) ? cm[1][1] : null;
-  const totalVal = tn !== null && fp !== null && fn !== null && tp !== null ? tn + fp + fn + tp : null;
-  const fprVal =
-    typeof metrics.false_positive_rate === "number"
-      ? metrics.false_positive_rate
-      : typeof metrics.fpr === "number"
-      ? metrics.fpr
-      : null;
+  const query = useQuery({ queryKey: ["manifest"], queryFn: api.manifest });
+  if (query.isLoading) return <div className="page"><LoadingState label="Loading model manifest" /></div>;
+  if (query.isError || !query.data) return <div className="page"><ErrorState retry={() => void query.refetch()} /></div>;
+  const manifest = query.data;
 
   return (
-    <div className="space-y-6">
-      {/* Page Title & Status */}
-      <div>
-        <h1 className="text-lg font-semibold tracking-tight text-[#F1F3F6]">
-          Model Architecture, Hashes & Empirical Performance
-        </h1>
-        <p className="text-xs text-[#939AA6] mt-0.5">
-          Release bundle verification, cryptographic provenance, and held-out partition evaluation.
-        </p>
-      </div>
-
-      {modelError && (
-        <div role="alert" className="border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-300">
-          Model unavailable: {modelError.message}. Start the configured Nexus backend and retry.
+    <div className="page">
+      <PageHeader
+        eyebrow="PROVENANCE"
+        title="Model and manifest"
+        description="Technical information about the model running inside NEXUS, including its version, threshold, evaluation results, and artifact integrity."
+        actions={<Button onClick={() => void query.refetch()}><RefreshCw size={15} /> Refresh manifest</Button>}
+      />
+      <section className="manifest-hero">
+        <div className="manifest-mark"><Gauge size={28} /></div>
+        <div className="manifest-title"><span>PRIMARY SERVING MODEL</span><h2>{manifest.architecture}</h2><p>Supervised network flow classifier</p></div>
+        <div className="manifest-kv">
+          <span>BUNDLE VERSION <InfoHelp label="Model bundle" text="The packaged model, preprocessor, feature schema, threshold, and validation metadata used by NEXUS." /></span>
+          <strong className="mono">{manifest.bundleVersion}</strong>
         </div>
-      )}
-
-      {/* Overview Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
-          <div className="text-[11px] font-medium text-[#939AA6]">Model Architecture</div>
-          <div className="text-sm font-semibold text-[#F1F3F6]">
-            {modelLoading ? "—" : model?.algorithm || "Unavailable"}
-          </div>
-          <div className="text-[10px] text-[#939AA6]">UNSW-NB15 Validated Model</div>
+        <div className="manifest-kv">
+          <span>DECISION THRESHOLD <InfoHelp label="decision threshold" text="The minimum score required for NEXUS to classify a network flow as an alert." /></span>
+          <strong className="mono">{manifest.threshold}</strong>
         </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
-          <div className="text-[11px] font-medium text-[#939AA6]">Bundle Version</div>
-          <div className="text-sm font-semibold font-mono text-[#F1F3F6]">
-            {modelLoading ? "—" : model?.bundle_version || "—"}
-          </div>
-          <div className="text-[10px] text-[#939AA6]">Cryptographically sealed</div>
-        </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
-          <div className="text-[11px] font-medium text-[#939AA6]">Decision Threshold</div>
-          <div className="text-sm font-semibold font-mono text-[#F87171] tabular-nums">
-            {modelLoading
-              ? "—"
-              : typeof model?.decision_threshold === "number"
-              ? model.decision_threshold.toFixed(6)
-              : "—"}
-          </div>
-          <div className="text-[10px] text-[#939AA6]">Single operational decision boundary</div>
-        </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-4 rounded-sm space-y-1">
-          <div className="text-[11px] font-medium text-[#939AA6]">Selection Accuracy</div>
-          <div className="text-sm font-semibold font-mono text-[#34D399] tabular-nums">
-            {modelLoading
-              ? "—"
-              : typeof metrics.accuracy === "number"
-              ? `${(metrics.accuracy * 100).toFixed(2)}%`
-              : "—"}
-          </div>
-          <div className="text-[10px] text-[#939AA6]">Held-out selection partition</div>
-        </div>
-      </div>
-
-      {/* Grid: Selection Metrics vs Replay Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left: Frozen Selection Partition Metrics */}
-        <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
-          <div className="flex items-center space-x-2">
-            <BarChart2 className="w-4 h-4 text-[#F1F3F6]" />
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-              Selection Partition Metrics (Validation Estimate)
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 bg-[#181B21] border border-[#282C35] rounded-sm">
-              <div className="text-[10px] text-[#939AA6]">Recall / Detection Rate</div>
-              <div className="text-base font-semibold font-mono tabular-nums text-[#F1F3F6] mt-1">
-                {typeof metrics.recall === "number"
-                  ? `${(metrics.recall * 100).toFixed(2)}%`
-                  : "—"}
+        <Status tone="success">Production path</Status>
+      </section>
+      <div className="model-grid">
+        <section className="content-section selection-panel">
+          <span className="section-index">01 / VALIDATED EVALUATION</span>
+          <div className="section-heading">
+            <div>
+              <div className="heading-with-help">
+                <h2>Selection results</h2>
+                <InfoHelp label="selection results" text="Measurements from the evaluation used to select this model version. They do not represent guaranteed production performance." />
               </div>
-            </div>
-
-            <div className="p-3 bg-[#181B21] border border-[#282C35] rounded-sm">
-              <div className="text-[10px] text-[#939AA6]">False Positive Rate (FPR)</div>
-              <div className="text-base font-semibold font-mono tabular-nums text-[#F1F3F6] mt-1">
-                {typeof fprVal === "number"
-                  ? `${(fprVal * 100).toFixed(2)}%`
-                  : "—"}
-              </div>
+              <p>How this model performed during its documented selection evaluation.</p>
             </div>
           </div>
-
-          <div className="space-y-2">
-            <div className="text-[11px] font-medium text-[#939AA6]">
-              Validation Confusion Matrix{totalVal !== null ? ` (${totalVal.toLocaleString()} flows)` : ""}:
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-center border border-[#282C35] text-xs font-mono">
-                <thead>
-                  <tr className="bg-[#181B21] text-[#939AA6]">
-                    <th className="p-2 border-r border-[#282C35]">Actual \ Pred</th>
-                    <th className="p-2 border-r border-[#282C35]">Pred Normal (0)</th>
-                    <th className="p-2">Pred Alert (1)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#282C35]">
-                  <tr>
-                    <td className="p-2 font-medium bg-[#181B21] border-r border-[#282C35] text-left text-[#F1F3F6]">
-                      Actual Normal (0)
-                    </td>
-                    <td className="p-2 border-r border-[#282C35] text-[#34D399] font-semibold">
-                      {tn !== null ? `${tn.toLocaleString()} (TN)` : "—"}
-                    </td>
-                    <td className="p-2 text-[#FBBF24] font-semibold">
-                      {fp !== null ? `${fp.toLocaleString()} (FP)` : "—"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="p-2 font-medium bg-[#181B21] border-r border-[#282C35] text-left text-[#F1F3F6]">
-                      Actual Attack (1)
-                    </td>
-                    <td className="p-2 border-r border-[#282C35] text-[#F87171] font-semibold">
-                      {fn !== null ? `${fn.toLocaleString()} (FN)` : "—"}
-                    </td>
-                    <td className="p-2 text-[#34D399] font-semibold">
-                      {tp !== null ? `${tp.toLocaleString()} (TP)` : "—"}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div className="selection-grid">
+            {Object.entries(manifest.selection).map(([label, value]) => {
+              return (
+                <div key={label}>
+                  <span>
+                    {label}
+                    {modelMetricExplanations[label] && <InfoHelp label={label} text={modelMetricExplanations[label]} />}
+                  </span>
+                  <strong className="mono">{String(value)}</strong>
+                </div>
+              );
+            })}
           </div>
-        </div>
-
-        {/* Right: Empirical Replay Performance */}
-        <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
-          <div className="flex items-center space-x-2">
-            <Database className="w-4 h-4 text-[#F1F3F6]" />
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-              Live Replay Performance (replay_truth)
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 bg-[#181B21] border border-[#282C35] rounded-sm">
-              <div className="text-[10px] text-[#939AA6]">Replayed Flows Count</div>
-              <div className="text-base font-semibold font-mono tabular-nums text-[#F1F3F6] mt-1">
-                {replayLoading ? "—" : replay?.total_replayed.toLocaleString() || "0"}
-              </div>
-            </div>
-
-            <div className="p-3 bg-[#181B21] border border-[#282C35] rounded-sm">
-              <div className="text-[10px] text-[#939AA6]">False Alerts / 1k Normal</div>
-              <div className="text-base font-semibold font-mono tabular-nums text-[#FBBF24] mt-1">
-                {replayLoading
-                  ? "—"
-                  : replay?.false_alerts_per_1000_normal !== undefined
-                  ? `${replay.false_alerts_per_1000_normal.toFixed(1)} / 1,000`
-                  : "0.0 / 1,000"}
-              </div>
-            </div>
-          </div>
-
-          {replay && replay.total_replayed > 0 ? (
-            <div className="space-y-2">
-              <div className="text-[11px] font-medium text-[#939AA6]">
-                Empirical Replay Matrix ({replay.total_replayed} flows evaluated):
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-center border border-[#282C35] text-xs font-mono">
-                  <thead>
-                    <tr className="bg-[#181B21] text-[#939AA6]">
-                      <th className="p-2 border-r border-[#282C35]">Actual \ Pred</th>
-                      <th className="p-2 border-r border-[#282C35]">Pred Normal</th>
-                      <th className="p-2">Pred Alert</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#282C35]">
-                    <tr>
-                      <td className="p-2 font-medium bg-[#181B21] border-r border-[#282C35] text-left text-[#F1F3F6]">
-                        Actual Normal
-                      </td>
-                      <td className="p-2 border-r border-[#282C35] text-[#34D399] font-semibold">
-                        {replay.true_negatives}
-                      </td>
-                      <td className="p-2 text-[#FBBF24] font-semibold">
-                        {replay.false_positives}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 font-medium bg-[#181B21] border-r border-[#282C35] text-left text-[#F1F3F6]">
-                        Actual Attack
-                      </td>
-                      <td className="p-2 border-r border-[#282C35] text-[#F87171] font-semibold">
-                        {replay.false_negatives}
-                      </td>
-                      <td className="p-2 text-[#34D399] font-semibold">
-                        {replay.true_positives}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ) : (
-            <div className="py-8 text-center text-xs text-[#939AA6]">
-              Run the dataset replay CLI (<code className="font-mono bg-[#181B21] px-1 py-0.5 border border-[#282C35] rounded-xs text-[#F1F3F6]">python -m nexus.replay</code>) to generate live empirical evaluation statistics.
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Cryptographic Provenance & SHA-256 Hashes */}
-      <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-5 space-y-4">
-        <div className="flex items-center space-x-2">
-          <Hash className="w-4 h-4 text-[#F1F3F6]" />
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#F1F3F6]">
-            Cryptographic SHA-256 Hashes & Bundle Provenance
-          </h2>
-        </div>
-
-        <div className="divide-y divide-[#282C35] border border-[#282C35] rounded-sm text-xs font-mono">
-          <div className="p-3 bg-[#181B21] font-semibold text-[#F1F3F6]">
-            Release Artifacts ({model?.bundle_version || "—"}):
-          </div>
-
-          {model?.bundle_hashes &&
-            Object.entries(model.bundle_hashes).map(([file, hash]) => (
-              <div key={file} className="p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                <span className="text-[#F1F3F6] font-medium">{file}</span>
-                <span className="text-[11px] text-[#939AA6] break-all">{hash}</span>
-              </div>
+        </section>
+        <section className="content-section pipeline-panel">
+          <span className="section-index">02 / SERVING PATH</span>
+          <h2>Production inference</h2>
+          <p className="section-explanation">The steps NEXUS follows to turn one network flow into a normal or alert decision.</p>
+          <div className="pipeline">
+            {["Network flow", "Preprocessing", "LightGBM", "Threshold", "Normal or alert", "TreeSHAP", "SOC review"].map((step, index, all) => (
+              <div key={step}><span>{index + 1}</span><strong>{step}</strong>{index < all.length - 1 && <ChevronRight size={15} />}</div>
             ))}
-
-          <div className="p-3 bg-[#181B21] font-semibold text-[#F1F3F6]">
-            Source Code & Training Partition Integrity:
           </div>
-
-          {model?.source_hashes &&
-            Object.entries(model.source_hashes).map(([file, hash]) => (
-              <div key={file} className="p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                <span className="text-[#F1F3F6] font-medium">{file}</span>
-                <span className="text-[11px] text-[#939AA6] break-all">{hash}</span>
-              </div>
-            ))}
-        </div>
+        </section>
       </div>
+      <section className="content-section">
+        <span className="section-index">03 / ARTIFACT INTEGRITY</span>
+        <div className="section-heading"><div><h2>Model provenance</h2><p>File fingerprints used to verify that model and source artifacts have not changed.</p></div><Server size={20} /></div>
+        <div className="hash-table">
+          <div className="hash-group">
+            <h3>ARTIFACT HASHES</h3>
+            {Object.entries(manifest.artifactHashes).map(([name, hash]) => (
+              <div className="hash-item" key={name}><span>{name}</span><CopyHash value={String(hash)} /></div>
+            ))}
+          </div>
+          <div className="hash-group">
+            <h3>SOURCE HASHES</h3>
+            {Object.entries(manifest.sourceHashes).map(([name, hash]) => (
+              <div className="hash-item" key={name}><span>{name}</span><CopyHash value={String(hash)} /></div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="research-panel">
+        <div><CircleDot size={19} /><span>RESEARCH CONTEXT</span></div>
+        <div>
+          <h2>Selective recovery remains separate from production serving.</h2>
+          <p>Research evaluates whether autoencoders, Isolation Forest, latent distance, calibration, and selective fusion can recover attacks missed by the primary LightGBM detector.</p>
+          <div className="research-path"><span>LightGBM</span><ChevronRight size={14} /><span>Anomaly detection</span><ChevronRight size={14} /><span>Selective fusion</span><ChevronRight size={14} /><span>Calibration</span><ChevronRight size={14} /><span>Research evaluation</span></div>
+        </div>
+      </section>
     </div>
   );
 }

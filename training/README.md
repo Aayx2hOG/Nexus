@@ -41,10 +41,3 @@ The scripts preserve their historical artifact paths. Existing output directorie
 26 unrelated research scripts and eight research-only test modules were moved to [the historical archive](../experiments/archived_training_20261007/README.md). The archive includes original paths and byte hashes, preserving existing local/staged edits. Baseline-AE and anomaly helper tests remain active; research-only cases from mixed test modules are preserved in their original archived copies.
 
 Model weights, configs, datasets, saved experiment results and application serving were not changed. `FUSION_EXPERIMENTS.md` is historical documentation. The retained dependency modules sometimes contain older optional workflows; their imported helpers are still needed, so their source is preserved.
-
-## Selective-fusion shadow dependencies
-
-Shadow serving requires `complementary_fusion.py`. The active regression suite
-also retains `run_novelty_experiment.py`, `calibration_evidence.py`,
-`fusion_ablation.py` and `summarize_anomaly_results.py` to verify the frozen
-selective policy and training reuse. Historical copies remain in the archive.

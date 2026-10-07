@@ -9,7 +9,6 @@ experiments and the frontend.
 | Document | Purpose |
 | --- | --- |
 | [Local demo](LOCAL_DEMO.md) | Set up and run the backend, dashboard and dataset replay |
-| [Shadow fusion](SHADOW_FUSION.md) | Understand frozen candidate export, parity checks and opt-in shadow serving |
 | [API contract](api.md) | Prediction, alert, replay and analyst-feedback endpoints |
 
 ## Research and planning

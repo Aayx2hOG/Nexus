@@ -1,378 +1,252 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAlerts, fetchStats } from "@/lib/api";
+import { ArrowRight, Filter, RefreshCw } from "lucide-react";
 import {
-  Clock,
-  CheckCircle2,
-  ArrowRight,
-  RefreshCw,
-} from "lucide-react";
+  Button,
+  EmptyState,
+  ErrorState,
+  InfoHelp,
+  LoadingState,
+  PageHeader,
+} from "@/components/components";
+import { api, isPreviewData } from "@/lib/api";
+import type { ReviewStatus, Severity } from "@/lib/types";
+
+const statusTone = (status: ReviewStatus) => {
+  if (status === "Confirmed Attack") return "danger";
+  if (status === "False Positive") return "success";
+  if (status === "Investigating") return "warning";
+  return "neutral";
+};
 
 export default function AlertsPage() {
   const router = useRouter();
-  const [severityFilter, setSeverityFilter] = useState<string>("all");
-  const [sourceFilter, setSourceFilter] = useState<string>("all");
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [pageAfter, setPageAfter] = useState<number | undefined>(undefined);
-  const [pageHistory, setPageHistory] = useState<number[]>([]);
+  const alertsQuery = useQuery({ queryKey: ["alerts"], queryFn: api.alerts, refetchInterval: 15_000 });
+  const statsQuery = useQuery({ queryKey: ["stats"], queryFn: api.stats, refetchInterval: 15_000 });
+  const [statusFilter, setStatusFilter] = useState("All statuses");
+  const [severityFilter, setSeverityFilter] = useState("All severities");
+  const [selected, setSelected] = useState(0);
+  const [page, setPage] = useState(1);
 
-  // Fetch summary stats
-  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = useQuery({
-    queryKey: ["stats"],
-    queryFn: fetchStats,
-    refetchInterval: 10000,
-  });
+  const alerts = useMemo(
+    () =>
+      (alertsQuery.data ?? []).filter(
+        (alert) =>
+          (statusFilter === "All statuses" || alert.reviewStatus === statusFilter) &&
+          (severityFilter === "All severities" || alert.severity === severityFilter),
+      ),
+    [alertsQuery.data, statusFilter, severityFilter],
+  );
 
-  // Fetch alerts
-  const {
-    data: alertPage,
-    isLoading: alertsLoading,
-    isRefetching,
-    refetch: refetchAlerts,
-  } = useQuery({
-    queryKey: ["alerts", severityFilter, pageAfter],
-    queryFn: () =>
-      fetchAlerts({
-        limit: 25,
-        after: pageAfter,
-        severity: severityFilter !== "all" ? severityFilter : undefined,
-      }),
-  });
+  const rowsPerPage = 10;
+  const pageCount = Math.max(1, Math.ceil(alerts.length / rowsPerPage));
+  const visibleAlerts = alerts.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  const alerts = alertPage?.items || [];
-
-  // Filter client-side for source if selected
-  const displayedAlerts = alerts.filter((a) => {
-    if (sourceFilter !== "all" && a.source !== sourceFilter) return false;
-    return true;
-  });
-
-  // Keyboard navigation: j / k / Enter
   useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (
-        document.activeElement?.tagName === "INPUT" ||
-        document.activeElement?.tagName === "TEXTAREA"
-      ) {
-        return;
-      }
+    setPage(1);
+    setSelected(0);
+  }, [severityFilter, statusFilter, alertsQuery.data]);
 
-      if (e.key === "j" || e.key === "ArrowDown") {
-        e.preventDefault();
-        setSelectedIndex((prev) =>
-          prev < displayedAlerts.length - 1 ? prev + 1 : prev
-        );
-      } else if (e.key === "k" || e.key === "ArrowUp") {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : 0));
-      } else if (e.key === "Enter") {
-        if (displayedAlerts[selectedIndex]) {
-          router.push(`/alerts/${displayedAlerts[selectedIndex].alert_id}`);
-        }
-      }
-    }
+  useEffect(() => {
+    const keyboard = (event: KeyboardEvent) => {
+      if (["INPUT", "SELECT", "TEXTAREA"].includes((event.target as HTMLElement).tagName)) return;
+      if (event.key.toLowerCase() === "j") setSelected((value) => Math.min(value + 1, visibleAlerts.length - 1));
+      if (event.key.toLowerCase() === "k") setSelected((value) => Math.max(value - 1, 0));
+      if (event.key === "Enter" && visibleAlerts[selected]) router.push(`/alerts/${visibleAlerts[selected].id}`);
+    };
+    window.addEventListener("keydown", keyboard);
+    return () => window.removeEventListener("keydown", keyboard);
+  }, [router, selected, visibleAlerts]);
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [displayedAlerts, selectedIndex, router]);
+  const refresh = () => {
+    void alertsQuery.refetch();
+    void statsQuery.refetch();
+  };
 
-  function handleNextPage() {
-    if (alertPage?.next_after) {
-      setPageHistory((prev) => [...prev, pageAfter || 0]);
-      setPageAfter(alertPage.next_after);
-      setSelectedIndex(0);
-    }
-  }
-
-  function handlePrevPage() {
-    if (pageHistory.length > 0) {
-      const prev = [...pageHistory];
-      const last = prev.pop();
-      setPageHistory(prev);
-      setPageAfter(last === 0 ? undefined : last);
-      setSelectedIndex(0);
-    }
-  }
+  const stats = statsQuery.data;
+  const counterItems = stats
+    ? [
+        {
+          label: "Critical",
+          value: (alertsQuery.data ?? []).filter((alert) => alert.severity === "Critical").length,
+          help: "Alerts assigned the highest available severity level.",
+        },
+        {
+          label: "Investigating",
+          value: stats.investigating,
+          help: "Alerts still being reviewed with no final decision recorded.",
+        },
+        {
+          label: "Confirmed",
+          value: stats.confirmedAttacks,
+          help: "Alerts an analyst reviewed and determined represent attacks.",
+        },
+        {
+          label: "False positive",
+          value: stats.falsePositives,
+          help: "Normal network activity that NEXUS incorrectly flagged as suspicious.",
+        },
+        {
+          label: "Total flows",
+          value: stats.totalPredictions,
+          help: "All network flows scored by the detector in the reported period.",
+        },
+      ]
+    : [];
 
   return (
-    <div className="space-y-5">
-      {/* 1. Header & Summary Stats */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div className="page" data-preview={isPreviewData() ? "true" : undefined}>
+      <PageHeader
+        title="Alerts"
+        description="Network activity that NEXUS has flagged as suspicious and sent to an analyst for review."
+        actions={
+          <>
+            {isPreviewData() && <span className="demo-inline">DEMO DATA</span>}
+            <Button onClick={refresh}>
+              <RefreshCw size={15} /> Refresh
+            </Button>
+          </>
+        }
+      />
+      <section className="ops-summary" aria-label="Alert statistics">
+        {statsQuery.isLoading ? (
+          <div className="ops-summary-loading">Reading detection counters</div>
+        ) : stats ? (
+          <>
+            <div className="ops-primary">
+              <span>
+                Alerts <InfoHelp label="Alert" text="A network flow whose model score crossed the decision threshold and was sent for analyst review." />
+              </span>
+              <div><strong className="mono">{stats.awaitingReview + stats.investigating}</strong><small>ACTIVE</small></div>
+              <em className="mono">{stats.last24Hours} in 24h</em>
+            </div>
+            <div className="ops-counters">
+              {counterItems.map((item) => (
+                <div className="ops-counter" key={item.label}>
+                  <span>{item.label} <InfoHelp label={item.label} text={item.help} /></span>
+                  <strong className="mono">{item.value}</strong>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <span className="ops-unavailable">Counters unavailable</span>
+        )}
+      </section>
+
+      <div className="section-heading">
         <div>
-          <h1 className="text-lg font-semibold tracking-tight text-[#F1F3F6]">
-            Alert Queue & Triage
-          </h1>
-          <p className="text-xs text-[#939AA6]">
-            Binary intrusion classification queue (threshold shown per model result)
-          </p>
+          <h2>Open alerts</h2>
+          <p>Alerts that still need attention, newest first.</p>
         </div>
-
-        <div className="flex items-center space-x-2">
-          <button
+        <div className="shortcut-help">
+          <span><kbd>J</kbd><kbd>K</kbd> Navigate</span>
+          <span><kbd>Enter</kbd> Open</span>
+        </div>
+      </div>
+      <div className="filter-bar">
+        <div className="filter-label"><Filter size={15} /> Filters</div>
+        <label>
+          <span className="sr-only">Severity</span>
+          <select value={severityFilter} onChange={(e) => setSeverityFilter(e.target.value)}>
+            <option>All severities</option>
+            <option>Critical</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </label>
+        <label>
+          <span className="sr-only">Review status</span>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option>All statuses</option>
+            <option>Pending Review</option>
+            <option>Investigating</option>
+            <option>Confirmed Attack</option>
+            <option>False Positive</option>
+          </select>
+        </label>
+        {(statusFilter !== "All statuses" || severityFilter !== "All severities") && (
+          <Button
             onClick={() => {
-              refetchStats();
-              refetchAlerts();
+              setStatusFilter("All statuses");
+              setSeverityFilter("All severities");
             }}
-            disabled={isRefetching}
-            className="flex items-center space-x-1 px-2.5 py-1 text-xs border border-[#282C35] bg-[#181B21] rounded-sm hover:bg-[#1D2027] text-[#F1F3F6] disabled:opacity-50"
           >
-            <RefreshCw
-              className={`w-3.5 h-3.5 ${isRefetching ? "animate-spin" : ""}`}
-            />
-            <span>Refresh</span>
-          </button>
-        </div>
+            Clear filters
+          </Button>
+        )}
+        <span className="record-count">{alerts.length} records</span>
       </div>
 
-      {/* Summary Stats Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-[#13151A] border border-[#282C35] p-3 rounded-sm">
-          <div className="text-[11px] font-medium text-[#939AA6]">Alerts (24h)</div>
-          <div className="text-xl font-semibold text-[#F1F3F6] tabular-nums mt-0.5">
-            {statsLoading ? "—" : stats?.alerts_24h.toLocaleString()}
-          </div>
-        </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-3 rounded-sm">
-          <div className="text-[11px] font-medium text-[#939AA6]">Awaiting Review</div>
-          <div className="text-xl font-semibold text-[#FBBF24] tabular-nums mt-0.5">
-            {statsLoading ? "—" : stats?.awaiting_review.toLocaleString()}
-          </div>
-        </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-3 rounded-sm">
-          <div className="text-[11px] font-medium text-[#939AA6]">Confirmed Attacks</div>
-          <div className="text-xl font-semibold text-[#F87171] tabular-nums mt-0.5">
-            {statsLoading ? "—" : stats?.confirmed_attacks.toLocaleString()}
-          </div>
-        </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-3 rounded-sm">
-          <div className="text-[11px] font-medium text-[#939AA6]">False Positives</div>
-          <div className="text-xl font-semibold text-[#34D399] tabular-nums mt-0.5">
-            {statsLoading ? "—" : stats?.false_positives.toLocaleString()}
-          </div>
-        </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-3 rounded-sm">
-          <div className="text-[11px] font-medium text-[#939AA6]">Investigating</div>
-          <div className="text-xl font-semibold text-[#939AA6] tabular-nums mt-0.5">
-            {statsLoading ? "—" : stats?.needs_investigation.toLocaleString()}
-          </div>
-        </div>
-
-        <div className="bg-[#13151A] border border-[#282C35] p-3 rounded-sm">
-          <div className="text-[11px] font-medium text-[#939AA6]">Total Ingested (24h)</div>
-          <div className="text-xl font-semibold text-[#F1F3F6] tabular-nums mt-0.5">
-            {statsLoading ? "—" : stats?.total_predictions_24h.toLocaleString()}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Filters & Table Controls */}
-      <div className="bg-[#13151A] border border-[#282C35] rounded-sm p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center space-x-1.5">
-            <span className="text-[#939AA6]">Severity:</span>
-            <select
-              value={severityFilter}
-              onChange={(e) => {
-                setSeverityFilter(e.target.value);
-                setPageAfter(undefined);
-                setPageHistory([]);
-              }}
-              className="bg-[#1D2027] border border-[#282C35] rounded-sm px-2 py-1 text-xs text-[#F1F3F6] focus:outline-hidden"
-            >
-              <option value="all">All Severities</option>
-              <option value="alert">Alert (Single Tier)</option>
-              <option value="critical">Critical (Legacy Mock)</option>
-              <option value="high">High (Legacy Mock)</option>
-              <option value="medium">Medium (Legacy Mock)</option>
-              <option value="low">Low (Legacy Mock)</option>
-            </select>
-          </div>
-
-          <div className="flex items-center space-x-1.5">
-            <span className="text-[#939AA6]">Source:</span>
-            <select
-              value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value)}
-              className="bg-[#1D2027] border border-[#282C35] rounded-sm px-2 py-1 text-xs text-[#F1F3F6] focus:outline-hidden"
-            >
-              <option value="all">All Sources</option>
-              <option value="model">Model Inference</option>
-              <option value="mock">MOCK Only</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-2 text-[#939AA6] text-[11px]">
-          <span>Navigate with</span>
-          <kbd className="px-1.5 py-0.5 bg-[#1D2027] border border-[#282C35] font-mono rounded-sm text-[#F1F3F6]">
-            j
-          </kbd>
-          <kbd className="px-1.5 py-0.5 bg-[#1D2027] border border-[#282C35] font-mono rounded-sm text-[#F1F3F6]">
-            k
-          </kbd>
-          <span>and</span>
-          <kbd className="px-1.5 py-0.5 bg-[#1D2027] border border-[#282C35] font-mono rounded-sm text-[#F1F3F6]">
-            Enter
-          </kbd>
-        </div>
-      </div>
-
-      {/* 3. Dense SOC Alert Table */}
-      <div className="bg-[#13151A] border border-[#282C35] rounded-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+      {alertsQuery.isLoading ? (
+        <LoadingState label="Loading alert queue" />
+      ) : alertsQuery.isError ? (
+        <ErrorState retry={() => void alertsQuery.refetch()} />
+      ) : alerts.length === 0 ? (
+        <EmptyState title="No alerts require review." detail="The current alert queue is clear for these filters." />
+      ) : (
+        <div className="table-wrap">
+          <table>
             <thead>
-              <tr className="bg-[#181B21] border-b border-[#282C35] text-[#939AA6] font-medium">
-                <th className="py-2.5 px-3 w-12 text-center">#</th>
-                <th className="py-2.5 px-3">Alert ID</th>
-                <th className="py-2.5 px-3">Created</th>
-                <th className="py-2.5 px-3">Severity</th>
-                <th className="py-2.5 px-3">Source</th>
-                <th className="py-2.5 px-3">Score / Threshold</th>
-                <th className="py-2.5 px-3">Predicted Category</th>
-                <th className="py-2.5 px-3">Status</th>
-                <th className="py-2.5 px-3 text-right">Action</th>
+              <tr>
+                <th>Time</th>
+                <th>Alert</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Score</th>
+                <th>Threshold</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th><span className="sr-only">Action</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#282C35]">
-              {alertsLoading ? (
-                <tr>
-                  <td colSpan={9} className="py-12 text-center text-[#939AA6]">
-                    Loading alert queue...
+            <tbody>
+              {visibleAlerts.map((alert, index) => (
+                <tr
+                  key={alert.id}
+                  className={selected === index ? "selected-row" : ""}
+                  onClick={() => setSelected(index)}
+                  onDoubleClick={() => router.push(`/alerts/${alert.id}`)}
+                >
+                  <td className="mono time-cell" title={new Date(alert.createdAt).toLocaleString()}>
+                    {new Date(alert.createdAt).toLocaleTimeString([], { hour12: false })}
+                  </td>
+                  <td className={`mono alert-cell severity-${alert.severity.toLowerCase()}`}>
+                    <strong>{alert.id}</strong>
+                    <small>{alert.severity.toUpperCase()}</small>
+                  </td>
+                  <td className="mono">{alert.source}</td>
+                  <td className="mono">{alert.destination ?? "Not provided"}</td>
+                  <td className="mono score-cell">{alert.score.toFixed(4)}</td>
+                  <td className="mono">{alert.threshold.toFixed(4)}</td>
+                  <td>{alert.category}</td>
+                  <td className={`queue-status queue-status-${statusTone(alert.reviewStatus)}`}>
+                    {alert.reviewStatus === "Pending Review" ? "OPEN" : alert.reviewStatus.toUpperCase()}
+                  </td>
+                  <td>
+                    <button className="row-action" onClick={() => router.push(`/alerts/${alert.id}`)} aria-label={`Open ${alert.id}`}>
+                      <ArrowRight size={16} />
+                    </button>
                   </td>
                 </tr>
-              ) : displayedAlerts.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="py-12 text-center text-[#939AA6]">
-                    No alerts found in queue matching the filters.
-                  </td>
-                </tr>
-              ) : (
-                displayedAlerts.map((alert, idx) => {
-                  const isSelected = idx === selectedIndex;
-                  const score = alert.score ?? alert.probability;
-                  const threshold = alert.threshold;
-
-                  return (
-                    <tr
-                      key={alert.alert_id}
-                      onClick={() => setSelectedIndex(idx)}
-                      onDoubleClick={() => router.push(`/alerts/${alert.alert_id}`)}
-                      className={`cursor-pointer transition-colors ${
-                        isSelected
-                          ? "bg-[#1D2027] ring-1 ring-inset ring-[#F1F3F6]/20"
-                          : "hover:bg-[#181B21]/60"
-                      }`}
-                    >
-                      <td className="py-2.5 px-3 text-center text-[#939AA6] font-mono text-[11px] tabular-nums">
-                        {alert.sequence}
-                      </td>
-
-                      <td className="py-2.5 px-3 font-mono text-[11px] text-[#F1F3F6]">
-                        {alert.alert_id.slice(0, 8)}...{alert.alert_id.slice(-4)}
-                      </td>
-
-                      <td className="py-2.5 px-3 text-[#939AA6] tabular-nums whitespace-nowrap text-[11px]">
-                        {alert.created_at.replace("T", " ").replace("Z", "")}
-                      </td>
-
-                      <td className="py-2.5 px-3 whitespace-nowrap">
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-semibold uppercase bg-[#2A1316] text-[#F87171] border border-[#5C1D24]">
-                          {alert.severity}
-                        </span>
-                      </td>
-
-                      <td className="py-2.5 px-3 whitespace-nowrap">
-                        {alert.source === "mock" ? (
-                          <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[10px] font-semibold uppercase bg-[#2B1F0B] text-[#FBBF24] border border-[#5E4012]">
-                            MOCK
-                          </span>
-                        ) : (
-                          <span className="text-[#939AA6] text-[11px] font-mono">
-                            model
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="py-2.5 px-3 whitespace-nowrap font-mono text-[11px] tabular-nums">
-                        {score !== null && score !== undefined ? (
-                          <div className="flex items-center space-x-2">
-                            <span>{score.toFixed(4)}</span>
-                            <span className="text-[#616875]">/</span>
-                            <span className="text-[#939AA6]">{threshold?.toFixed(4) ?? "Unavailable"}</span>
-                          </div>
-                        ) : (
-                          "—"
-                        )}
-                      </td>
-
-                      <td className="py-2.5 px-3 font-medium text-[#F1F3F6]">
-                        {alert.predicted_class}
-                      </td>
-
-                      <td className="py-2.5 px-3 whitespace-nowrap">
-                        {alert.feedback_version === 0 ? (
-                          <span className="text-[#FBBF24] text-[11px] font-medium flex items-center space-x-1">
-                            <Clock className="w-3 h-3" />
-                            <span>Awaiting Review</span>
-                          </span>
-                        ) : (
-                          <span className="text-[#34D399] text-[11px] font-medium flex items-center space-x-1">
-                            <CheckCircle2 className="w-3 h-3" />
-                            <span>v{alert.feedback_version} Reviewed</span>
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="py-2.5 px-3 text-right whitespace-nowrap">
-                        <Link
-                          href={`/alerts/${alert.alert_id}`}
-                          className="inline-flex items-center space-x-1 text-xs font-medium text-[#F1F3F6] hover:underline"
-                        >
-                          <span>Review</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+              ))}
             </tbody>
           </table>
         </div>
-
-        {/* Pagination footer */}
-        <div className="border-t border-[#282C35] px-3 py-2 flex items-center justify-between text-xs text-[#939AA6]">
+      )}
+      {alerts.length > rowsPerPage && (
+        <div className="pagination">
+          <span className="mono">PAGE {page} / {pageCount}</span>
           <div>
-            Showing {displayedAlerts.length} alerts
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={handlePrevPage}
-              disabled={pageHistory.length === 0}
-              className="px-2.5 py-1 border border-[#282C35] rounded-sm hover:bg-[#1D2027] text-[#F1F3F6] disabled:opacity-40"
-            >
-              Previous
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={!alertPage?.next_after}
-              className="px-2.5 py-1 border border-[#282C35] rounded-sm hover:bg-[#1D2027] text-[#F1F3F6] disabled:opacity-40"
-            >
-              Next
-            </button>
+            <Button disabled={page === 1} onClick={() => { setPage((value) => value - 1); setSelected(0); }}>Previous</Button>
+            <Button disabled={page === pageCount} onClick={() => { setPage((value) => value + 1); setSelected(0); }}>Next</Button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

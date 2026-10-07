@@ -32,10 +32,6 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
             app.state.bundle_loader = loader
         else:
             app.state.bundle_loader = None
-        from nexus.shadow import ShadowService
-
-        app.state.shadow_service = ShadowService(settings.shadow_bundle_dir)
-        await run_in_threadpool(app.state.shadow_service.load)
         yield
 
     app = FastAPI(
@@ -49,7 +45,7 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
     app.state.store = store
     app.add_middleware(StrictRequests, limits=limits or RequestLimits())
     register_error_handlers(app)
-    from nexus import live_probe, shadow_routes, traffic_presets
+    from nexus import live_probe, traffic_presets
 
     for router in (
         routes.health,
@@ -58,7 +54,6 @@ def create_app(settings: Settings | None = None, *, limits: RequestLimits | None
         routes.predictions,
         routes.stats,
         routes.replay,
-        shadow_routes.router,
         traffic_presets.router,
         live_probe.router,
     ):

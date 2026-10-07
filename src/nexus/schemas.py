@@ -110,6 +110,7 @@ class Flow(StrictModel):
 class FlowBatch(StrictModel):
     schema_version: Literal["unsw-nb15.v0"]
     flows: Annotated[list[Flow], Field(min_length=1, max_length=100)]
+    model_id: str | None = None
 
     @model_validator(mode="after")
     def unique_ids(self) -> "FlowBatch":
@@ -137,14 +138,27 @@ class PredictionSummaryItem(StrictModel):
     threshold: float
     decision: Literal["alert", "normal"]
     alert_id: Identifier | None = None
+    ae_mode: str | None = None
+    ae_error: float | None = None
 
 
 class BatchPredictionResponse(StrictModel):
-    shadow: dict[str, Any] | None = None
     bundle_version: str
     predictions: list[PredictionSummaryItem]
     alert_count: int
     total_count: int
+    model_id: str | None = None
+
+
+class ModelOptionItem(StrictModel):
+    id: str
+    name: str
+    description: str
+    architecture: str
+    decision_threshold: float
+    focus: str
+    ae_budget: str | None = None
+    is_fusion: bool = False
 
 
 class ModelSummaryResponse(StrictModel):
